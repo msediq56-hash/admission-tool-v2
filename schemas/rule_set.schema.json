@@ -184,8 +184,8 @@
         },
         "operator": {
           "type": "string",
-          "enum": ["eq", "neq", "in", "not_in", "gte", "lte", "gt", "lt", "exists", "not_exists", "contains", "matches_regex"],
-          "description": "Comparison operator. 'in'/'not_in' expect value to be an array. 'exists'/'not_exists' check field presence (value is ignored)."
+          "enum": ["eq", "neq", "in", "not_in", "gte", "lte", "gt", "lt", "exists", "not_exists", "contains", "contains_any", "matches_regex"],
+          "description": "Comparison operator. 'in'/'not_in' expect value to be an array. 'exists'/'not_exists' check field presence (value is ignored). 'contains' checks if an array field contains a single value. 'contains_any' checks if an array field contains at least one value from the provided array."
         },
         "value": {
           "description": "The value to compare against. Type depends on operator and field."

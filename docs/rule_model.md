@@ -64,7 +64,11 @@ The basic building block. Compares a profile field against a value.
 }
 ```
 
-Operators: `eq`, `neq`, `in`, `not_in`, `gte`, `lte`, `gt`, `lt`, `exists`, `not_exists`, `contains`, `matches_regex`.
+Operators: `eq`, `neq`, `in`, `not_in`, `gte`, `lte`, `gt`, `lt`, `exists`, `not_exists`, `contains`, `contains_any`, `matches_regex`.
+
+- `in` / `not_in` — checks if a scalar field value is (or is not) in a provided array. E.g. `nationality in ["US", "GB"]`.
+- `contains` — checks if an array field contains a single value. E.g. `subjects contains "mathematics"`.
+- `contains_any` — checks if an array field contains at least one value from a provided array. E.g. `additional_nationalities contains_any ["US", "GB", "AU"]`. Use this instead of `any_of` when the target is an array of primitive values (strings, numbers) rather than an array of objects.
 
 ### 2. `composite` — AND / OR / NOT
 
@@ -128,6 +132,8 @@ Evaluates a condition across array elements. `any_of` passes if at least one ele
 ```
 
 The `filter` narrows which array elements to check. The inner `condition` field paths are relative to each array element.
+
+**Important**: `any_of`/`all_of` is designed for arrays of objects (like `education_history`, `language_proficiency`). For arrays of primitive values (like `additional_nationalities: ["US", "GB"]`), use a `comparison` with `contains` or `contains_any` instead — this avoids the ambiguity of referencing "the element itself" within a quantifier.
 
 ## Rule Dependencies
 

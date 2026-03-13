@@ -294,14 +294,10 @@
                 "value": ["US", "GB", "AU", "CA", "NZ", "IE", "SG"]
               },
               {
-                "type": "any_of",
-                "array_field": "personal_info.additional_nationalities",
-                "condition": {
-                  "type": "comparison",
-                  "field": "",
-                  "operator": "in",
-                  "value": ["US", "GB", "AU", "CA", "NZ", "IE", "SG"]
-                }
+                "type": "comparison",
+                "field": "personal_info.additional_nationalities",
+                "operator": "contains_any",
+                "value": ["US", "GB", "AU", "CA", "NZ", "IE", "SG"]
               }
             ]
           }

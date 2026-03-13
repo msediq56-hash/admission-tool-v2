@@ -32,8 +32,8 @@ The student's full data as assembled by the advisor. Key structures:
 ### Catalog Data (`data/`)
 Reference data maintained by the advisory team:
 - `universities.json` — institution info, admission office contacts, recognition agreements
-- `programs.json` — program definitions, prerequisites, tuition, accreditation
-- `program_offerings.json` — per-intake offerings with multiple deadline types
+- `programs.json` — academic program definitions: degree level, prerequisites, accreditation, language of instruction
+- `program_offerings.json` — per-intake offerings: tuition, deadlines, admission type, status
 - `reference_tables.json` — lookup tables for certificate recognition, GPA normalization, Studienkolleg tracks, language test validity
 
 ### Rule Sets (`rules/`)
