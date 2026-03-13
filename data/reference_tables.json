@@ -1,0 +1,166 @@
+{
+  "_comment": "Reference lookup tables used by eligibility rules. Rules reference these tables by name for country-specific logic, certificate recognition, GPA normalization, and language thresholds. This file is the single source of truth for domain reference data.",
+  "_status": "DEMO_PLACEHOLDER",
+  "_status_note": "Contains representative sample data only. Real deployment requires verified data from Anabin, DAAD, and individual university admission offices.",
+
+  "english_native_countries": {
+    "_comment": "Countries whose nationals are typically exempt from English language testing",
+    "countries": ["US", "GB", "AU", "CA", "NZ", "IE", "SG"]
+  },
+
+  "recognized_certificates_by_country": {
+    "_comment": "Maps countries to their secondary school certificates, Anabin default ratings, and whether a Studienkolleg/foundation year is typically required for direct university admission in Germany. Real data must be verified against current Anabin database.",
+    "DE": {
+      "certificates": ["Abitur", "Fachabitur"],
+      "anabin_default": "not_applicable",
+      "direct_admission": true,
+      "foundation_year_required": false,
+      "notes": "German certificates grant direct admission"
+    },
+    "US": {
+      "certificates": ["High School Diploma", "GED"],
+      "anabin_default": "not_applicable",
+      "direct_admission": true,
+      "foundation_year_required": false,
+      "notes": "Direct admission with AP scores or SAT/ACT. Requirements vary by university."
+    },
+    "GB": {
+      "certificates": ["A-Levels", "GCSE"],
+      "anabin_default": "not_applicable",
+      "direct_admission": true,
+      "foundation_year_required": false,
+      "notes": "A-Levels typically sufficient. GCSE alone is not."
+    },
+    "JO": {
+      "certificates": ["Tawjihi"],
+      "anabin_default": "H_plus_minus",
+      "direct_admission": false,
+      "foundation_year_required": true,
+      "notes": "Tawjihi holders typically require Studienkolleg for German public universities. Private universities may differ."
+    },
+    "TR": {
+      "certificates": ["Lise Diplomasi"],
+      "anabin_default": "H_plus_minus",
+      "direct_admission": false,
+      "foundation_year_required": true,
+      "notes": "Studienkolleg required for most German public universities"
+    },
+    "IN": {
+      "certificates": ["CBSE Class 12", "ISC", "State Board"],
+      "anabin_default": "H_plus_minus",
+      "direct_admission": false,
+      "foundation_year_required": true,
+      "notes": "Indian Class 12 typically requires Studienkolleg. Some universities accept with high scores."
+    },
+    "EG": {
+      "certificates": ["Thanaweya Amma"],
+      "anabin_default": "H_plus_minus",
+      "direct_admission": false,
+      "foundation_year_required": true,
+      "notes": "Studienkolleg required"
+    },
+    "NG": {
+      "certificates": ["WAEC", "NECO"],
+      "anabin_default": "H_minus",
+      "direct_admission": false,
+      "foundation_year_required": true,
+      "notes": "Studienkolleg required. WAEC alone typically rated H- in Anabin."
+    },
+    "CN": {
+      "certificates": ["Gaokao", "Senior High School Diploma"],
+      "anabin_default": "H_plus",
+      "direct_admission": true,
+      "foundation_year_required": false,
+      "notes": "Gaokao scores above provincial threshold may qualify for direct admission since 2020 APS reform."
+    }
+  },
+
+  "gpa_normalization": {
+    "_comment": "Grading system definitions used for cross-system GPA comparison. The engine uses these to normalize grades to a common scale when rules require it.",
+    "gpa_4": {
+      "name": "US 4.0 Scale",
+      "min": 0,
+      "max": 4.0,
+      "passing": 2.0,
+      "direction": "higher_is_better"
+    },
+    "gpa_5": {
+      "name": "5.0 Scale",
+      "min": 0,
+      "max": 5.0,
+      "passing": 2.5,
+      "direction": "higher_is_better"
+    },
+    "german_1_to_6": {
+      "name": "German Grading (1-6)",
+      "min": 1.0,
+      "max": 6.0,
+      "passing": 4.0,
+      "direction": "lower_is_better"
+    },
+    "percentage": {
+      "name": "Percentage (0-100)",
+      "min": 0,
+      "max": 100,
+      "passing": 50,
+      "direction": "higher_is_better"
+    },
+    "ib_points": {
+      "name": "IB Diploma Points",
+      "min": 0,
+      "max": 45,
+      "passing": 24,
+      "direction": "higher_is_better"
+    },
+    "french_20": {
+      "name": "French Grading (0-20)",
+      "min": 0,
+      "max": 20,
+      "passing": 10,
+      "direction": "higher_is_better"
+    },
+    "uk_classification": {
+      "name": "UK Degree Classification",
+      "values_ordered": ["First", "Upper Second (2:1)", "Lower Second (2:2)", "Third"],
+      "passing": "Third",
+      "direction": "first_is_best",
+      "note": "Ordinal, not numeric — requires special comparison logic"
+    }
+  },
+
+  "studienkolleg_tracks": {
+    "_comment": "German Studienkolleg preparation tracks. Each track maps to specific fields of study the student can pursue after completion.",
+    "T": {
+      "name": "Technical/Engineering",
+      "target_fields": ["engineering", "computer_science", "mathematics", "physics", "chemistry", "information_technology"]
+    },
+    "W": {
+      "name": "Business/Economics",
+      "target_fields": ["business", "economics", "social_sciences", "political_science"]
+    },
+    "M": {
+      "name": "Medical/Biological",
+      "target_fields": ["medicine", "biology", "pharmacy", "dentistry", "veterinary"]
+    },
+    "G": {
+      "name": "Humanities/German Studies",
+      "target_fields": ["humanities", "german_studies", "law", "philosophy", "history", "theology"]
+    },
+    "S": {
+      "name": "Languages",
+      "target_fields": ["languages", "linguistics", "translation", "cultural_studies"]
+    }
+  },
+
+  "language_test_validity": {
+    "_comment": "How long language test results remain valid, in months from test date",
+    "IELTS": 24,
+    "TOEFL": 24,
+    "Duolingo": 24,
+    "Cambridge": null,
+    "TestDaF": null,
+    "DSH": null,
+    "telc": null,
+    "Goethe": null
+  }
+}

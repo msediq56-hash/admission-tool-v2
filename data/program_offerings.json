@@ -1,0 +1,54 @@
+{
+  "_comment": "Specific program offerings per university and intake semester. Links universities to programs for a given admission cycle. Advisors select from these when setting up an evaluation. Deadlines are broken out by type (early, regular, late, scholarship, document submission). Tuition lives here (not in programs.json) because it can vary by university, intake semester, and scholarship cycle.",
+  "_status": "DEMO_PLACEHOLDER",
+  "program_offerings": [
+    {
+      "offering_id": "constructor_cs_bachelor_w2026",
+      "university_id": "constructor_university",
+      "program_id": "cs_bachelor",
+      "intake_semester": "winter_2026",
+      "deadlines": {
+        "early_admission": "2026-02-01",
+        "regular": "2026-06-15",
+        "late_admission": null,
+        "scholarship": "2026-02-01",
+        "document_submission": "2026-07-15"
+      },
+      "status": "open",
+      "admission_type": "selective",
+      "available_seats": null,
+      "tuition": {
+        "amount": 20000,
+        "currency": "EUR",
+        "per": "year",
+        "scholarship_available": true
+      },
+      "application_portal_url": "https://constructor.university/apply",
+      "notes": "Scholarship deadline matches early admission deadline"
+    },
+    {
+      "offering_id": "constructor_business_bachelor_w2026",
+      "university_id": "constructor_university",
+      "program_id": "business_bachelor",
+      "intake_semester": "winter_2026",
+      "deadlines": {
+        "early_admission": "2026-02-01",
+        "regular": "2026-06-15",
+        "late_admission": null,
+        "scholarship": "2026-02-01",
+        "document_submission": "2026-07-15"
+      },
+      "status": "open",
+      "admission_type": "selective",
+      "available_seats": null,
+      "tuition": {
+        "amount": 20000,
+        "currency": "EUR",
+        "per": "year",
+        "scholarship_available": true
+      },
+      "application_portal_url": "https://constructor.university/apply",
+      "notes": ""
+    }
+  ]
+}

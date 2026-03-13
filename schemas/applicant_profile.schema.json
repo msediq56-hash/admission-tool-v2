@@ -1,0 +1,255 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "applicant_profile.schema.json",
+  "title": "Applicant Profile",
+  "description": "Describes the student's full academic background, credentials, language qualifications, and personal information. This is the primary input document assembled by the advisor. The profile must capture enough detail for the evaluation engine to check eligibility across different universities, grading systems, certificate types, and recognition frameworks (e.g. Anabin for Germany).",
+  "type": "object",
+  "required": ["applicant_id", "personal_info", "education_history"],
+  "properties": {
+    "applicant_id": {
+      "type": "string",
+      "description": "Internal identifier assigned by the advisor"
+    },
+
+    "personal_info": {
+      "type": "object",
+      "description": "Demographic and residency information relevant to eligibility determination",
+      "required": ["nationality", "date_of_birth"],
+      "properties": {
+        "full_name": { "type": "string" },
+        "nationality": {
+          "type": "string",
+          "description": "Primary nationality — ISO 3166-1 alpha-2"
+        },
+        "additional_nationalities": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Additional nationalities (dual/multiple citizenship). Can affect recognition rules and language exemptions."
+        },
+        "date_of_birth": {
+          "type": "string",
+          "format": "date"
+        },
+        "country_of_residence": {
+          "type": "string",
+          "description": "Current country of residence — ISO 3166-1 alpha-2"
+        },
+        "visa_status": {
+          "type": "object",
+          "description": "Current visa/residence status. Some universities have eligibility conditions tied to residency or refugee status.",
+          "properties": {
+            "current_type": {
+              "type": "string",
+              "enum": ["none", "tourist_visa", "student_visa", "residence_permit", "eu_citizen", "refugee_status", "subsidiary_protection", "other"]
+            },
+            "country": {
+              "type": "string",
+              "description": "Country the visa/permit is for — ISO 3166-1 alpha-2"
+            },
+            "valid_until": {
+              "type": ["string", "null"],
+              "format": "date"
+            },
+            "notes": { "type": "string" }
+          }
+        }
+      }
+    },
+
+    "education_history": {
+      "type": "array",
+      "description": "All relevant educational qualifications, in chronological order. Includes secondary school, foundation year/Studienkolleg, and any post-secondary education. Multiple entries handle students with complex academic paths (e.g. high school + foundation year + partial bachelor).",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["entry_id", "qualification_level", "certificate_country", "graduation_status"],
+        "properties": {
+          "entry_id": {
+            "type": "string",
+            "description": "Internal reference ID for this education entry. Used in rule conditions to target specific entries (e.g. 'edu_secondary', 'edu_studienkolleg')."
+          },
+          "qualification_level": {
+            "type": "string",
+            "enum": ["secondary", "post_secondary_non_university", "foundation_year", "studienkolleg", "bachelor", "master", "phd", "other"],
+            "description": "Level of the qualification. 'secondary' = high school equivalent. 'post_secondary_non_university' = vocational/technical diplomas."
+          },
+          "certificate_type": {
+            "type": "string",
+            "description": "Specific certificate name as recognized in the issuing country. E.g. 'Abitur', 'Tawjihi', 'IB Diploma', 'A-Levels', 'CBSE Class 12', 'High School Diploma', 'Lise Diplomasi'."
+          },
+          "certificate_country": {
+            "type": "string",
+            "description": "Country that issued the certificate — ISO 3166-1 alpha-2"
+          },
+          "institution_name": {
+            "type": "string",
+            "description": "Name of the school or institution"
+          },
+          "field_of_study": {
+            "type": ["string", "null"],
+            "description": "Subject area or major, if applicable. Important for subject prerequisite rules and Studienkolleg track matching."
+          },
+          "graduation_status": {
+            "type": "string",
+            "enum": ["completed", "in_progress", "withdrawn", "expected"],
+            "description": "'expected' = student has not yet graduated but is expected to (e.g. final semester)"
+          },
+          "graduation_year": {
+            "type": ["integer", "null"]
+          },
+          "grading": {
+            "type": "object",
+            "description": "Grade information using the issuing country's system. The engine uses reference_tables.json/gpa_normalization to compare across systems.",
+            "properties": {
+              "system": {
+                "type": "string",
+                "enum": ["gpa_4", "gpa_5", "percentage", "german_1_to_6", "ib_points", "french_20", "uk_classification", "letter_grade", "other"],
+                "description": "The grading system used. Must match a key in reference_tables.json/gpa_normalization."
+              },
+              "value": {
+                "type": ["number", "string"],
+                "description": "The grade value. Numeric for most systems. String for ordinal systems like UK classification or letter grades."
+              },
+              "scale_max": {
+                "type": ["number", "null"],
+                "description": "Maximum possible value in this system. E.g. 4.0 for gpa_4, 100 for percentage. Null for ordinal systems."
+              }
+            }
+          },
+          "recognition": {
+            "type": "object",
+            "description": "Recognition status in the target country's framework. For Germany this maps to Anabin. May be pre-filled by the advisor or looked up from reference_tables by the engine.",
+            "properties": {
+              "anabin_rating": {
+                "type": ["string", "null"],
+                "enum": ["H_plus", "H_plus_minus", "H_minus", "not_rated", "not_applicable", null],
+                "description": "H+ = recognized, H+/- = partially recognized (may need Studienkolleg), H- = not recognized."
+              },
+              "recognized_as": {
+                "type": ["string", "null"],
+                "description": "What this certificate equates to in the target system. E.g. 'Hochschulreife', 'Fachhochschulreife', 'Hochschulzugang'."
+              },
+              "recognition_notes": { "type": "string" }
+            }
+          },
+          "studienkolleg_track": {
+            "type": ["string", "null"],
+            "enum": ["T", "W", "M", "G", "S", null],
+            "description": "Only for qualification_level 'studienkolleg'. Which preparation track was completed."
+          },
+          "subjects": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Relevant subjects studied. Used for subject prerequisite checks (e.g. math required for engineering)."
+          },
+          "documents": {
+            "type": "object",
+            "description": "Submission status of documents for this education entry",
+            "properties": {
+              "transcript_status": {
+                "type": "string",
+                "enum": ["provided", "pending", "not_required"]
+              },
+              "certificate_status": {
+                "type": "string",
+                "enum": ["provided", "pending", "not_required"]
+              },
+              "translation_status": {
+                "type": "string",
+                "enum": ["provided", "pending", "not_required", "not_applicable"]
+              },
+              "apostille_status": {
+                "type": "string",
+                "enum": ["provided", "pending", "not_required", "not_applicable"]
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "language_proficiency": {
+      "type": "array",
+      "description": "Language test results and certifications. Multiple entries per language are allowed (e.g. IELTS and Duolingo for English).",
+      "items": {
+        "type": "object",
+        "required": ["language", "test_type"],
+        "properties": {
+          "language": {
+            "type": "string",
+            "description": "E.g. 'english', 'german', 'french'"
+          },
+          "test_type": {
+            "type": "string",
+            "description": "E.g. 'IELTS', 'TOEFL', 'Duolingo', 'Cambridge', 'TestDaF', 'DSH', 'Goethe', 'native_speaker', 'medium_of_instruction'"
+          },
+          "overall_score": {
+            "type": ["string", "number", "null"],
+            "description": "Overall score or level. E.g. 7.0 for IELTS, 95 for TOEFL, 'C1' for Cambridge, 'TDN 4' for TestDaF."
+          },
+          "sub_scores": {
+            "type": "object",
+            "description": "Component scores. Some rules check sub-scores (e.g. minimum writing score).",
+            "properties": {
+              "reading": { "type": ["number", "string", "null"] },
+              "writing": { "type": ["number", "string", "null"] },
+              "speaking": { "type": ["number", "string", "null"] },
+              "listening": { "type": ["number", "string", "null"] }
+            }
+          },
+          "test_date": {
+            "type": ["string", "null"],
+            "format": "date",
+            "description": "Date the test was taken. Used with language_test_validity in reference_tables.json to check expiry."
+          },
+          "expiry_date": {
+            "type": ["string", "null"],
+            "format": "date",
+            "description": "Explicit expiry date if known. If null, engine calculates from test_date + validity period."
+          },
+          "certificate_status": {
+            "type": "string",
+            "enum": ["provided", "pending", "self_reported"],
+            "description": "'self_reported' = advisor entered score based on student's claim, not yet verified."
+          }
+        }
+      }
+    },
+
+    "work_experience": {
+      "type": "object",
+      "description": "Professional experience. Required for some master's/executive programs.",
+      "properties": {
+        "total_years": { "type": ["number", "null"] },
+        "field": {
+          "type": ["string", "null"],
+          "description": "Primary field of work experience"
+        },
+        "description": { "type": "string" }
+      }
+    },
+
+    "documents_summary": {
+      "type": "object",
+      "description": "Advisor-facing overview of overall document completeness",
+      "properties": {
+        "overall_status": {
+          "type": "string",
+          "enum": ["complete", "partially_complete", "incomplete"]
+        },
+        "missing_documents": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "E.g. ['translated_transcript', 'ielts_certificate', 'apostille_secondary']"
+        },
+        "notes": { "type": "string" }
+      }
+    },
+
+    "notes": {
+      "type": "string",
+      "description": "Free-text advisor notes about special circumstances not captured by structured fields"
+    }
+  },
+  "additionalProperties": false
+}

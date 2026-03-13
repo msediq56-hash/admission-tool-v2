@@ -1,0 +1,292 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "evaluation_result.schema.json",
+  "title": "Evaluation Result",
+  "description": "The complete output of the evaluation engine. Provides the advisor with an overall verdict, per-rule results with execution traces, missing information, conditions to meet, advisory notes, and next steps. For multi-program screening, includes per-program verdicts.",
+  "type": "object",
+  "required": ["evaluation_id", "applicant_id", "overall_verdict", "rule_results", "evaluated_at", "evaluation_metadata"],
+  "properties": {
+    "evaluation_id": {
+      "type": "string",
+      "description": "Unique identifier for this evaluation run"
+    },
+    "applicant_id": {
+      "type": "string"
+    },
+    "university_id": {
+      "type": "string",
+      "description": "For single_program mode. Null for multi_program_screening."
+    },
+    "program_id": {
+      "type": "string",
+      "description": "For single_program mode. Null for multi_program_screening."
+    },
+
+    "overall_verdict": {
+      "type": "string",
+      "enum": ["eligible", "not_eligible", "conditional", "needs_review", "insufficient_data"],
+      "description": "'eligible' = meets all requirements. 'not_eligible' = fails one or more reject rules. 'conditional' = eligible if specific conditions are met. 'needs_review' = flagged for human review. 'insufficient_data' = cannot complete evaluation due to missing profile information."
+    },
+    "overall_summary": {
+      "type": "string",
+      "description": "Concise human-readable summary of the verdict for the advisor"
+    },
+
+    "confidence": {
+      "type": "object",
+      "description": "How confident the engine is in this result. Self-reported scores, pending documents, or override usage lowers confidence.",
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": ["definitive", "high", "moderate", "low", "cannot_determine"],
+          "description": "'definitive' = all data verified, no overrides. 'high' = minor caveats. 'moderate' = some self-reported data or assumed documents. 'low' = significant missing data. 'cannot_determine' = too much missing."
+        },
+        "factors": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "What reduced confidence. E.g. ['self_reported_language_score', 'pending_transcript', 'advisor_override_applied']."
+        }
+      }
+    },
+
+    "rule_results": {
+      "type": "array",
+      "description": "Per-rule evaluation outcomes, in evaluation order",
+      "items": {
+        "type": "object",
+        "required": ["rule_id", "stage", "category", "status"],
+        "properties": {
+          "rule_id": { "type": "string" },
+          "stage": {
+            "type": "string",
+            "description": "Which evaluation stage this rule belongs to"
+          },
+          "category": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["passed", "failed", "skipped_dependency", "skipped_override", "exception_applied"],
+            "description": "'skipped_dependency' = a dependency rule failed so this was not evaluated. 'skipped_override' = advisor override caused this to be skipped."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable explanation of the result"
+          },
+          "actual_value": {
+            "description": "The value found in the applicant's profile"
+          },
+          "expected_value": {
+            "description": "The value the rule required"
+          },
+          "exception_applied": {
+            "type": ["string", "null"],
+            "description": "Exception ID if an exception overrode this rule's failure"
+          },
+          "condition_trace": {
+            "type": "object",
+            "description": "Recursive execution trace for debugging. Shows which condition nodes were evaluated, their results, and data accessed. Structure mirrors the condition tree from the rule set.",
+            "properties": {
+              "condition_type": { "type": "string" },
+              "result": {
+                "type": "string",
+                "enum": ["passed", "failed", "error"]
+              },
+              "detail": { "type": "string" },
+              "sub_results": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "description": "Recursive trace nodes for composite/conditional conditions"
+                }
+              }
+            }
+          },
+          "data_sources_used": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Which profile fields were accessed during evaluation. E.g. ['education_history.0.grading.value', 'personal_info.nationality']."
+          }
+        }
+      }
+    },
+
+    "missing_information": {
+      "type": "array",
+      "description": "Data points the engine needed but could not find or verify in the applicant profile",
+      "items": {
+        "type": "object",
+        "required": ["field", "description", "impact"],
+        "properties": {
+          "field": {
+            "type": "string",
+            "description": "Dot-path to the missing or incomplete field"
+          },
+          "description": {
+            "type": "string",
+            "description": "What is missing, in advisor-friendly language"
+          },
+          "impact": {
+            "type": "string",
+            "enum": ["blocks_evaluation", "may_change_outcome", "informational"],
+            "description": "'blocks_evaluation' = cannot determine verdict without this. 'may_change_outcome' = verdict could change if this data is provided. 'informational' = nice to have."
+          },
+          "required_for_rules": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Which rule_ids need this data"
+          }
+        }
+      }
+    },
+
+    "conditions_to_meet": {
+      "type": "array",
+      "description": "Conditions the applicant must meet to become eligible. Populated when any rule with on_fail 'conditional_accept' has failed. Appears for 'conditional' verdicts (always) and 'needs_review' verdicts (when conditional_accept and flag_for_review failures coexist). Never appears for 'not_eligible', 'eligible', or 'insufficient_data' verdicts.",
+      "items": {
+        "type": "object",
+        "required": ["condition_id", "description", "category"],
+        "properties": {
+          "condition_id": { "type": "string" },
+          "description": {
+            "type": "string",
+            "description": "E.g. 'Achieve IELTS overall 6.5 (currently has 6.0)'"
+          },
+          "category": { "type": "string" },
+          "current_value": {
+            "description": "What the applicant currently has"
+          },
+          "required_value": {
+            "description": "What is needed"
+          },
+          "deadline": {
+            "type": ["string", "null"],
+            "format": "date",
+            "description": "By when this must be met, if applicable"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["required", "recommended"]
+          },
+          "related_rule_id": { "type": "string" }
+        }
+      }
+    },
+
+    "advisory_notes": {
+      "type": "array",
+      "description": "Tips, alternatives, and edge case warnings for the advisor. Not tied to pass/fail — these are informational.",
+      "items": {
+        "type": "object",
+        "required": ["type", "title", "message"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["alternative_pathway", "edge_case", "tip", "deadline_warning", "scholarship_note", "document_note"]
+          },
+          "title": { "type": "string" },
+          "message": { "type": "string" },
+          "related_rule_id": {
+            "type": ["string", "null"]
+          }
+        }
+      }
+    },
+
+    "matched_programs": {
+      "type": "array",
+      "description": "Only present for multi_program_screening mode. Per-program verdict summary.",
+      "items": {
+        "type": "object",
+        "required": ["university_id", "program_id", "verdict"],
+        "properties": {
+          "university_id": { "type": "string" },
+          "program_id": { "type": "string" },
+          "program_name": { "type": "string" },
+          "verdict": {
+            "type": "string",
+            "enum": ["eligible", "not_eligible", "conditional", "needs_review", "insufficient_data"]
+          },
+          "summary": { "type": "string" },
+          "blocking_rules": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Rule IDs that caused failure, if any"
+          }
+        }
+      }
+    },
+
+    "next_steps": {
+      "type": "array",
+      "description": "Recommended actions for the advisor, applicant, or system to take after this evaluation",
+      "items": {
+        "type": "object",
+        "required": ["action", "responsible"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "description": "E.g. 'Submit IELTS certificate', 'Apply through uni-assist', 'Contact admissions office for exception'"
+          },
+          "responsible": {
+            "type": "string",
+            "enum": ["advisor", "applicant", "system"]
+          },
+          "deadline": {
+            "type": ["string", "null"],
+            "format": "date"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["urgent", "normal", "optional"]
+          }
+        }
+      }
+    },
+
+    "flags": {
+      "type": "array",
+      "description": "System-level warnings and alerts",
+      "items": {
+        "type": "object",
+        "required": ["severity", "message"],
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": ["blocker", "warning", "info"]
+          },
+          "type": {
+            "type": "string",
+            "enum": ["warning", "info", "action_required", "data_quality"]
+          },
+          "message": { "type": "string" }
+        }
+      }
+    },
+
+    "evaluated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rule_set_version": {
+      "type": "string"
+    },
+
+    "evaluation_metadata": {
+      "type": "object",
+      "description": "Technical metadata about the evaluation run",
+      "required": ["rules_evaluated", "rules_skipped"],
+      "properties": {
+        "engine_version": { "type": "string" },
+        "evaluation_duration_ms": { "type": "integer" },
+        "rules_evaluated": { "type": "integer" },
+        "rules_skipped": { "type": "integer" },
+        "overrides_applied": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of categories or rule_ids that were overridden by advisor"
+        },
+        "reference_tables_version": { "type": "string" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

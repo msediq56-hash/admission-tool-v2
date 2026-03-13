@@ -1,0 +1,593 @@
+{
+  "_comment": "Test cases for the Constructor University CS bachelor eligibility rules (constructor_cs_bachelor_v1). Each test case input follows the evaluation_context.schema.json structure: applicant profile + evaluation_scope (with resolved targets) + evaluation_date + optional advisor_overrides.",
+  "_status": "DEMO_PLACEHOLDER",
+  "test_suite": "constructor_cs_bachelor",
+  "rule_set_id": "constructor_cs_bachelor_v1",
+
+  "test_cases": [
+    {
+      "test_id": "tc_eligible_jordanian_with_studienkolleg",
+      "description": "Jordanian student with Tawjihi + completed Studienkolleg (T-Kurs) + IELTS 7.0. Should be eligible. Foundation year routing should pass because Studienkolleg is completed.",
+      "input": {
+        "applicant": {
+          "applicant_id": "test_001",
+          "personal_info": {
+            "full_name": "Ahmad Al-Hassan",
+            "nationality": "JO",
+            "date_of_birth": "2004-05-15",
+            "country_of_residence": "DE"
+          },
+          "education_history": [
+            {
+              "entry_id": "edu_secondary",
+              "qualification_level": "secondary",
+              "certificate_type": "Tawjihi",
+              "certificate_country": "JO",
+              "institution_name": "Amman Secondary School",
+              "graduation_status": "completed",
+              "graduation_year": 2023,
+              "grading": { "system": "percentage", "value": 78, "scale_max": 100 },
+              "subjects": ["mathematics", "physics", "chemistry", "arabic", "english"],
+              "documents": {
+                "transcript_status": "provided",
+                "certificate_status": "provided",
+                "translation_status": "provided",
+                "apostille_status": "provided"
+              }
+            },
+            {
+              "entry_id": "edu_studienkolleg",
+              "qualification_level": "studienkolleg",
+              "certificate_type": "Feststellungsprüfung",
+              "certificate_country": "DE",
+              "institution_name": "Studienkolleg Hamburg",
+              "graduation_status": "completed",
+              "graduation_year": 2024,
+              "studienkolleg_track": "T",
+              "grading": { "system": "german_1_to_6", "value": 2.3, "scale_max": null },
+              "subjects": ["mathematics", "physics", "informatics", "german"],
+              "documents": {
+                "transcript_status": "provided",
+                "certificate_status": "provided",
+                "translation_status": "not_applicable",
+                "apostille_status": "not_applicable"
+              }
+            }
+          ],
+          "language_proficiency": [
+            {
+              "language": "english",
+              "test_type": "IELTS",
+              "overall_score": 7.0,
+              "sub_scores": { "reading": 7.5, "writing": 6.5, "speaking": 7.0, "listening": 7.0 },
+              "test_date": "2025-06-01",
+              "expiry_date": "2027-06-01",
+              "certificate_status": "provided"
+            }
+          ],
+          "documents_summary": { "overall_status": "complete", "missing_documents": [] }
+        },
+        "evaluation_scope": {
+          "mode": "single_program",
+          "targets": [
+            {
+              "university": { "university_id": "constructor_university", "name": "Constructor University", "country": "DE" },
+              "program": { "program_id": "cs_bachelor", "name": "Computer Science", "degree_level": "bachelor" },
+              "offering": { "offering_id": "constructor_cs_bachelor_w2026", "intake_semester": "winter_2026", "status": "open" },
+              "rule_set": { "rule_set_id": "constructor_cs_bachelor_v1", "version": "1.0.0" }
+            }
+          ]
+        },
+        "evaluation_date": "2026-03-13"
+      },
+      "expected": {
+        "overall_verdict": "eligible",
+        "confidence": { "level": "definitive" },
+        "rule_results": [
+          { "rule_id": "qualification_level", "status": "passed" },
+          { "rule_id": "cert_recognition", "status": "passed" },
+          { "rule_id": "foundation_year_routing", "status": "passed" },
+          { "rule_id": "english_proficiency", "status": "passed" },
+          { "rule_id": "gpa_minimum", "status": "passed" },
+          { "rule_id": "math_prerequisite", "status": "passed" }
+        ]
+      }
+    },
+
+    {
+      "test_id": "tc_rejected_no_language_proof",
+      "description": "Turkish student with Lise Diplomasi, no English language proof. Should be rejected by english_proficiency rule.",
+      "input": {
+        "applicant": {
+          "applicant_id": "test_002",
+          "personal_info": {
+            "full_name": "Elif Yilmaz",
+            "nationality": "TR",
+            "date_of_birth": "2005-01-10",
+            "country_of_residence": "TR"
+          },
+          "education_history": [
+            {
+              "entry_id": "edu_secondary",
+              "qualification_level": "secondary",
+              "certificate_type": "Lise Diplomasi",
+              "certificate_country": "TR",
+              "institution_name": "Istanbul Anadolu Lisesi",
+              "graduation_status": "completed",
+              "graduation_year": 2025,
+              "grading": { "system": "percentage", "value": 75, "scale_max": 100 },
+              "subjects": ["mathematics", "physics", "turkish", "english"],
+              "documents": {
+                "transcript_status": "provided",
+                "certificate_status": "pending",
+                "translation_status": "pending",
+                "apostille_status": "pending"
+              }
+            }
+          ],
+          "language_proficiency": [],
+          "documents_summary": { "overall_status": "incomplete", "missing_documents": ["english_language_certificate"] }
+        },
+        "evaluation_scope": {
+          "mode": "single_program",
+          "targets": [
+            {
+              "university": { "university_id": "constructor_university", "name": "Constructor University", "country": "DE" },
+              "program": { "program_id": "cs_bachelor", "name": "Computer Science", "degree_level": "bachelor" },
+              "offering": { "offering_id": "constructor_cs_bachelor_w2026", "intake_semester": "winter_2026", "status": "open" },
+              "rule_set": { "rule_set_id": "constructor_cs_bachelor_v1", "version": "1.0.0" }
+            }
+          ]
+        },
+        "evaluation_date": "2026-03-13"
+      },
+      "expected": {
+        "overall_verdict": "not_eligible",
+        "rule_results": [
+          { "rule_id": "qualification_level", "status": "passed" },
+          { "rule_id": "cert_recognition", "status": "passed" },
+          { "rule_id": "english_proficiency", "status": "failed" }
+        ],
+        "missing_information": [
+          { "field": "language_proficiency", "description": "No English proficiency test provided. Submitting IELTS, TOEFL, Duolingo, or Cambridge result could change the outcome.", "impact": "may_change_outcome" }
+        ]
+      }
+    },
+
+    {
+      "test_id": "tc_us_native_english_exception",
+      "description": "US national with High School Diploma, no English test. English requirement should be waived via native speaker exception. GPA 3.5 should trigger scholarship note.",
+      "input": {
+        "applicant": {
+          "applicant_id": "test_003",
+          "personal_info": {
+            "full_name": "Sarah Johnson",
+            "nationality": "US",
+            "date_of_birth": "2004-09-20",
+            "country_of_residence": "US"
+          },
+          "education_history": [
+            {
+              "entry_id": "edu_secondary",
+              "qualification_level": "secondary",
+              "certificate_type": "High School Diploma",
+              "certificate_country": "US",
+              "institution_name": "Lincoln High School",
+              "graduation_status": "completed",
+              "graduation_year": 2025,
+              "grading": { "system": "gpa_4", "value": 3.5, "scale_max": 4.0 },
+              "subjects": ["mathematics", "computer_science", "physics", "english"],
+              "documents": {
+                "transcript_status": "provided",
+                "certificate_status": "provided",
+                "translation_status": "not_applicable",
+                "apostille_status": "not_required"
+              }
+            }
+          ],
+          "language_proficiency": [],
+          "documents_summary": { "overall_status": "complete", "missing_documents": [] }
+        },
+        "evaluation_scope": {
+          "mode": "single_program",
+          "targets": [
+            {
+              "university": { "university_id": "constructor_university", "name": "Constructor University", "country": "DE" },
+              "program": { "program_id": "cs_bachelor", "name": "Computer Science", "degree_level": "bachelor" },
+              "offering": { "offering_id": "constructor_cs_bachelor_w2026", "intake_semester": "winter_2026", "status": "open" },
+              "rule_set": { "rule_set_id": "constructor_cs_bachelor_v1", "version": "1.0.0" }
+            }
+          ]
+        },
+        "evaluation_date": "2026-03-13"
+      },
+      "expected": {
+        "overall_verdict": "eligible",
+        "rule_results": [
+          { "rule_id": "qualification_level", "status": "passed" },
+          { "rule_id": "cert_recognition", "status": "passed" },
+          { "rule_id": "foundation_year_routing", "status": "passed", "_note": "US not in foundation_year_required_countries, conditional IF is false, so overall passes" },
+          { "rule_id": "english_proficiency", "status": "exception_applied", "exception_applied": "exc_native_english_nationality" },
+          { "rule_id": "gpa_minimum", "status": "passed" },
+          { "rule_id": "math_prerequisite", "status": "passed" },
+          { "rule_id": "scholarship_gpa", "status": "passed", "_note": "GPA 3.5 meets scholarship threshold" }
+        ]
+      }
+    },
+
+    {
+      "test_id": "tc_low_gpa_needs_review",
+      "description": "Indian student with CBSE, low GPA (percentage 45%), TOEFL 90. GPA rule should trigger flag_for_review. Also triggers foundation_year_routing conditional_accept since India is in the list.",
+      "input": {
+        "applicant": {
+          "applicant_id": "test_004",
+          "personal_info": {
+            "full_name": "Priya Sharma",
+            "nationality": "IN",
+            "date_of_birth": "2005-03-01",
+            "country_of_residence": "IN"
+          },
+          "education_history": [
+            {
+              "entry_id": "edu_secondary",
+              "qualification_level": "secondary",
+              "certificate_type": "CBSE Class 12",
+              "certificate_country": "IN",
+              "institution_name": "Delhi Public School",
+              "graduation_status": "completed",
+              "graduation_year": 2025,
+              "grading": { "system": "percentage", "value": 45, "scale_max": 100 },
+              "subjects": ["mathematics", "physics", "chemistry", "english", "computer_science"],
+              "documents": {
+                "transcript_status": "provided",
+                "certificate_status": "provided",
+                "translation_status": "not_applicable",
+                "apostille_status": "pending"
+              }
+            }
+          ],
+          "language_proficiency": [
+            {
+              "language": "english",
+              "test_type": "TOEFL",
+              "overall_score": 90,
+              "test_date": "2025-08-01",
+              "certificate_status": "provided"
+            }
+          ],
+          "documents_summary": { "overall_status": "partially_complete", "missing_documents": ["apostille_secondary"] }
+        },
+        "evaluation_scope": {
+          "mode": "single_program",
+          "targets": [
+            {
+              "university": { "university_id": "constructor_university", "name": "Constructor University", "country": "DE" },
+              "program": { "program_id": "cs_bachelor", "name": "Computer Science", "degree_level": "bachelor" },
+              "offering": { "offering_id": "constructor_cs_bachelor_w2026", "intake_semester": "winter_2026", "status": "open" },
+              "rule_set": { "rule_set_id": "constructor_cs_bachelor_v1", "version": "1.0.0" }
+            }
+          ]
+        },
+        "evaluation_date": "2026-03-13"
+      },
+      "expected": {
+        "overall_verdict": "needs_review",
+        "confidence": { "level": "moderate" },
+        "rule_results": [
+          { "rule_id": "qualification_level", "status": "passed" },
+          { "rule_id": "cert_recognition", "status": "passed" },
+          { "rule_id": "foundation_year_routing", "status": "failed", "_note": "IN is in foundation_year_required_countries and no Studienkolleg/foundation_year completed. on_fail: conditional_accept" },
+          { "rule_id": "english_proficiency", "status": "passed" },
+          { "rule_id": "gpa_minimum", "status": "failed", "_note": "45% below 60% threshold. on_fail: flag_for_review" },
+          { "rule_id": "math_prerequisite", "status": "passed" }
+        ],
+        "conditions_to_meet": [
+          {
+            "description": "Complete a Studienkolleg (T-Kurs) or approved foundation year program",
+            "category": "foundation_year_requirement",
+            "related_rule_id": "foundation_year_routing"
+          }
+        ]
+      }
+    },
+
+    {
+      "test_id": "tc_jordanian_no_studienkolleg",
+      "description": "Jordanian student with Tawjihi but NO Studienkolleg or foundation year. Foundation year routing rule should trigger conditional_accept since JO is in the required list.",
+      "input": {
+        "applicant": {
+          "applicant_id": "test_005",
+          "personal_info": {
+            "full_name": "Omar Khaled",
+            "nationality": "JO",
+            "date_of_birth": "2005-07-12",
+            "country_of_residence": "JO"
+          },
+          "education_history": [
+            {
+              "entry_id": "edu_secondary",
+              "qualification_level": "secondary",
+              "certificate_type": "Tawjihi",
+              "certificate_country": "JO",
+              "institution_name": "Zarqa High School",
+              "graduation_status": "completed",
+              "graduation_year": 2025,
+              "grading": { "system": "percentage", "value": 82, "scale_max": 100 },
+              "subjects": ["mathematics", "physics", "chemistry", "arabic", "english"],
+              "documents": {
+                "transcript_status": "provided",
+                "certificate_status": "provided",
+                "translation_status": "provided",
+                "apostille_status": "provided"
+              }
+            }
+          ],
+          "language_proficiency": [
+            {
+              "language": "english",
+              "test_type": "Duolingo",
+              "overall_score": 120,
+              "test_date": "2025-09-15",
+              "certificate_status": "provided"
+            }
+          ],
+          "documents_summary": { "overall_status": "complete", "missing_documents": [] }
+        },
+        "evaluation_scope": {
+          "mode": "single_program",
+          "targets": [
+            {
+              "university": { "university_id": "constructor_university", "name": "Constructor University", "country": "DE" },
+              "program": { "program_id": "cs_bachelor", "name": "Computer Science", "degree_level": "bachelor" },
+              "offering": { "offering_id": "constructor_cs_bachelor_w2026", "intake_semester": "winter_2026", "status": "open" },
+              "rule_set": { "rule_set_id": "constructor_cs_bachelor_v1", "version": "1.0.0" }
+            }
+          ]
+        },
+        "evaluation_date": "2026-03-13"
+      },
+      "expected": {
+        "overall_verdict": "conditional",
+        "rule_results": [
+          { "rule_id": "qualification_level", "status": "passed" },
+          { "rule_id": "cert_recognition", "status": "passed" },
+          { "rule_id": "foundation_year_routing", "status": "failed", "_note": "JO in foundation_year_required_countries, no Studienkolleg completed. on_fail: conditional_accept" },
+          { "rule_id": "english_proficiency", "status": "passed", "_note": "Duolingo 120 >= 110 threshold" },
+          { "rule_id": "gpa_minimum", "status": "passed" },
+          { "rule_id": "math_prerequisite", "status": "passed" }
+        ],
+        "conditions_to_meet": [
+          {
+            "description": "Complete a Studienkolleg (T-Kurs recommended for CS) or approved foundation year, or obtain confirmation from Constructor University that this requirement is waived",
+            "category": "foundation_year_requirement",
+            "related_rule_id": "foundation_year_routing"
+          }
+        ],
+        "advisory_notes": [
+          {
+            "type": "tip",
+            "title": "Private university exception",
+            "message": "Constructor University is a private institution and may waive the Studienkolleg requirement. Contact admissions to confirm."
+          }
+        ]
+      }
+    },
+
+    {
+      "test_id": "tc_expired_language_test",
+      "description": "German student with Abitur, but IELTS test is from 2022 (expired by evaluation date 2026). Should fail language requirement due to expiry. Note: this test validates that the engine checks test_date + validity period.",
+      "input": {
+        "applicant": {
+          "applicant_id": "test_006",
+          "personal_info": {
+            "full_name": "Max Weber",
+            "nationality": "DE",
+            "date_of_birth": "2003-11-05",
+            "country_of_residence": "DE"
+          },
+          "education_history": [
+            {
+              "entry_id": "edu_secondary",
+              "qualification_level": "secondary",
+              "certificate_type": "Abitur",
+              "certificate_country": "DE",
+              "institution_name": "Friedrich-Ebert-Gymnasium",
+              "graduation_status": "completed",
+              "graduation_year": 2022,
+              "grading": { "system": "german_1_to_6", "value": 2.1, "scale_max": null },
+              "recognition": { "anabin_rating": "not_applicable", "recognized_as": "Hochschulreife" },
+              "subjects": ["mathematics", "physics", "german", "english", "history"],
+              "documents": {
+                "transcript_status": "provided",
+                "certificate_status": "provided",
+                "translation_status": "not_applicable",
+                "apostille_status": "not_applicable"
+              }
+            }
+          ],
+          "language_proficiency": [
+            {
+              "language": "english",
+              "test_type": "IELTS",
+              "overall_score": 7.5,
+              "sub_scores": { "reading": 8.0, "writing": 7.0, "speaking": 7.5, "listening": 7.5 },
+              "test_date": "2022-03-01",
+              "expiry_date": "2024-03-01",
+              "certificate_status": "provided"
+            }
+          ],
+          "documents_summary": { "overall_status": "partially_complete", "missing_documents": ["valid_english_certificate"] }
+        },
+        "evaluation_scope": {
+          "mode": "single_program",
+          "targets": [
+            {
+              "university": { "university_id": "constructor_university", "name": "Constructor University", "country": "DE" },
+              "program": { "program_id": "cs_bachelor", "name": "Computer Science", "degree_level": "bachelor" },
+              "offering": { "offering_id": "constructor_cs_bachelor_w2026", "intake_semester": "winter_2026", "status": "open" },
+              "rule_set": { "rule_set_id": "constructor_cs_bachelor_v1", "version": "1.0.0" }
+            }
+          ]
+        },
+        "evaluation_date": "2026-03-13"
+      },
+      "expected": {
+        "overall_verdict": "not_eligible",
+        "_note": "The IELTS score is high enough (7.5 >= 6.5) but the test expired in 2024. The engine must check expiry_date against evaluation_date.",
+        "rule_results": [
+          { "rule_id": "qualification_level", "status": "passed" },
+          { "rule_id": "cert_recognition", "status": "passed" },
+          { "rule_id": "foundation_year_routing", "status": "passed" },
+          { "rule_id": "english_proficiency", "status": "failed" }
+        ],
+        "advisory_notes": [
+          {
+            "type": "tip",
+            "title": "Expired language test",
+            "message": "Previous IELTS (7.5) expired 2024-03-01. Retake IELTS or provide another valid English proficiency test to re-evaluate eligibility."
+          }
+        ]
+      }
+    },
+
+    {
+      "test_id": "tc_missing_documents_insufficient_data",
+      "description": "Egyptian student with most data self-reported and documents pending. Should return insufficient_data or low confidence due to unverified information.",
+      "input": {
+        "applicant": {
+          "applicant_id": "test_007",
+          "personal_info": {
+            "full_name": "Fatima El-Said",
+            "nationality": "EG",
+            "date_of_birth": "2005-08-22",
+            "country_of_residence": "EG"
+          },
+          "education_history": [
+            {
+              "entry_id": "edu_secondary",
+              "qualification_level": "secondary",
+              "certificate_type": "Thanaweya Amma",
+              "certificate_country": "EG",
+              "graduation_status": "expected",
+              "graduation_year": 2026,
+              "documents": {
+                "transcript_status": "pending",
+                "certificate_status": "pending",
+                "translation_status": "pending",
+                "apostille_status": "pending"
+              }
+            }
+          ],
+          "language_proficiency": [
+            {
+              "language": "english",
+              "test_type": "IELTS",
+              "overall_score": 6.5,
+              "test_date": "2025-12-01",
+              "certificate_status": "self_reported"
+            }
+          ],
+          "documents_summary": {
+            "overall_status": "incomplete",
+            "missing_documents": ["secondary_transcript", "secondary_certificate", "translated_documents", "apostille", "verified_ielts_certificate"]
+          }
+        },
+        "evaluation_scope": {
+          "mode": "single_program",
+          "targets": [
+            {
+              "university": { "university_id": "constructor_university", "name": "Constructor University", "country": "DE" },
+              "program": { "program_id": "cs_bachelor", "name": "Computer Science", "degree_level": "bachelor" },
+              "offering": { "offering_id": "constructor_cs_bachelor_w2026", "intake_semester": "winter_2026", "status": "open" },
+              "rule_set": { "rule_set_id": "constructor_cs_bachelor_v1", "version": "1.0.0" }
+            }
+          ]
+        },
+        "evaluation_date": "2026-03-13"
+      },
+      "expected": {
+        "overall_verdict": "insufficient_data",
+        "confidence": { "level": "low", "factors": ["self_reported_language_score", "graduation_expected_not_completed", "no_grading_data"] },
+        "missing_information": [
+          { "field": "education_history.0.grading", "description": "No grade information available for secondary education", "impact": "blocks_evaluation" },
+          { "field": "education_history.0.graduation_status", "description": "Student has not yet graduated (expected 2026)", "impact": "may_change_outcome" }
+        ]
+      }
+    },
+
+    {
+      "test_id": "tc_advisor_override_skip_language",
+      "description": "Indian student where the advisor has overridden the language check (verbal confirmation pending from university). Tests that advisor_overrides.skip_categories works correctly.",
+      "input": {
+        "applicant": {
+          "applicant_id": "test_008",
+          "personal_info": {
+            "full_name": "Rahul Patel",
+            "nationality": "IN",
+            "date_of_birth": "2004-12-15",
+            "country_of_residence": "IN"
+          },
+          "education_history": [
+            {
+              "entry_id": "edu_secondary",
+              "qualification_level": "secondary",
+              "certificate_type": "CBSE Class 12",
+              "certificate_country": "IN",
+              "institution_name": "Delhi Public School R.K. Puram",
+              "graduation_status": "completed",
+              "graduation_year": 2024,
+              "grading": { "system": "percentage", "value": 88, "scale_max": 100 },
+              "subjects": ["mathematics", "physics", "computer_science", "english", "chemistry"],
+              "documents": {
+                "transcript_status": "provided",
+                "certificate_status": "provided",
+                "translation_status": "not_applicable",
+                "apostille_status": "provided"
+              }
+            }
+          ],
+          "language_proficiency": [],
+          "documents_summary": { "overall_status": "partially_complete", "missing_documents": ["english_language_certificate"] }
+        },
+        "evaluation_scope": {
+          "mode": "single_program",
+          "targets": [
+            {
+              "university": { "university_id": "constructor_university", "name": "Constructor University", "country": "DE" },
+              "program": { "program_id": "cs_bachelor", "name": "Computer Science", "degree_level": "bachelor" },
+              "offering": { "offering_id": "constructor_cs_bachelor_w2026", "intake_semester": "winter_2026", "status": "open" },
+              "rule_set": { "rule_set_id": "constructor_cs_bachelor_v1", "version": "1.0.0" }
+            }
+          ]
+        },
+        "evaluation_date": "2026-03-13",
+        "advisor_overrides": {
+          "skip_categories": ["language_requirement"],
+          "override_reasons": {
+            "language_requirement": "Verbal confirmation from Constructor admissions that medium-of-instruction certificate will be accepted. Pending written confirmation."
+          }
+        }
+      },
+      "expected": {
+        "overall_verdict": "conditional",
+        "confidence": { "level": "moderate", "factors": ["advisor_override_applied"] },
+        "rule_results": [
+          { "rule_id": "qualification_level", "status": "passed" },
+          { "rule_id": "cert_recognition", "status": "passed" },
+          { "rule_id": "foundation_year_routing", "status": "failed", "_note": "IN requires foundation year, on_fail: conditional_accept" },
+          { "rule_id": "english_proficiency", "status": "skipped_override" },
+          { "rule_id": "gpa_minimum", "status": "passed" },
+          { "rule_id": "math_prerequisite", "status": "passed" },
+          { "rule_id": "scholarship_gpa", "status": "passed", "_note": "88% >= 85% scholarship threshold" }
+        ],
+        "advisory_notes": [
+          {
+            "type": "scholarship_note",
+            "title": "Scholarship eligibility",
+            "message": "Applicant's grade (88%) meets the scholarship consideration threshold. Ensure scholarship deadline (2026-02-01) is met."
+          }
+        ]
+      }
+    }
+  ]
+}

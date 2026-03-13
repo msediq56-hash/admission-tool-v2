@@ -1,0 +1,30 @@
+{
+  "_comment": "Catalog of programs offered across universities. Each program is a general definition — specific offerings per intake are in program_offerings.json. Programs are university-independent definitions; a program can exist at multiple universities.",
+  "_status": "DEMO_PLACEHOLDER",
+  "programs": [
+    {
+      "program_id": "cs_bachelor",
+      "name": "Computer Science",
+      "degree_level": "bachelor",
+      "language_of_instruction": "english",
+      "duration_semesters": 6,
+      "field_of_study": "computer_science",
+      "prerequisite_subjects": ["mathematics"],
+      "ects_credits": 180,
+      "accreditation": "ASIIN",
+      "notes": "Strong math background recommended. Programming experience is a plus but not required."
+    },
+    {
+      "program_id": "business_bachelor",
+      "name": "International Business Administration",
+      "degree_level": "bachelor",
+      "language_of_instruction": "english",
+      "duration_semesters": 6,
+      "field_of_study": "business",
+      "prerequisite_subjects": [],
+      "ects_credits": 180,
+      "accreditation": "AACSB",
+      "notes": ""
+    }
+  ]
+}

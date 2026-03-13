@@ -1,0 +1,34 @@
+{
+  "_comment": "Catalog of universities supported by the evaluation system. Maintained manually by the advisory team. Contains institutional data, admission office contacts, and recognition agreements.",
+  "_status": "DEMO_PLACEHOLDER",
+  "universities": [
+    {
+      "university_id": "constructor_university",
+      "name": "Constructor University",
+      "country": "DE",
+      "city": "Bremen",
+      "type": "private",
+      "website": "https://constructor.university",
+      "supported_languages": ["english"],
+      "admission_office": {
+        "email": "admission@constructor.university",
+        "phone": "+49 421 200 4200",
+        "portal_url": "https://constructor.university/apply"
+      },
+      "recognition_agreements": [
+        {
+          "country": "US",
+          "agreement_type": "direct_recognition",
+          "notes": "High School Diploma with AP/SAT accepted for direct admission"
+        },
+        {
+          "country": "GB",
+          "agreement_type": "direct_recognition",
+          "notes": "A-Levels accepted for direct admission"
+        }
+      ],
+      "anabin_institution_status": "H_plus",
+      "notes": "Formerly Jacobs University. English-taught programs. Private university — admission requirements may differ from German public university standards."
+    }
+  ]
+}

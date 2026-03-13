@@ -1,0 +1,492 @@
+{
+  "_comment": "Eligibility rules for Constructor University bachelor programs (CS). Demonstrates all five condition types: comparison, composite, lookup, conditional, and quantifier. Uses staged evaluation with rule dependencies.",
+  "_status": "DEMO_PLACEHOLDER",
+  "_status_note": "This rule set is structurally representative but NOT a verified migration of real Constructor University admission rules. Thresholds, country lists, and exception conditions are approximate. Do not use for real eligibility decisions until verified against current university requirements.",
+
+  "rule_set_id": "constructor_cs_bachelor_v1",
+  "university_id": "constructor_university",
+  "program_id": "cs_bachelor",
+  "degree_level": "bachelor",
+  "version": "1.0.0",
+  "effective_from": "2026-01-01",
+
+  "stages": [
+    {
+      "stage_id": "qualification",
+      "name": "Qualification Check",
+      "description": "Verifies the applicant holds a recognized secondary qualification",
+      "evaluation_order": 1,
+      "stop_on_first_failure": false
+    },
+    {
+      "stage_id": "foundation_routing",
+      "name": "Foundation Year Routing",
+      "description": "Determines if a Studienkolleg or foundation year is required based on certificate country",
+      "evaluation_order": 2,
+      "stop_on_first_failure": false
+    },
+    {
+      "stage_id": "language",
+      "name": "Language Requirements",
+      "description": "Checks English proficiency through accepted test pathways",
+      "evaluation_order": 3,
+      "stop_on_first_failure": false
+    },
+    {
+      "stage_id": "academic_performance",
+      "name": "Academic Performance",
+      "description": "Checks GPA/grade thresholds with cross-system normalization",
+      "evaluation_order": 4,
+      "stop_on_first_failure": false
+    },
+    {
+      "stage_id": "subject_prerequisites",
+      "name": "Subject Prerequisites",
+      "description": "Checks subject-specific requirements for the CS program",
+      "evaluation_order": 5,
+      "stop_on_first_failure": false
+    },
+    {
+      "stage_id": "supplementary",
+      "name": "Supplementary Checks",
+      "description": "Non-blocking checks: scholarship eligibility, document completeness",
+      "evaluation_order": 6,
+      "stop_on_first_failure": false
+    }
+  ],
+
+  "reference_tables": {
+    "_comment": "Inline reference tables for this rule set. In production these would $ref to data/reference_tables.json.",
+    "english_native_countries": ["US", "GB", "AU", "CA", "NZ", "IE", "SG"],
+    "foundation_year_required_countries": ["JO", "IN", "EG", "NG", "PK", "BD", "LK", "VN"],
+    "language_thresholds": {
+      "IELTS": { "min_overall": 6.5, "min_sub_score": 6.0 },
+      "TOEFL": { "min_overall": 80 },
+      "Duolingo": { "min_overall": 110 },
+      "Cambridge": { "accepted_levels": ["C1", "C2", "B2"] }
+    }
+  },
+
+  "rules": [
+    {
+      "rule_id": "qualification_level",
+      "stage": "qualification",
+      "priority": 1,
+      "category": "qualification_level",
+      "description": "Applicant must have at least one completed secondary-level education entry (high school or equivalent)",
+      "condition": {
+        "type": "any_of",
+        "array_field": "education_history",
+        "filter": { "qualification_level": "secondary" },
+        "condition": {
+          "type": "comparison",
+          "field": "graduation_status",
+          "operator": "in",
+          "value": ["completed", "expected"]
+        }
+      },
+      "on_fail": "reject",
+      "on_fail_message_template": "No completed or expected secondary education found. Applicant must hold a recognized high school diploma or equivalent.",
+      "exceptions": [
+        {
+          "exception_id": "exc_studienkolleg_completed",
+          "description": "Applicants who completed a Studienkolleg are eligible even without a separately recognized secondary certificate in the system",
+          "condition": {
+            "type": "any_of",
+            "array_field": "education_history",
+            "filter": { "qualification_level": "studienkolleg" },
+            "condition": {
+              "type": "comparison",
+              "field": "graduation_status",
+              "operator": "eq",
+              "value": "completed"
+            }
+          }
+        },
+        {
+          "exception_id": "exc_foundation_year_completed",
+          "description": "Applicants who completed an approved foundation year program",
+          "condition": {
+            "type": "any_of",
+            "array_field": "education_history",
+            "filter": { "qualification_level": "foundation_year" },
+            "condition": {
+              "type": "comparison",
+              "field": "graduation_status",
+              "operator": "eq",
+              "value": "completed"
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "rule_id": "cert_recognition",
+      "stage": "qualification",
+      "priority": 2,
+      "category": "certificate_recognition",
+      "description": "The applicant's secondary certificate must be from a recognized country/certificate combination. Uses lookup against recognized_certificates_by_country reference table.",
+      "depends_on": ["qualification_level"],
+      "condition": {
+        "type": "any_of",
+        "array_field": "education_history",
+        "filter": { "qualification_level": "secondary" },
+        "condition": {
+          "type": "lookup",
+          "table": "recognized_certificates_by_country",
+          "lookup_key_field": "certificate_country",
+          "result_field": "certificates",
+          "expected_values": null
+        }
+      },
+      "on_fail": "flag_for_review",
+      "on_fail_message_template": "Certificate from {actual} is not in the recognized certificates table. Manual verification required.",
+      "exceptions": []
+    },
+
+    {
+      "rule_id": "foundation_year_routing",
+      "stage": "foundation_routing",
+      "priority": 1,
+      "category": "foundation_year_requirement",
+      "description": "If the applicant's secondary certificate is from a country that requires a foundation year/Studienkolleg for German university admission, check that they have completed one. Note: Constructor is a private university and may waive this — this rule uses conditional_accept rather than reject.",
+      "depends_on": ["qualification_level"],
+      "condition": {
+        "type": "conditional",
+        "if": {
+          "type": "any_of",
+          "array_field": "education_history",
+          "filter": { "qualification_level": "secondary" },
+          "condition": {
+            "type": "comparison",
+            "field": "certificate_country",
+            "operator": "in",
+            "value": ["JO", "IN", "EG", "NG", "PK", "BD", "LK", "VN"]
+          }
+        },
+        "then": {
+          "type": "composite",
+          "operator": "or",
+          "conditions": [
+            {
+              "type": "any_of",
+              "array_field": "education_history",
+              "filter": { "qualification_level": "studienkolleg" },
+              "condition": {
+                "type": "comparison",
+                "field": "graduation_status",
+                "operator": "eq",
+                "value": "completed"
+              }
+            },
+            {
+              "type": "any_of",
+              "array_field": "education_history",
+              "filter": { "qualification_level": "foundation_year" },
+              "condition": {
+                "type": "comparison",
+                "field": "graduation_status",
+                "operator": "eq",
+                "value": "completed"
+              }
+            }
+          ]
+        }
+      },
+      "on_fail": "conditional_accept",
+      "on_fail_message_template": "Applicant's certificate country ({actual}) typically requires a Studienkolleg or foundation year. Constructor University may waive this for qualified applicants — confirm with admissions.",
+      "exceptions": []
+    },
+
+    {
+      "rule_id": "english_proficiency",
+      "stage": "language",
+      "priority": 1,
+      "category": "language_requirement",
+      "description": "Applicant must demonstrate English proficiency through one of the accepted test pathways: IELTS >= 6.5, TOEFL >= 80, Duolingo >= 110, or Cambridge B2/C1/C2. Native English speakers from recognized countries are exempt.",
+      "condition": {
+        "type": "composite",
+        "operator": "or",
+        "conditions": [
+          {
+            "type": "any_of",
+            "array_field": "language_proficiency",
+            "filter": { "language": "english", "test_type": "IELTS" },
+            "condition": {
+              "type": "comparison",
+              "field": "overall_score",
+              "operator": "gte",
+              "value": 6.5
+            }
+          },
+          {
+            "type": "any_of",
+            "array_field": "language_proficiency",
+            "filter": { "language": "english", "test_type": "TOEFL" },
+            "condition": {
+              "type": "comparison",
+              "field": "overall_score",
+              "operator": "gte",
+              "value": 80
+            }
+          },
+          {
+            "type": "any_of",
+            "array_field": "language_proficiency",
+            "filter": { "language": "english", "test_type": "Duolingo" },
+            "condition": {
+              "type": "comparison",
+              "field": "overall_score",
+              "operator": "gte",
+              "value": 110
+            }
+          },
+          {
+            "type": "any_of",
+            "array_field": "language_proficiency",
+            "filter": { "language": "english", "test_type": "Cambridge" },
+            "condition": {
+              "type": "comparison",
+              "field": "overall_score",
+              "operator": "in",
+              "value": ["C1", "C2", "B2"]
+            }
+          },
+          {
+            "type": "any_of",
+            "array_field": "language_proficiency",
+            "filter": { "language": "english", "test_type": "native_speaker" },
+            "condition": {
+              "type": "comparison",
+              "field": "test_type",
+              "operator": "eq",
+              "value": "native_speaker"
+            }
+          },
+          {
+            "type": "any_of",
+            "array_field": "language_proficiency",
+            "filter": { "language": "english", "test_type": "medium_of_instruction" },
+            "condition": {
+              "type": "comparison",
+              "field": "certificate_status",
+              "operator": "in",
+              "value": ["provided", "pending"]
+            }
+          }
+        ]
+      },
+      "on_fail": "reject",
+      "on_fail_message_template": "No accepted English proficiency proof found. Accepted: IELTS >= 6.5, TOEFL >= 80, Duolingo >= 110, Cambridge B2+, native speaker proof, or medium of instruction certificate.",
+      "exceptions": [
+        {
+          "exception_id": "exc_native_english_nationality",
+          "description": "Nationals of English-speaking countries are exempt from English language testing",
+          "condition": {
+            "type": "composite",
+            "operator": "or",
+            "conditions": [
+              {
+                "type": "comparison",
+                "field": "personal_info.nationality",
+                "operator": "in",
+                "value": ["US", "GB", "AU", "CA", "NZ", "IE", "SG"]
+              },
+              {
+                "type": "any_of",
+                "array_field": "personal_info.additional_nationalities",
+                "condition": {
+                  "type": "comparison",
+                  "field": "",
+                  "operator": "in",
+                  "value": ["US", "GB", "AU", "CA", "NZ", "IE", "SG"]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+
+    {
+      "rule_id": "gpa_minimum",
+      "stage": "academic_performance",
+      "priority": 1,
+      "category": "gpa_requirement",
+      "description": "Applicant's secondary education grade must meet the minimum threshold. Uses conditional branching to handle different grading systems: GPA >= 2.5 (on 4.0 scale), percentage >= 60%, German grade <= 3.5 (lower is better), IB >= 28 points.",
+      "depends_on": ["qualification_level"],
+      "condition": {
+        "type": "any_of",
+        "array_field": "education_history",
+        "filter": { "qualification_level": "secondary" },
+        "condition": {
+          "type": "conditional",
+          "if": {
+            "type": "comparison",
+            "field": "grading.system",
+            "operator": "eq",
+            "value": "gpa_4"
+          },
+          "then": {
+            "type": "comparison",
+            "field": "grading.value",
+            "operator": "gte",
+            "value": 2.5
+          },
+          "else": {
+            "type": "conditional",
+            "if": {
+              "type": "comparison",
+              "field": "grading.system",
+              "operator": "eq",
+              "value": "percentage"
+            },
+            "then": {
+              "type": "comparison",
+              "field": "grading.value",
+              "operator": "gte",
+              "value": 60
+            },
+            "else": {
+              "type": "conditional",
+              "if": {
+                "type": "comparison",
+                "field": "grading.system",
+                "operator": "eq",
+                "value": "german_1_to_6"
+              },
+              "then": {
+                "type": "comparison",
+                "field": "grading.value",
+                "operator": "lte",
+                "value": 3.5
+              },
+              "else": {
+                "type": "conditional",
+                "if": {
+                  "type": "comparison",
+                  "field": "grading.system",
+                  "operator": "eq",
+                  "value": "ib_points"
+                },
+                "then": {
+                  "type": "comparison",
+                  "field": "grading.value",
+                  "operator": "gte",
+                  "value": 28
+                }
+              }
+            }
+          }
+        }
+      },
+      "on_fail": "flag_for_review",
+      "on_fail_message_template": "Grade {actual} on {system} scale does not meet the minimum threshold. Manual review recommended — the threshold may vary by certificate type.",
+      "exceptions": []
+    },
+
+    {
+      "rule_id": "math_prerequisite",
+      "stage": "subject_prerequisites",
+      "priority": 1,
+      "category": "subject_prerequisite",
+      "description": "CS bachelor applicants should have studied mathematics in secondary education. This is advisory (flag_for_review) since Constructor does not strictly require it but it is strongly recommended.",
+      "depends_on": ["qualification_level"],
+      "condition": {
+        "type": "any_of",
+        "array_field": "education_history",
+        "filter": { "qualification_level": "secondary" },
+        "condition": {
+          "type": "composite",
+          "operator": "and",
+          "conditions": [
+            {
+              "type": "comparison",
+              "field": "subjects",
+              "operator": "exists"
+            },
+            {
+              "type": "comparison",
+              "field": "subjects",
+              "operator": "contains",
+              "value": "mathematics"
+            }
+          ]
+        }
+      },
+      "on_fail": "warn",
+      "on_fail_message_template": "No mathematics subject found in the applicant's secondary education record. Mathematics background is strongly recommended for the CS program.",
+      "exceptions": []
+    },
+
+    {
+      "rule_id": "scholarship_gpa",
+      "stage": "supplementary",
+      "priority": 1,
+      "category": "scholarship_eligibility",
+      "description": "Flag applicants who meet the higher GPA threshold for scholarship consideration. This is informational only (warn) — does not affect eligibility.",
+      "depends_on": ["qualification_level", "gpa_minimum"],
+      "condition": {
+        "type": "any_of",
+        "array_field": "education_history",
+        "filter": { "qualification_level": "secondary" },
+        "condition": {
+          "type": "conditional",
+          "if": {
+            "type": "comparison",
+            "field": "grading.system",
+            "operator": "eq",
+            "value": "gpa_4"
+          },
+          "then": {
+            "type": "comparison",
+            "field": "grading.value",
+            "operator": "gte",
+            "value": 3.5
+          },
+          "else": {
+            "type": "conditional",
+            "if": {
+              "type": "comparison",
+              "field": "grading.system",
+              "operator": "eq",
+              "value": "percentage"
+            },
+            "then": {
+              "type": "comparison",
+              "field": "grading.value",
+              "operator": "gte",
+              "value": 85
+            },
+            "else": {
+              "type": "conditional",
+              "if": {
+                "type": "comparison",
+                "field": "grading.system",
+                "operator": "eq",
+                "value": "ib_points"
+              },
+              "then": {
+                "type": "comparison",
+                "field": "grading.value",
+                "operator": "gte",
+                "value": 36
+              }
+            }
+          }
+        }
+      },
+      "on_fail": "warn",
+      "on_fail_message_template": "Applicant does not meet the higher GPA threshold for automatic scholarship consideration. They may still apply for need-based scholarships.",
+      "exceptions": []
+    }
+  ],
+
+  "metadata": {
+    "author": "advisory_team",
+    "last_updated": "2026-03-13",
+    "source": "Constructor University admissions website and direct communication. Thresholds are approximate.",
+    "notes": "DEMO PLACEHOLDER — not verified against current Constructor University admission requirements. Do not use for real eligibility decisions."
+  }
+}

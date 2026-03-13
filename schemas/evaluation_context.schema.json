@@ -1,0 +1,161 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "evaluation_context.schema.json",
+  "title": "Evaluation Context",
+  "description": "The fully assembled input to the evaluation engine. Constructed by the system (not the advisor) by resolving the applicant profile, catalog data, and rule set into a self-contained context. The engine should be able to evaluate eligibility using only this document — no additional lookups needed. Supports single-program evaluation and multi-program screening.",
+  "type": "object",
+  "required": ["applicant", "evaluation_scope", "evaluation_date"],
+  "properties": {
+    "applicant": {
+      "description": "The full resolved applicant profile. Copied from the applicant_profile at assembly time so the context is self-contained and the evaluation is reproducible.",
+      "$ref": "applicant_profile.schema.json"
+    },
+
+    "evaluation_scope": {
+      "type": "object",
+      "description": "Defines what is being evaluated — a single program or a batch screening across multiple programs.",
+      "required": ["mode", "targets"],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["single_program", "multi_program_screening"],
+          "description": "'single_program' = evaluate one specific program. 'multi_program_screening' = evaluate eligibility across multiple programs and return which ones match."
+        },
+        "targets": {
+          "type": "array",
+          "description": "One or more target program evaluations. For 'single_program' mode, this array has exactly one entry.",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["university", "program", "rule_set"],
+            "properties": {
+              "university": {
+                "type": "object",
+                "description": "Resolved university data from universities.json",
+                "required": ["university_id", "name", "country"],
+                "properties": {
+                  "university_id": { "type": "string" },
+                  "name": { "type": "string" },
+                  "country": { "type": "string" },
+                  "type": { "type": "string" },
+                  "supported_languages": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  }
+                }
+              },
+              "program": {
+                "type": "object",
+                "description": "Resolved program data from programs.json",
+                "required": ["program_id", "name", "degree_level"],
+                "properties": {
+                  "program_id": { "type": "string" },
+                  "name": { "type": "string" },
+                  "degree_level": { "type": "string" },
+                  "language_of_instruction": { "type": "string" },
+                  "prerequisite_subjects": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "ects_credits": { "type": ["integer", "null"] }
+                }
+              },
+              "offering": {
+                "type": "object",
+                "description": "Resolved offering data from program_offerings.json. Null if evaluating general eligibility without a specific intake.",
+                "properties": {
+                  "offering_id": { "type": "string" },
+                  "intake_semester": { "type": "string" },
+                  "deadlines": {
+                    "type": "object",
+                    "properties": {
+                      "early_admission": { "type": ["string", "null"], "format": "date" },
+                      "regular": { "type": "string", "format": "date" },
+                      "late_admission": { "type": ["string", "null"], "format": "date" },
+                      "scholarship": { "type": ["string", "null"], "format": "date" },
+                      "document_submission": { "type": ["string", "null"], "format": "date" }
+                    }
+                  },
+                  "status": { "type": "string" },
+                  "tuition": {
+                    "type": "object",
+                    "properties": {
+                      "amount": { "type": "number" },
+                      "currency": { "type": "string" },
+                      "per": { "type": "string", "enum": ["semester", "year", "total"] },
+                      "scholarship_available": { "type": "boolean" }
+                    }
+                  }
+                }
+              },
+              "rule_set": {
+                "type": "object",
+                "description": "The full resolved rule set to evaluate against. Embedded so the context is self-contained.",
+                "required": ["rule_set_id", "version"],
+                "properties": {
+                  "rule_set_id": { "type": "string" },
+                  "version": { "type": "string" },
+                  "_comment": "Full rule set structure as defined in rule_set.schema.json is embedded here at runtime"
+                },
+                "additionalProperties": true
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "evaluation_date": {
+      "type": "string",
+      "format": "date",
+      "description": "The reference date for the evaluation. Used for: language test expiry checks, age calculations, rule set version selection, deadline comparisons. Typically today's date, but can be set to a future date for planning."
+    },
+
+    "advisor_overrides": {
+      "type": "object",
+      "description": "Advisor-specified overrides that modify how the evaluation is performed. These allow advisors to skip checks (e.g. verbal confirmation pending), force-include rules, or note assumed documents.",
+      "properties": {
+        "skip_categories": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Rule categories to skip entirely. E.g. ['language_requirement'] if verbal confirmation is pending."
+        },
+        "skip_rules": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Specific rule_ids to skip"
+        },
+        "override_reasons": {
+          "type": "object",
+          "description": "Justification for each override, keyed by category or rule_id. E.g. { 'language_requirement': 'Verbal confirmation from university pending written proof' }.",
+          "additionalProperties": { "type": "string" }
+        },
+        "assumed_documents": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Documents the advisor knows are coming. E.g. ['ielts_certificate', 'translated_transcript']. The engine may treat these as 'provided' for document checks."
+        },
+        "apply_exceptions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to apply known exceptions. Set to false to see raw rule results without exception overrides."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Free-text justification for the overrides"
+        }
+      }
+    },
+
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when this context was assembled"
+    },
+    "created_by": {
+      "type": "string",
+      "description": "Advisor identifier who requested the evaluation"
+    }
+  },
+  "additionalProperties": false
+}

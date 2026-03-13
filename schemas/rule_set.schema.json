@@ -1,0 +1,301 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "rule_set.schema.json",
+  "title": "Rule Set",
+  "description": "Defines the structure for eligibility rule sets. Each rule set targets a university+program+degree combination and contains staged, ordered rules with a recursive condition system. The condition model supports five types: comparison (leaf), composite (AND/OR/NOT), lookup (reference table check), conditional (IF/THEN/ELSE branching), and quantifiers (any_of/all_of over arrays). Rules are grouped into stages and can declare dependencies on other rules.",
+  "type": "object",
+  "required": ["rule_set_id", "university_id", "program_id", "degree_level", "stages", "rules"],
+  "properties": {
+    "rule_set_id": {
+      "type": "string",
+      "description": "Unique identifier for this rule set"
+    },
+    "university_id": {
+      "type": "string"
+    },
+    "program_id": {
+      "type": "string"
+    },
+    "degree_level": {
+      "type": "string",
+      "enum": ["bachelor", "master", "phd", "preparatory"]
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version for tracking rule changes"
+    },
+    "effective_from": {
+      "type": "string",
+      "format": "date"
+    },
+
+    "stages": {
+      "type": "array",
+      "description": "Defines the evaluation stages. Rules reference a stage_id. Stages are evaluated in order of evaluation_order. If stop_on_first_failure is true, the engine skips remaining rules in the stage after the first reject.",
+      "items": {
+        "type": "object",
+        "required": ["stage_id", "name", "evaluation_order"],
+        "properties": {
+          "stage_id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "evaluation_order": {
+            "type": "integer",
+            "description": "Lower numbers are evaluated first"
+          },
+          "stop_on_first_failure": {
+            "type": "boolean",
+            "default": false,
+            "description": "If true, stop evaluating remaining rules in this stage after the first 'reject' result"
+          }
+        }
+      }
+    },
+
+    "reference_tables": {
+      "type": "object",
+      "description": "Lookup tables used by 'lookup' conditions in this rule set. Keys are table names referenced by rules. Values are either inline data or a $ref pointer to data/reference_tables.json. This allows rule sets to be self-contained or to share reference data.",
+      "additionalProperties": true
+    },
+
+    "rules": {
+      "type": "array",
+      "description": "Ordered list of eligibility rules. Each rule belongs to a stage, may depend on other rules, and contains a recursive condition tree.",
+      "items": {
+        "type": "object",
+        "required": ["rule_id", "stage", "category", "description", "condition"],
+        "properties": {
+          "rule_id": {
+            "type": "string",
+            "description": "Unique identifier within this rule set"
+          },
+          "stage": {
+            "type": "string",
+            "description": "References a stage_id from the stages array"
+          },
+          "priority": {
+            "type": "integer",
+            "description": "Evaluation order within the stage (lower = first). Default: 0.",
+            "default": 0
+          },
+          "category": {
+            "type": "string",
+            "description": "Rule category for grouping, filtering, and advisor reporting",
+            "enum": [
+              "certificate_recognition",
+              "qualification_level",
+              "language_requirement",
+              "gpa_requirement",
+              "subject_prerequisite",
+              "foundation_year_requirement",
+              "age_limit",
+              "work_experience",
+              "document_requirement",
+              "visa_requirement",
+              "scholarship_eligibility",
+              "special_condition"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable explanation of what this rule checks"
+          },
+          "depends_on": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Rule IDs that must have passed for this rule to execute. If any dependency failed, this rule is skipped with status 'skipped_dependency'."
+          },
+          "condition": {
+            "$ref": "#/definitions/condition",
+            "description": "The root condition node. Uses the recursive condition system (see definitions)."
+          },
+          "on_fail": {
+            "type": "string",
+            "enum": ["reject", "conditional_accept", "flag_for_review", "warn"],
+            "default": "reject",
+            "description": "'reject' = not eligible. 'conditional_accept' = eligible if condition is met later. 'flag_for_review' = needs human review. 'warn' = informational, does not block."
+          },
+          "on_fail_message_template": {
+            "type": "string",
+            "description": "Template with placeholders for the failure message shown to the advisor. E.g. 'Applicant needs {expected} but has {actual}. Consider {alternative}.'"
+          },
+          "exceptions": {
+            "type": "array",
+            "description": "Known exceptions that can override a failing rule. Each exception has its own condition; if the exception condition passes, the rule failure is overridden.",
+            "items": {
+              "type": "object",
+              "required": ["exception_id", "description", "condition"],
+              "properties": {
+                "exception_id": { "type": "string" },
+                "description": { "type": "string" },
+                "condition": {
+                  "$ref": "#/definitions/condition"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "author": { "type": "string" },
+        "last_updated": {
+          "type": "string",
+          "format": "date"
+        },
+        "source": {
+          "type": "string",
+          "description": "Where the requirements were sourced (e.g. university website, direct communication, Anabin database)"
+        },
+        "notes": { "type": "string" }
+      }
+    }
+  },
+
+  "definitions": {
+    "condition": {
+      "description": "A recursive condition node. Every condition has a 'type' that determines its structure. The five types are: comparison (leaf), composite (AND/OR/NOT), lookup (reference table), conditional (IF/THEN/ELSE), and quantifier (any_of/all_of over arrays).",
+      "type": "object",
+      "required": ["type"],
+      "oneOf": [
+        { "$ref": "#/definitions/comparison_condition" },
+        { "$ref": "#/definitions/composite_condition" },
+        { "$ref": "#/definitions/lookup_condition" },
+        { "$ref": "#/definitions/conditional_condition" },
+        { "$ref": "#/definitions/quantifier_condition" }
+      ]
+    },
+
+    "comparison_condition": {
+      "description": "Leaf condition: compares a field in the applicant profile against an expected value using an operator.",
+      "type": "object",
+      "required": ["type", "field", "operator"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "comparison"
+        },
+        "field": {
+          "type": "string",
+          "description": "Dot-path to the profile field. E.g. 'personal_info.nationality', 'education_history.0.grading.value'. For array access use dot notation with index or use quantifier conditions instead."
+        },
+        "operator": {
+          "type": "string",
+          "enum": ["eq", "neq", "in", "not_in", "gte", "lte", "gt", "lt", "exists", "not_exists", "contains", "matches_regex"],
+          "description": "Comparison operator. 'in'/'not_in' expect value to be an array. 'exists'/'not_exists' check field presence (value is ignored)."
+        },
+        "value": {
+          "description": "The value to compare against. Type depends on operator and field."
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "composite_condition": {
+      "description": "Groups multiple conditions with AND/OR/NOT logic. For 'not', the conditions array must have exactly one element.",
+      "type": "object",
+      "required": ["type", "operator", "conditions"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "composite"
+        },
+        "operator": {
+          "type": "string",
+          "enum": ["and", "or", "not"]
+        },
+        "conditions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/condition" },
+          "description": "Nested conditions. For 'not' operator, must contain exactly one condition."
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "lookup_condition": {
+      "description": "Checks a value from the applicant profile against a reference table. The table must be defined in the rule set's reference_tables or in data/reference_tables.json.",
+      "type": "object",
+      "required": ["type", "table", "lookup_key_field"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "lookup"
+        },
+        "table": {
+          "type": "string",
+          "description": "Name of the reference table. E.g. 'recognized_certificates_by_country', 'english_native_countries'."
+        },
+        "lookup_key_field": {
+          "type": "string",
+          "description": "Dot-path to the profile field whose value is used as the lookup key."
+        },
+        "result_field": {
+          "type": "string",
+          "description": "Which property of the lookup result to check. E.g. 'anabin_default', 'foundation_year_required'."
+        },
+        "expected_values": {
+          "type": ["array", "null"],
+          "description": "Acceptable values for the result_field. If null or omitted, the condition passes if the key exists in the table."
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "conditional_condition": {
+      "description": "IF/THEN/ELSE branching. Evaluates the 'if' condition first. If it passes, evaluates 'then'. If it fails and 'else' is present, evaluates 'else'. If 'else' is absent and 'if' fails, the overall condition passes (the branch is not applicable).",
+      "type": "object",
+      "required": ["type", "if", "then"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "conditional"
+        },
+        "if": {
+          "$ref": "#/definitions/condition",
+          "description": "Predicate condition"
+        },
+        "then": {
+          "$ref": "#/definitions/condition",
+          "description": "Evaluated if the predicate passes"
+        },
+        "else": {
+          "$ref": "#/definitions/condition",
+          "description": "Evaluated if the predicate fails. Optional — if absent and 'if' fails, the overall condition passes."
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "quantifier_condition": {
+      "description": "Evaluates a condition across elements of an array field. 'any_of' passes if at least one element matches. 'all_of' passes if every element matches. An optional filter narrows which array elements to consider.",
+      "type": "object",
+      "required": ["type", "array_field", "condition"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["any_of", "all_of"]
+        },
+        "array_field": {
+          "type": "string",
+          "description": "Dot-path to the array in the profile. E.g. 'education_history', 'language_proficiency'."
+        },
+        "filter": {
+          "type": "object",
+          "description": "Key-value filter to narrow which array elements to evaluate. E.g. { 'language': 'english' } to only check English entries. All keys must match for an element to be included.",
+          "additionalProperties": true
+        },
+        "condition": {
+          "$ref": "#/definitions/condition",
+          "description": "Condition evaluated against each matching array element. Field paths in this condition are relative to the array element."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+
+  "additionalProperties": false
+}
