@@ -1,4 +1,5 @@
 // Advisor flow server — serves the Arabic advisor UI and flow config APIs.
+// Supports multiple universities via flows/{universityId}/ folders.
 // Usage: node advisor/server.js
 // Then open http://localhost:3001
 
@@ -9,7 +10,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
-const FLOWS_DIR = path.join(ROOT, 'flows', 'constructor');
+const FLOWS_ROOT = path.join(ROOT, 'flows');
 
 const PORT = process.env.PORT || 3001;
 
@@ -52,45 +53,81 @@ function serveStatic(req, res) {
   });
 }
 
+// Validate university ID to prevent path traversal
+function isValidId(id) {
+  return /^[a-z][a-z0-9_]*$/.test(id);
+}
+
 function handleAPI(req, res) {
   const url = req.url.split('?')[0];
 
-  // GET /api/meta
-  if (url === '/api/meta') {
-    const metaPath = path.join(FLOWS_DIR, '_meta.json');
+  // GET /api/universities — list all available universities
+  if (url === '/api/universities') {
     try {
-      const data = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
-      sendJSON(res, data);
+      const entries = fs.readdirSync(FLOWS_ROOT, { withFileTypes: true });
+      const universities = [];
+      for (const entry of entries) {
+        if (!entry.isDirectory()) continue;
+        const metaPath = path.join(FLOWS_ROOT, entry.name, '_meta.json');
+        if (!fs.existsSync(metaPath)) continue;
+        const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+        universities.push({
+          id: meta.university_id || entry.name,
+          label: meta.university_label,
+          country_label: meta.country_label
+        });
+      }
+      sendJSON(res, { universities });
+    } catch (e) {
+      sendError(res, 500, 'Failed to list universities');
+    }
+    return;
+  }
+
+  // GET /api/:universityId/meta
+  const metaMatch = url.match(/^\/api\/([a-z_]+)\/meta$/);
+  if (metaMatch) {
+    const uniId = metaMatch[1];
+    if (!isValidId(uniId)) { sendError(res, 400, 'Invalid university ID'); return; }
+    const metaPath = path.join(FLOWS_ROOT, uniId, '_meta.json');
+    try {
+      if (!fs.existsSync(metaPath)) { sendError(res, 404, 'University not found'); return; }
+      sendJSON(res, JSON.parse(fs.readFileSync(metaPath, 'utf8')));
     } catch (e) {
       sendError(res, 500, 'Failed to load meta');
     }
     return;
   }
 
-  // GET /api/majors
-  if (url === '/api/majors') {
-    const majorsPath = path.join(FLOWS_DIR, 'shared', 'majors.json');
+  // GET /api/:universityId/majors
+  const majorsMatch = url.match(/^\/api\/([a-z_]+)\/majors$/);
+  if (majorsMatch) {
+    const uniId = majorsMatch[1];
+    if (!isValidId(uniId)) { sendError(res, 400, 'Invalid university ID'); return; }
+    const majorsPath = path.join(FLOWS_ROOT, uniId, 'shared', 'majors.json');
     try {
-      const data = JSON.parse(fs.readFileSync(majorsPath, 'utf8'));
-      sendJSON(res, data);
+      if (!fs.existsSync(majorsPath)) {
+        // Not all universities have majors — return empty
+        sendJSON(res, { majors: [] });
+        return;
+      }
+      sendJSON(res, JSON.parse(fs.readFileSync(majorsPath, 'utf8')));
     } catch (e) {
       sendError(res, 500, 'Failed to load majors');
     }
     return;
   }
 
-  // GET /api/flow/:pathId
-  const flowMatch = url.match(/^\/api\/flow\/([a-z_]+)$/);
+  // GET /api/:universityId/flow/:pathId
+  const flowMatch = url.match(/^\/api\/([a-z_]+)\/flow\/([a-z_]+)$/);
   if (flowMatch) {
-    const pathId = flowMatch[1];
-    const flowPath = path.join(FLOWS_DIR, `${pathId}.json`);
+    const uniId = flowMatch[1];
+    const pathId = flowMatch[2];
+    if (!isValidId(uniId) || !isValidId(pathId)) { sendError(res, 400, 'Invalid ID'); return; }
+    const flowPath = path.join(FLOWS_ROOT, uniId, `${pathId}.json`);
     try {
-      if (!fs.existsSync(flowPath)) {
-        sendError(res, 404, 'Flow not found');
-        return;
-      }
-      const data = JSON.parse(fs.readFileSync(flowPath, 'utf8'));
-      sendJSON(res, data);
+      if (!fs.existsSync(flowPath)) { sendError(res, 404, 'Flow not found'); return; }
+      sendJSON(res, JSON.parse(fs.readFileSync(flowPath, 'utf8')));
     } catch (e) {
       sendError(res, 500, 'Failed to load flow');
     }

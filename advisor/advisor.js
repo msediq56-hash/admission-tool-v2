@@ -11,10 +11,12 @@
 // STATE
 // ──────────────────────────────────────────────────────────────────────────────
 
-let meta = null;        // _meta.json
-let majorsData = null;  // shared/majors.json
-let currentFlow = null; // loaded flow JSON for current path
-let history = [];       // array of { questionId, answer, answerLabel }
+let universities = null;  // list from /api/universities
+let currentUni = null;    // selected university ID
+let meta = null;          // _meta.json for selected university
+let majorsData = null;    // shared/majors.json for selected university
+let currentFlow = null;   // loaded flow JSON for current path
+let history = [];         // array of { questionId, answer, answerLabel }
 let currentQuestion = null;
 
 const $ = id => document.getElementById(id);
@@ -24,14 +26,56 @@ const $ = id => document.getElementById(id);
 // ──────────────────────────────────────────────────────────────────────────────
 
 async function init() {
-  meta = await fetchJSON('/api/meta');
-  majorsData = await fetchJSON('/api/majors');
-  showPathSelector();
+  const data = await fetchJSON('/api/universities');
+  universities = data.universities;
+  showUniversitySelector();
 }
 
 async function fetchJSON(url) {
   const res = await fetch(url);
   return res.json();
+}
+
+// ──────────────────────────────────────────────────────────────────────────────
+// UNIVERSITY SELECTION — Step 0
+// ──────────────────────────────────────────────────────────────────────────────
+
+function showUniversitySelector() {
+  // Reset all state
+  currentUni = null;
+  meta = null;
+  majorsData = null;
+  currentFlow = null;
+  history = [];
+  currentQuestion = null;
+  selectedProgram = null;
+
+  $('app').innerHTML = `
+    <div class="header">
+      <h1>تقييم أهلية القبول</h1>
+      <p class="subtitle">اختر الجامعة للبدء</p>
+    </div>
+    <div class="card">
+      <h2>اختر الجامعة</h2>
+      <div class="path-list" id="uniList"></div>
+    </div>
+  `;
+
+  const list = $('uniList');
+  for (const uni of universities) {
+    const btn = document.createElement('button');
+    btn.className = 'path-btn';
+    btn.innerHTML = `${esc(uni.label)}<span class="uni-country">${esc(uni.country_label)}</span>`;
+    btn.addEventListener('click', () => selectUniversity(uni.id));
+    list.appendChild(btn);
+  }
+}
+
+async function selectUniversity(uniId) {
+  currentUni = uniId;
+  meta = await fetchJSON(`/api/${uniId}/meta`);
+  majorsData = await fetchJSON(`/api/${uniId}/majors`);
+  showProgramSelector();
 }
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -45,10 +89,6 @@ async function fetchJSON(url) {
 
 // Track the entry selections so "back" works correctly at every level
 let selectedProgram = null;
-
-function showPathSelector() {
-  showProgramSelector();
-}
 
 // Step 1: "ما نوع البرنامج المطلوب؟"
 function showProgramSelector() {
@@ -66,6 +106,7 @@ function showProgramSelector() {
       <h2>ما نوع البرنامج المطلوب؟</h2>
       <div class="path-list" id="programList"></div>
     </div>
+    <button class="back-btn" onclick="showUniversitySelector()">العودة لاختيار الجامعة</button>
   `;
 
   const list = $('programList');
@@ -78,7 +119,7 @@ function showProgramSelector() {
       btn.classList.add('placeholder');
       btn.addEventListener('click', () => showPlaceholder(prog));
     } else if (prog.direct_flow) {
-      // Master's — no certificate step, go straight to flow
+      // No certificate step, go straight to flow
       btn.addEventListener('click', () => {
         selectedProgram = prog;
         startFlow(prog.direct_flow);
@@ -118,7 +159,7 @@ function showCertificateSelector(program) {
   }
 }
 
-// Placeholder screen (Pre-Bachelor)
+// Placeholder screen (e.g. Pre-Bachelor)
 function showPlaceholder(programDef) {
   $('app').innerHTML = `
     <div class="header">
@@ -137,7 +178,7 @@ function showPlaceholder(programDef) {
 // ──────────────────────────────────────────────────────────────────────────────
 
 async function startFlow(pathId) {
-  currentFlow = await fetchJSON(`/api/flow/${pathId}`);
+  currentFlow = await fetchJSON(`/api/${currentUni}/flow/${pathId}`);
   history = [];
   showQuestion(currentFlow.first_question);
 }
