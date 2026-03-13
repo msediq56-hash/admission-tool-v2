@@ -1,0 +1,45 @@
+{
+  "path_label": "فاونديشن في الدراسات الإبداعية",
+  "foundation_type": "creative",
+  "first_question": "SRH_FND_HS",
+
+  "questions": {
+    "SRH_FND_HS": {
+      "text": "هل لدى الطالب شهادة ثانوية؟",
+      "type": "yes_no",
+      "options": [
+        { "value": "yes", "label": "نعم", "next": "SRH_FND_IELTS" },
+        { "value": "no", "label": "لا", "result": "no_hs" }
+      ]
+    },
+    "SRH_FND_IELTS": {
+      "text": "ما هو مستوى اللغة الإنجليزية لدى الطالب؟",
+      "type": "select",
+      "dynamic_result": "srh_foundation_language",
+      "options": [
+        { "value": "ielts_65_plus", "label": "IELTS 6.5 أو أعلى (أو ما يعادله)" },
+        { "value": "ielts_5_6", "label": "IELTS 5.0 إلى 6.4 (أو ما يعادله)" },
+        { "value": "ielts_4_5", "label": "IELTS 4.0 إلى 4.9 (أو ما يعادله)" },
+        { "value": "below_4", "label": "أقل من 4.0 أو لا يوجد" }
+      ]
+    }
+  },
+
+  "results": {
+    "no_hs": {
+      "status": "negative",
+      "title": "غير مؤهل",
+      "message": "الطالب لا يملك شهادة ثانوية — وهي شرط أساسي للقبول في برنامج الفاونديشن.",
+      "notes": ["يرجى التواصل مع المستشار لمعرفة الخيارات المتاحة."]
+    }
+  },
+
+  "progression_programs": [
+    "جميع برامج كلية الفنون والتصميم والموسيقى",
+    "جميع برامج كلية الاتصالات والإعلام والتسويق"
+  ],
+
+  "location": "Berlin",
+  "admission_seasons": "أكتوبر ويناير",
+  "duration": "فصلان دراسيان"
+}

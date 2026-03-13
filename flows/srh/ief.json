@@ -1,0 +1,104 @@
+{
+  "path_label": "فاونديشن — برنامج اللغة الإنجليزية التأسيسي المكثف (IEF)",
+  "first_question": "SRH_IEF_HS",
+
+  "questions": {
+    "SRH_IEF_HS": {
+      "text": "هل لدى الطالب شهادة ثانوية؟",
+      "type": "yes_no",
+      "options": [
+        { "value": "yes", "label": "نعم", "next": "SRH_IEF_IELTS" },
+        { "value": "no", "label": "لا", "result": "no_hs" }
+      ]
+    },
+    "SRH_IEF_IELTS": {
+      "text": "ما هو مستوى اللغة الإنجليزية لدى الطالب؟",
+      "type": "select",
+      "options": [
+        { "value": "ielts_4_5", "label": "IELTS 4.0 إلى أقل من 5.0", "next": "SRH_IEF_FIELD" },
+        { "value": "ielts_5_6", "label": "IELTS 5.0 إلى 6.4", "result": "lang_too_high_foundation" },
+        { "value": "ielts_65_plus", "label": "IELTS 6.5 أو أعلى", "result": "lang_too_high_bachelor" },
+        { "value": "below_4", "label": "أقل من 4.0 أو لا يوجد", "result": "no_lang" }
+      ]
+    },
+    "SRH_IEF_FIELD": {
+      "text": "ما هو مجال التخصص المطلوب؟",
+      "type": "select",
+      "options": [
+        { "value": "business", "label": "أعمال (Business)", "result": "eligible_business" },
+        { "value": "engineering", "label": "هندسة وتكنولوجيا المعلومات (Engineering & IT)", "result": "eligible_engineering" },
+        { "value": "creative", "label": "دراسات إبداعية (Creative Studies)", "result": "creative_not_available" }
+      ]
+    }
+  },
+
+  "results": {
+    "no_hs": {
+      "status": "negative",
+      "title": "غير مؤهل",
+      "message": "الطالب لا يملك شهادة ثانوية — وهي شرط أساسي للقبول في البرنامج.",
+      "notes": ["يرجى التواصل مع المستشار لمعرفة الخيارات المتاحة."]
+    },
+    "no_lang": {
+      "status": "negative",
+      "title": "غير مؤهل حالياً — اللغة الإنجليزية",
+      "message": "الحد الأدنى لهذا البرنامج هو IELTS 4.0 أو ما يعادله. مستوى الطالب الحالي أقل من المطلوب.",
+      "notes": ["يمكن للطالب التقديم بعد تحسين مستوى اللغة والوصول لـ IELTS 4.0 على الأقل."]
+    },
+    "lang_too_high_foundation": {
+      "status": "conditional",
+      "title": "مستوى اللغة أعلى من هذا البرنامج",
+      "message": "مستوى اللغة الإنجليزية لدى الطالب (5.0+) أعلى من المطلوب لبرنامج اللغة المكثف.",
+      "notes": ["💡 جرّب الفاونديشن العادي بدلاً من ذلك — يتطلب IELTS 5 أو أعلى."],
+      "suggestions": [
+        { "label": "فاونديشن في البزنس", "path": "foundation_business" },
+        { "label": "فاونديشن في الدراسات الإبداعية", "path": "foundation_creative" },
+        { "label": "فاونديشن الهندسة وتكنولوجيا المعلومات", "path": "foundation_engineering" }
+      ]
+    },
+    "lang_too_high_bachelor": {
+      "status": "positive",
+      "title": "مؤهل للتقديم المباشر على التخصص",
+      "message": "مستوى اللغة الإنجليزية لدى الطالب (6.5+) يؤهله للتقديم مباشرة على برنامج البكالوريوس بدون الحاجة لبرنامج تأسيسي.",
+      "notes": ["💡 الطالب مؤهل للتقديم المباشر على التخصص — ابدأ مسار البكالوريوس في جامعة SRH."],
+      "suggestions": [
+        { "label": "ابدأ مسار البكالوريوس", "path": "bachelor" }
+      ]
+    },
+    "eligible_business": {
+      "status": "positive",
+      "title": "مؤهل للتقديم — برنامج اللغة المكثف (أعمال)",
+      "message": "الطالب يستوفي شروط القبول في برنامج اللغة الإنجليزية التأسيسي المكثف في جامعة SRH.",
+      "notes": [
+        "الطالب مؤهل — تواصل معه لتجهيز ملف التقديم.",
+        "الموقع: Heidelberg أو Berlin",
+        "القبول: أكتوبر فقط",
+        "المدة: 3 فصول دراسية",
+        "الرسوم: 15,150 يورو (شاملة فصل اللغة + فصلين فاونديشن)",
+        "برامج البكالوريوس المتاحة بعد هذا المسار: جميع برامج كلية الأعمال والقانون"
+      ]
+    },
+    "eligible_engineering": {
+      "status": "positive",
+      "title": "مؤهل للتقديم — برنامج اللغة المكثف (هندسة)",
+      "message": "الطالب يستوفي شروط القبول في برنامج اللغة الإنجليزية التأسيسي المكثف في جامعة SRH.",
+      "notes": [
+        "الطالب مؤهل — تواصل معه لتجهيز ملف التقديم.",
+        "الموقع: Heidelberg أو Berlin",
+        "القبول: أكتوبر فقط",
+        "المدة: 3 فصول دراسية",
+        "الرسوم: 15,150 يورو (شاملة فصل اللغة + فصلين فاونديشن)",
+        "برامج البكالوريوس المتاحة بعد هذا المسار: جميع برامج كلية الهندسة والاستدامة والعمارة وعلوم الحاسوب"
+      ]
+    },
+    "creative_not_available": {
+      "status": "conditional",
+      "title": "هذا المجال غير متاح في برنامج اللغة المكثف",
+      "message": "برنامج اللغة الإنجليزية المكثف متاح فقط لمجالي الأعمال والهندسة وتكنولوجيا المعلومات.",
+      "notes": ["💡 جرّب الفاونديشن العادي في الدراسات الإبداعية — يتطلب IELTS 5 أو أعلى."],
+      "suggestions": [
+        { "label": "فاونديشن في الدراسات الإبداعية", "path": "foundation_creative" }
+      ]
+    }
+  }
+}

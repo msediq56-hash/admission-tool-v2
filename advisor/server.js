@@ -118,6 +118,22 @@ function handleAPI(req, res) {
     return;
   }
 
+  // GET /api/:universityId/shared/:fileName — generic shared data files
+  const sharedMatch = url.match(/^\/api\/([a-z_]+)\/shared\/([a-z_]+)$/);
+  if (sharedMatch) {
+    const uniId = sharedMatch[1];
+    const fileName = sharedMatch[2];
+    if (!isValidId(uniId) || !isValidId(fileName)) { sendError(res, 400, 'Invalid ID'); return; }
+    const filePath = path.join(FLOWS_ROOT, uniId, 'shared', `${fileName}.json`);
+    try {
+      if (!fs.existsSync(filePath)) { sendError(res, 404, 'Shared data not found'); return; }
+      sendJSON(res, JSON.parse(fs.readFileSync(filePath, 'utf8')));
+    } catch (e) {
+      sendError(res, 500, 'Failed to load shared data');
+    }
+    return;
+  }
+
   // GET /api/:universityId/flow/:pathId
   const flowMatch = url.match(/^\/api\/([a-z_]+)\/flow\/([a-z_]+)$/);
   if (flowMatch) {

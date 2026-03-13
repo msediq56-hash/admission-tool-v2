@@ -1,0 +1,36 @@
+{
+  "university_id": "srh",
+  "university_label": "جامعة SRH",
+  "country_label": "ألمانيا — جامعة خاصة",
+
+  "programs": [
+    {
+      "id": "foundation",
+      "label": "فاونديشن",
+      "certificates": [
+        { "id": "ief", "label": "برنامج اللغة الإنجليزية التأسيسي المكثف (IEF)", "file": "ief.json" },
+        { "id": "foundation_business", "label": "فاونديشن في البزنس", "file": "foundation_business.json" },
+        { "id": "foundation_creative", "label": "فاونديشن في الدراسات الإبداعية", "file": "foundation_creative.json" },
+        { "id": "foundation_engineering", "label": "فاونديشن الهندسة وتكنولوجيا المعلومات", "file": "foundation_engineering.json" }
+      ]
+    },
+    {
+      "id": "pre_master",
+      "label": "بري ماستر (ما قبل الماجستير)",
+      "direct_flow": "pre_master",
+      "file": "pre_master.json"
+    },
+    {
+      "id": "bachelor",
+      "label": "بكالوريوس",
+      "direct_flow": "bachelor",
+      "file": "bachelor.json"
+    },
+    {
+      "id": "master",
+      "label": "ماجستير",
+      "direct_flow": "master",
+      "file": "master.json"
+    }
+  ]
+}

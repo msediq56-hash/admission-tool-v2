@@ -1,0 +1,56 @@
+{
+  "programs": [
+    { "id": "bsc_hospitality_global", "faculty": "hospitality", "label": "إدارة الضيافة العالمية", "details": "الكامبوس: درسدن | المواسم: ربيع، خريف | المدة: 3.5 سنة | الرسوم: 9,800 يورو/سنة", "requires": null },
+
+    { "id": "bsc_scm_fast_cologne", "faculty": "supply_chain", "label": "إدارة الأعمال الدولية - تخصص في إدارة سلسلة التوريد (المسار السريع) — كولونيا", "details": "الكامبوس: كولونيا | المواسم: ربيع، خريف | المدة: 3 سنوات | الرسوم: 9,800 يورو/سنة", "requires": null },
+    { "id": "bsc_scm_fast_leipzig", "faculty": "supply_chain", "label": "إدارة الأعمال الدولية - تركيز في إدارة سلسلة التوريد (المسار السريع) — لايبزيغ", "details": "الكامبوس: لايبزيغ | المواسم: ربيع، خريف | المدة: 3 سنوات | الرسوم: 9,800 يورو/سنة", "requires": null },
+    { "id": "bsc_scm_intl_cologne", "faculty": "supply_chain", "label": "إدارة الأعمال الدولية - تخصص في إدارة سلسلة التوريد (مسار الخبرة الدولية) — كولونيا", "details": "الكامبوس: كولونيا | المواسم: ربيع، خريف | المدة: 3.5 سنة | الرسوم: 9,000 يورو/سنة", "requires": null },
+    { "id": "bsc_scm_intl_hamm", "faculty": "supply_chain", "label": "إدارة الأعمال الدولية - تركيز في إدارة سلسلة التوريد (مسار الخبرة الدولية) — هام", "details": "الكامبوس: هام | الموسم: خريف | المدة: 3.5 سنة | الرسوم: 9,000 يورو/سنة", "requires": null },
+
+    { "id": "bsc_ba_fixed_online", "faculty": "business_law", "label": "إدارة الأعمال (ثابت) (أونلاين)", "details": "الكامبوس: أونلاين | المواسم: شتاء، ربيع، صيف، خريف | المدة: 3 سنوات | الرسوم: 3,588 يورو/سنة", "requires": null },
+    { "id": "bsc_ba_flex_online", "faculty": "business_law", "label": "إدارة الأعمال (مرن) (أونلاين)", "details": "الكامبوس: أونلاين | المواسم: شتاء، ربيع، صيف، خريف | المدة: 3 سنوات | الرسوم: 5,052 يورو/سنة", "requires": null },
+    { "id": "bsc_auto_fast", "faculty": "business_law", "label": "إدارة الأعمال الدولية - تركيز في إدارة السيارات (المسار السريع)", "details": "الكامبوس: لايبزيغ (ربيع وخريف)، ميونيخ (خريف) | المدة: 3 سنوات | الرسوم: 9,800 يورو/سنة", "requires": null },
+    { "id": "bsc_auto_intl", "faculty": "business_law", "label": "إدارة الأعمال الدولية - تركيز في إدارة السيارات (مسار الخبرة الدولية)", "details": "الكامبوس: لايبزيغ (ربيع وخريف)، ميونيخ (خريف) | المدة: 3.5 سنة | الرسوم: 9,000 يورو/سنة", "requires": null },
+    { "id": "bsc_ibm_fast", "faculty": "business_law", "label": "إدارة الأعمال الدولية (المسار السريع)", "details": "الكامبوس: برلين وهايدلبرغ (11,000€)، ميونيخ وكولونيا وهامبورغ ولايبزيغ وهام (9,800€) | المواسم: ربيع وخريف | المدة: 3 سنوات", "requires": null },
+    { "id": "bsc_ibm_intl", "faculty": "business_law", "label": "إدارة الأعمال الدولية (مسار الخبرة الدولية)", "details": "الكامبوس: برلين وهايدلبرغ (10,200€)، كولونيا وهامبورغ ولايبزيغ وميونيخ وهام (9,000€) | المواسم: ربيع وخريف | المدة: 3.5 سنة", "requires": null },
+    { "id": "bsc_law_econ", "faculty": "business_law", "label": "قانون، اقتصاد وحوكمة", "details": "الكامبوس: برلين | المواسم: ربيع، خريف | المدة: 3 سنوات | الرسوم: 11,000 يورو/سنة", "requires": null },
+
+    { "id": "bsc_creative_industries", "faculty": "communications", "label": "إدارة الصناعات الإبداعية", "details": "الكامبوس: برلين (9,900€)، ميونيخ (8,640€) | برلين: ربيع وخريف | ميونيخ: خريف | المدة: 3.5 سنة", "requires": null },
+    { "id": "bsc_digital_marketing_fast", "faculty": "communications", "label": "إدارة الأعمال الدولية - تخصص في التسويق الرقمي (المسار السريع)", "details": "الكامبوس: برلين (11,000€)، هامبورغ (9,800€) | المواسم: ربيع وخريف | المدة: 3 سنوات", "requires": null },
+    { "id": "bsc_digital_marketing_intl", "faculty": "communications", "label": "إدارة الأعمال الدولية - تخصص في التسويق الرقمي (مسار الخبرة الدولية)", "details": "الكامبوس: برلين (10,200€)، هامبورغ (9,000€) | المواسم: ربيع وخريف | المدة: 3.5 سنة", "requires": null },
+    { "id": "bsc_ux_content", "faculty": "communications", "label": "تصميم تجربة المستخدم وإنشاء المحتوى", "details": "الكامبوس: برلين | الموسم: خريف | المدة: 3.5 سنة | الرسوم: 9,900 يورو/سنة", "requires": null },
+
+    { "id": "bsc_healthcare_fast", "faculty": "health_education", "label": "إدارة الأعمال الدولية - تخصص في إدارة الرعاية الصحية (المسار السريع)", "details": "الكامبوس: برلين | المواسم: ربيع، خريف | المدة: 3 سنوات | الرسوم: 11,000 يورو/سنة", "requires": null },
+    { "id": "bsc_healthcare_intl", "faculty": "health_education", "label": "إدارة الأعمال الدولية - تخصص في إدارة الرعاية الصحية (مسار الخبرة الدولية)", "details": "الكامبوس: برلين | المواسم: ربيع، خريف | المدة: 3.5 سنة | الرسوم: 10,200 يورو/سنة", "requires": null },
+    { "id": "bsc_social_work", "faculty": "health_education", "label": "العمل الاجتماعي", "details": "الكامبوس: فورث (7,000€/3.5 سنة)، برلين (7,500€/3 سنوات) | الموسم: خريف", "requires": null },
+
+    { "id": "bsc_ad_branding", "faculty": "arts_design", "label": "تصميم الإعلان والعلامة التجارية", "details": "الكامبوس: برلين | المواسم: ربيع، خريف | المدة: 3.5 سنة | الرسوم: 9,900 يورو/سنة", "requires": "portfolio" },
+    { "id": "bsc_sound_design", "faculty": "arts_design", "label": "تصميم الصوت", "details": "الكامبوس: برلين (9,900€)، ميونيخ (9,000€) | برلين: ربيع وخريف | ميونيخ: خريف | المدة: 3.5 سنة", "requires": "portfolio" },
+    { "id": "bsc_classical_music", "faculty": "arts_design", "label": "الموسيقى الكلاسيكية", "details": "الكامبوس: برلين | المواسم: ربيع، خريف | المدة: 3.5 سنة | الرسوم: 18,500 يورو/سنة", "requires": "audition" },
+    { "id": "bsc_film_motion", "faculty": "arts_design", "label": "تصميم الفيلم والحركة", "details": "الكامبوس: برلين | المواسم: ربيع، خريف | المدة: 3.5 سنة | الرسوم: 9,900 يورو/سنة", "requires": "portfolio" },
+    { "id": "bsc_music_production", "faculty": "arts_design", "label": "إنتاج الموسيقى", "details": "الكامبوس: برلين (9,900€)، ميونيخ (9,000€) | المواسم: ربيع وخريف | المدة: 3.5 سنة", "requires": null },
+    { "id": "bsc_photography", "faculty": "arts_design", "label": "التصوير الفوتوغرافي", "details": "الكامبوس: برلين | المواسم: ربيع، خريف | المدة: 3.5 سنة | الرسوم: 9,900 يورو/سنة", "requires": null },
+    { "id": "bsc_popular_music", "faculty": "arts_design", "label": "الموسيقى الشعبية", "details": "الكامبوس: برلين | المواسم: ربيع، خريف | المدة: 3.5 سنة | الرسوم: 9,900 يورو/سنة", "requires": null },
+    { "id": "bsc_world_music", "faculty": "arts_design", "label": "الموسيقى العالمية (الإبداع الموسيقي العابر للتقاليد)", "details": "الكامبوس: برلين | الموسم: ربيع | المدة: 3 سنوات | الرسوم: 18,500 يورو/سنة", "requires": null },
+    { "id": "bsc_comm_design", "faculty": "arts_design", "label": "تصميم الاتصالات", "details": "الكامبوس: برلين | الموسم: خريف | المدة: 3.5 سنة | الرسوم: 9,900 يورو/سنة", "requires": null },
+    { "id": "bsc_illustration", "faculty": "arts_design", "label": "الرسم التوضيحي", "details": "الكامبوس: برلين | الموسم: خريف | المدة: 3.5 سنة | الرسوم: 9,900 يورو/سنة", "requires": null },
+    { "id": "bsc_interior_design", "faculty": "arts_design", "label": "التصميم الداخلي والسينوغرافيا", "details": "الكامبوس: برلين | الموسم: خريف | المدة: 3.5 سنة | الرسوم: 9,900 يورو/سنة", "requires": null },
+    { "id": "bsc_fashion", "faculty": "arts_design", "label": "تصميم الأزياء", "details": "الكامبوس: ميونيخ | الموسم: خريف | المدة: 3.5 سنة | الرسوم: 9,900 يورو/سنة", "requires": null },
+
+    { "id": "bsc_ind_eng_fixed", "faculty": "engineering", "label": "الهندسة الصناعية (ثابت) (أونلاين)", "details": "الكامبوس: أونلاين | المواسم: شتاء، ربيع، صيف، خريف | المدة: 3 سنوات | الرسوم: 3,588 يورو/سنة", "requires": null },
+    { "id": "bsc_ind_eng_flex", "faculty": "engineering", "label": "الهندسة الصناعية (مرن) (أونلاين)", "details": "الكامبوس: أونلاين | المواسم: شتاء، ربيع، صيف، خريف | المدة: 3 سنوات | الرسوم: 5,052 يورو/سنة", "requires": null },
+    { "id": "bsc_mechatronics", "faculty": "engineering", "label": "الأنظمة الميكاترونيكية التطبيقية", "details": "الكامبوس: برلين (10,900€)، هايدلبرغ (10,200€) | برلين: ربيع وخريف | هايدلبرغ: خريف | المدة: 3.5 سنة", "requires": null },
+    { "id": "bsc_business_eng", "faculty": "engineering", "label": "الهندسة التجارية", "details": "الكامبوس: هايدلبرغ | الموسم: خريف | المدة: 3.5 سنة | الرسوم: 10,200 يورو/سنة", "requires": null },
+    { "id": "bsc_electrical_eng", "faculty": "engineering", "label": "الهندسة الكهربائية", "details": "الكامبوس: هايدلبرغ | الموسم: خريف | المدة: 3.5 سنة | الرسوم: 10,200 يورو/سنة", "requires": null },
+    { "id": "bsc_mechanical_eng", "faculty": "engineering", "label": "الهندسة الميكانيكية", "details": "الكامبوس: هايدلبرغ | الموسم: خريف | المدة: 3.5 سنة | الرسوم: 10,200 يورو/سنة", "requires": null },
+
+    { "id": "bsc_biz_psych_fast", "faculty": "psychology", "label": "إدارة الأعمال الدولية - تخصص في علم نفس الأعمال (المسار السريع)", "details": "الكامبوس: برلين (11,000€)، هامبورغ (9,800€) | المواسم: ربيع وخريف | المدة: 3 سنوات", "requires": null },
+    { "id": "bsc_biz_psych_intl", "faculty": "psychology", "label": "إدارة الأعمال الدولية - تخصص في علم نفس الأعمال (مسار الخبرة الدولية)", "details": "الكامبوس: هامبورغ | المواسم: ربيع وخريف | المدة: 3.5 سنة | الرسوم: 9,000 - 10,200 يورو/سنة", "requires": null },
+
+    { "id": "bsc_cs_fast", "faculty": "computer_science", "label": "علوم الحاسوب (المسار السريع)", "details": "الكامبوس: برلين وهايدلبرغ (11,300€)، لايبزيغ وشتوتغارت وميونيخ (10,200€) | المواسم: ربيع وخريف | المدة: 3 سنوات", "requires": null },
+    { "id": "bsc_cs_intl", "faculty": "computer_science", "label": "علوم الحاسوب (مسار الخبرة الدولية)", "details": "الكامبوس: برلين وهايدلبرغ (10,200€)، لايبزيغ وميونيخ وشتوتغارت (9,540€) | المواسم: ربيع وخريف | المدة: 3 سنوات", "requires": null },
+    { "id": "bsc_webdev_dual", "faculty": "computer_science", "label": "تطوير الويب (نظام مزدوج)", "details": "الكامبوس: برلين | المواسم: ربيع، خريف | المدة: 3.5 سنة | الرسوم: 9,450 يورو/سنة", "requires": null },
+    { "id": "bsc_webdev", "faculty": "computer_science", "label": "تطوير الويب", "details": "الكامبوس: برلين | الموسم: خريف | المدة: 3.5 سنة | الرسوم: 9,900 يورو/سنة", "requires": null },
+    { "id": "bsc_applied_ai", "faculty": "computer_science", "label": "الذكاء الاصطناعي التطبيقي", "details": "الكامبوس: هايدلبرغ | الموسم: خريف | المدة: 3 سنوات | الرسوم: 9,480 يورو/سنة", "requires": null }
+  ]
+}

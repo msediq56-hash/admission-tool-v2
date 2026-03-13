@@ -19,6 +19,14 @@ let currentFlow = null;   // loaded flow JSON for current path
 let history = [];         // array of { questionId, answer, answerLabel }
 let currentQuestion = null;
 
+// SRH faculty/program selection state
+// WHY: SRH bachelor/master require faculty→program selection before questions start.
+// The selected program determines whether portfolio/audition/MBA questions are needed.
+let facultyData = null;   // loaded faculty list for current flow
+let programData = null;   // loaded program list for current flow
+let selectedFaculty = null;
+let selectedProgram_srh = null;
+
 const $ = id => document.getElementById(id);
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -180,7 +188,72 @@ function showPlaceholder(programDef) {
 async function startFlow(pathId) {
   currentFlow = await fetchJSON(`/api/${currentUni}/flow/${pathId}`);
   history = [];
-  showQuestion(currentFlow.first_question);
+  selectedFaculty = null;
+  selectedProgram_srh = null;
+  facultyData = null;
+  programData = null;
+
+  // If flow has faculty_select, load faculty/program data and show selection first
+  if (currentFlow.faculty_select) {
+    const fs = currentFlow.faculty_select;
+    facultyData = await fetchJSON(`/api/${currentUni}/shared/${fs.data_file}`);
+    programData = await fetchJSON(`/api/${currentUni}/shared/${fs.programs_file}`);
+    showFacultySelector();
+  } else {
+    showQuestion(currentFlow.first_question);
+  }
+}
+
+// Faculty selection screen (SRH bachelor/master)
+function showFacultySelector() {
+  $('app').innerHTML = `
+    <div class="header">
+      <h1>${esc(meta.university_label)}</h1>
+      <p class="subtitle">${esc(currentFlow.path_label)}</p>
+    </div>
+    <div class="card">
+      <h2>اختر الكلية</h2>
+      <div class="options" id="facultyList"></div>
+    </div>
+    <button class="back-btn" onclick="showProgramSelector()">العودة لاختيار البرنامج</button>
+  `;
+  const list = $('facultyList');
+  for (const fac of facultyData.faculties) {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = fac.label;
+    btn.addEventListener('click', () => showFacultyProgramSelector(fac));
+    list.appendChild(btn);
+  }
+}
+
+// Program selection within faculty (SRH bachelor/master)
+function showFacultyProgramSelector(faculty) {
+  selectedFaculty = faculty;
+  const filtered = programData.programs.filter(p => p.faculty === faculty.id);
+
+  $('app').innerHTML = `
+    <div class="header">
+      <h1>${esc(meta.university_label)}</h1>
+      <p class="subtitle">${esc(currentFlow.path_label)} — ${esc(faculty.label)}</p>
+    </div>
+    <div class="card">
+      <h2>اختر البرنامج</h2>
+      <div class="options" id="progList"></div>
+    </div>
+    <button class="back-btn" onclick="showFacultySelector()">العودة لاختيار الكلية</button>
+  `;
+  const list = $('progList');
+  for (const prog of filtered) {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn program-btn';
+    btn.textContent = prog.label;
+    btn.addEventListener('click', () => {
+      selectedProgram_srh = prog;
+      showQuestion(currentFlow.first_question);
+    });
+    list.appendChild(btn);
+  }
 }
 
 function showQuestion(questionId) {
@@ -289,6 +362,11 @@ function handleAnswer(questionId, value, label) {
     const resolver = DYNAMIC_RESOLVERS[q.dynamic_result];
     if (resolver) {
       const result = resolver(value, history, currentFlow);
+      // Special signal: '__next:QUESTION_ID' means show next question instead of result
+      if (typeof result === 'string' && result.startsWith('__next:')) {
+        showQuestion(result.slice(7));
+        return;
+      }
       showResult(result);
       return;
     }
@@ -431,6 +509,196 @@ const DYNAMIC_RESOLVERS = {
   }
 };
 
+  // ─── SRH Foundation (Business/Creative/Engineering): Language question ──
+  // Reference: SRH section 3.2 — all 3 foundation types share the same language logic.
+  // WHY dynamic: result depends on language level + foundation type (from flow config).
+  // The flow JSON contains location, admission_seasons, duration, and progression_programs.
+  srh_foundation_language(langValue, hist, flow) {
+    const fndLabel = flow.path_label;
+
+    if (langValue === 'below_4') {
+      return {
+        status: 'negative',
+        title: 'غير مؤهل حالياً — اللغة الإنجليزية',
+        message: `الحد الأدنى لهذا الفاونديشن هو IELTS 5.0 أو ما يعادله. مستوى الطالب الحالي أقل من المطلوب.`,
+        notes: ['يمكن للطالب التقديم بعد تحسين مستوى اللغة والوصول لـ IELTS 5.0 على الأقل.']
+      };
+    }
+    if (langValue === 'ielts_4_5') {
+      return {
+        status: 'conditional',
+        title: '💡 جرّب برنامج اللغة الإنجليزية المكثف (IEF)',
+        message: 'مستوى اللغة الإنجليزية لدى الطالب (4.0-4.9) أقل من شرط الفاونديشن (5.0+) — لكنه مؤهل لبرنامج اللغة المكثف الذي يؤدي للفاونديشن.',
+        notes: ['💡 يُنصح بالتقديم على برنامج اللغة الإنجليزية المكثف (IEF) أولاً — يتطلب IELTS 4.0 ويؤدي للفاونديشن بعد فصل واحد.'],
+        suggestions: [{ label: 'برنامج اللغة المكثف (IEF)', path: 'ief' }]
+      };
+    }
+    if (langValue === 'ielts_65_plus') {
+      return {
+        status: 'conditional',
+        title: '🔶 الطالب مؤهل للتقديم المباشر على البكالوريوس',
+        message: 'مستوى اللغة الإنجليزية لدى الطالب (6.5+) يؤهله للتقديم مباشرة على برنامج البكالوريوس دون الحاجة لفاونديشن.',
+        notes: ['💡 ابدأ مسار البكالوريوس مباشرة في جامعة SRH.'],
+        suggestions: [{ label: 'ابدأ مسار البكالوريوس', path: 'bachelor' }]
+      };
+    }
+    // ielts_5_6 → eligible
+    const notes = [
+      'الطالب مؤهل — تواصل معه لتجهيز ملف التقديم.',
+      `الموقع: ${flow.location}`,
+      `القبول: ${flow.admission_seasons}`,
+      `المدة: ${flow.duration}`
+    ];
+    if (flow.progression_programs) {
+      notes.push('برامج البكالوريوس المتاحة بعد الفاونديشن:');
+      for (const p of flow.progression_programs) notes.push(`• ${p}`);
+    }
+    return {
+      status: 'positive',
+      title: `مؤهل للتقديم — ${fndLabel}`,
+      message: 'الطالب يستوفي شروط القبول في برنامج الفاونديشن في جامعة SRH.',
+      notes
+    };
+  },
+
+  // ─── SRH Pre-Master: Language question ────────────────────────────────
+  // Reference: SRH section 3.3, SRH_PM_IELTS
+  // WHY dynamic: result includes selected program name + progression info from flow config.
+  srh_pre_master_language(langValue, hist, flow) {
+    if (langValue === 'no') {
+      return flow.results.no_lang;
+    }
+    // Yes → eligible
+    const programId = getHistoryAnswer(hist, 'SRH_PM_TYPE');
+    const pm = flow.pm_programs[programId];
+    const notes = [
+      'الطالب مؤهل — تواصل معه لتجهيز ملف التقديم لجامعة SRH.',
+      `الموقع: ${flow.location}`,
+      `مواعيد القبول: ${flow.admission_seasons}`,
+      `المدة: ${flow.duration}`,
+      `الرسوم: ${flow.tuition}`
+    ];
+    if (pm && pm.progression) {
+      notes.push('برامج الماجستير المتاحة بعد هذا البرنامج:');
+      for (const p of pm.progression) notes.push(`• ${p}`);
+    }
+    return {
+      status: 'positive',
+      title: `مؤهل للتقديم — ${pm ? pm.label : 'بري ماستر'}`,
+      message: 'الطالب يستوفي شروط القبول لبرامج بري ماستر في SRH.',
+      notes
+    };
+  },
+
+  // ─── SRH Bachelor: Language question ──────────────────────────────────
+  // Reference: SRH section 3.4, SRH_BSC_IELTS
+  // WHY dynamic: after language=yes, must check if selected program requires
+  // portfolio/audition and route to appropriate next question. Otherwise → eligible.
+  srh_bachelor_language(langValue, hist, flow) {
+    if (langValue === 'no') {
+      return flow.results.no_lang;
+    }
+    // Yes → check program requirements
+    if (selectedProgram_srh && selectedProgram_srh.requires === 'portfolio') {
+      // Route to portfolio question — return null to signal "show next question"
+      return '__next:SRH_BSC_PORTFOLIO';
+    }
+    if (selectedProgram_srh && selectedProgram_srh.requires === 'audition') {
+      return '__next:SRH_BSC_AUDITION';
+    }
+    // No special requirement → eligible
+    return buildBscResult();
+  },
+
+  // ─── SRH Bachelor: Portfolio question ─────────────────────────────────
+  srh_bachelor_portfolio(value, hist, flow) {
+    if (value === 'no') return flow.results.no_portfolio;
+    return buildBscResult();
+  },
+
+  // ─── SRH Bachelor: Audition question ──────────────────────────────────
+  srh_bachelor_audition(value, hist, flow) {
+    if (value === 'no') return flow.results.no_audition;
+    return buildBscResult();
+  },
+
+  // ─── SRH Master: Language question ────────────────────────────────────
+  // Reference: SRH section 3.5, SRH_MSC_IELTS
+  // WHY dynamic: language routing depends on level (below 5.5 → reject,
+  // 5.5-6.4 → pre-master suggestion, 6.5+ → check program requirements).
+  srh_master_language(langValue, hist, flow) {
+    if (langValue === 'below_55') {
+      return flow.results.no_lang;
+    }
+    if (langValue === 'ielts_55_64') {
+      return flow.results.try_pre_master;
+    }
+    // 6.5+ → check program requirements
+    if (selectedProgram_srh && selectedProgram_srh.requires === 'mba_experience') {
+      return '__next:SRH_MSC_MBA_EXP';
+    }
+    if (selectedProgram_srh && selectedProgram_srh.requires === 'portfolio') {
+      return '__next:SRH_MSC_PORTFOLIO';
+    }
+    return buildMscResult(hist, flow);
+  },
+
+  // ─── SRH Master: MBA experience question ──────────────────────────────
+  srh_master_mba_exp(value, hist, flow) {
+    if (value === 'no') return flow.results.no_mba_exp;
+    // MBA programs with experience also need portfolio check?
+    // Reference says: "نعم → (تحقق من البورتفوليو إذا لزم، وإلا → ✅ مؤهل)"
+    // MBA programs are NOT in portfolio list, so → eligible
+    if (selectedProgram_srh && selectedProgram_srh.requires === 'portfolio') {
+      return '__next:SRH_MSC_PORTFOLIO';
+    }
+    return buildMscResult(hist, flow);
+  },
+
+  // ─── SRH Master: Portfolio question ───────────────────────────────────
+  srh_master_portfolio(value, hist, flow) {
+    if (value === 'no') return flow.results.no_portfolio;
+    return buildMscResult(hist, flow);
+  }
+};
+
+// ─── SRH result builders ────────────────────────────────────────────────
+// WHY separate: these combine selected program details with the base result
+// to produce the final output. Called from multiple resolver paths.
+
+function buildBscResult() {
+  const prog = selectedProgram_srh;
+  const notes = [
+    'الطالب مؤهل — تواصل معه لتجهيز ملف التقديم.',
+    prog ? prog.details : ''
+  ].filter(Boolean);
+  return {
+    status: 'positive',
+    title: `مؤهل للتقديم — ${prog ? prog.label : 'بكالوريوس'}`,
+    message: 'الطالب يستوفي جميع شروط القبول في جامعة SRH.',
+    notes
+  };
+}
+
+function buildMscResult(hist, flow) {
+  const prog = selectedProgram_srh;
+  const ectsAnswer = getHistoryAnswer(hist, 'SRH_MSC_ECTS');
+  const notes = [
+    'الطالب مؤهل — تواصل معه لتجهيز ملف التقديم.',
+    prog ? prog.details : ''
+  ].filter(Boolean);
+  // Add ECTS note
+  if (flow.ects_notes && ectsAnswer && flow.ects_notes[ectsAnswer]) {
+    notes.push(flow.ects_notes[ectsAnswer]);
+  }
+  return {
+    status: 'positive',
+    title: `مؤهل للتقديم — ${prog ? prog.label : 'ماجستير'}`,
+    message: 'الطالب يستوفي جميع شروط القبول في ماجستير جامعة SRH.',
+    notes
+  };
+}
+
 // Helper: find a previous answer in history by question ID
 function getHistoryAnswer(hist, questionId) {
   const entry = hist.find(h => h.questionId === questionId);
@@ -501,8 +769,12 @@ function showResult(result) {
 // goBack: replay from start
 function goBack() {
   if (history.length === 0) {
-    // At first question — go back to certificate or program selector
-    if (selectedProgram && selectedProgram.certificates) {
+    // At first question — go back to faculty selector, certificate selector, or program selector
+    if (currentFlow && currentFlow.faculty_select && selectedProgram_srh) {
+      showFacultyProgramSelector(selectedFaculty);
+    } else if (currentFlow && currentFlow.faculty_select) {
+      showFacultySelector();
+    } else if (selectedProgram && selectedProgram.certificates) {
       showCertificateSelector(selectedProgram);
     } else {
       showProgramSelector();

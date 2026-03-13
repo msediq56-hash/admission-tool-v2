@@ -1,0 +1,13 @@
+{
+  "faculties": [
+    { "id": "hospitality", "label": "إدارة الضيافة" },
+    { "id": "supply_chain", "label": "إدارة سلسلة التوريد" },
+    { "id": "business_law", "label": "الأعمال والقانون" },
+    { "id": "communications", "label": "الاتصالات والإعلام والتسويق" },
+    { "id": "health_education", "label": "الصحة والتعليم والعمل الاجتماعي" },
+    { "id": "arts_design", "label": "الفنون والتصميم والموسيقى" },
+    { "id": "engineering", "label": "الهندسة والاستدامة والعمارة" },
+    { "id": "psychology", "label": "علم النفس والعلاج" },
+    { "id": "computer_science", "label": "علوم الحاسوب والبيانات" }
+  ]
+}

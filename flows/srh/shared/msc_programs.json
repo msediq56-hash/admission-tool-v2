@@ -1,0 +1,65 @@
+{
+  "programs": [
+    { "id": "msc_hospitality", "faculty": "hospitality", "label": "إدارة الضيافة والقيادة", "details": "Dresden | خريف، ربيع | 1.5 أو 2 سنة | 17,250 / 23,000 يورو/سنة\n⚡ المدة تعتمد على عدد ECTS — يخضع لتقييم الجامعة", "requires": null },
+
+    { "id": "msc_scm_berlin", "faculty": "supply_chain", "label": "إدارة سلاسل الإمداد — برلين", "details": "Berlin | خريف، ربيع | 2 سنة | 27,800 يورو/سنة", "requires": null },
+    { "id": "msc_scm_furth", "faculty": "supply_chain", "label": "إدارة سلاسل الإمداد — فورث", "details": "Fürth | خريف | 2 سنة | 19,600 يورو/سنة", "requires": null },
+    { "id": "msc_scm_cologne", "faculty": "supply_chain", "label": "إدارة سلسلة التوريد — كولونيا", "details": "Cologne | خريف، ربيع | 2 سنة | 10,200 يورو/سنة", "requires": null },
+    { "id": "msc_scm_hamburg", "faculty": "supply_chain", "label": "إدارة سلسلة التوريد — هامبورغ", "details": "Hamburg | خريف، ربيع | 2 سنة | 27,200 يورو/سنة", "requires": null },
+    { "id": "msc_scm_hamm", "faculty": "supply_chain", "label": "إدارة سلسلة التوريد — هام", "details": "Hamm | خريف، ربيع | 2 سنة | 20,400 يورو/سنة", "requires": null },
+
+    { "id": "msc_global_biz_online", "faculty": "business_law", "label": "إدارة الأعمال العالمية (أونلاين)", "details": "Online | جميع المواسم | 1 أو 1.5 أو 2 سنة | 8,948 / 12,122 / 14,096 يورو/سنة\n⚡ المدة تعتمد على عدد ECTS — يخضع لتقييم الجامعة", "requires": null },
+    { "id": "msc_mba_sustainability", "faculty": "business_law", "label": "ماجستير إدارة الأعمال العالمي في الاستدامة (أونلاين)", "details": "Online | جميع المواسم | 1 أو 1.5 أو 2 سنة | 8,948 / 12,122 / 14,096 يورو/سنة\n⚡ المدة تعتمد على عدد ECTS — يخضع لتقييم الجامعة", "requires": null },
+    { "id": "msc_ai_business", "faculty": "business_law", "label": "الذكاء الاصطناعي في الأعمال", "details": "Berlin | خريف، ربيع | 2 سنة | 27,800 يورو/سنة", "requires": null },
+    { "id": "msc_digital_transformation", "faculty": "business_law", "label": "إدارة التحول الرقمي", "details": "Hamburg | خريف، ربيع | 2 سنة | 23,000 يورو/سنة", "requires": null },
+    { "id": "msc_mba_exec_60", "faculty": "business_law", "label": "الإدارة العامة التنفيذية — MBA (60 ECTS)", "details": "Berlin | خريف، ربيع | 1 سنة | 16,200 يورو/سنة", "requires": "mba_experience" },
+    { "id": "msc_mba_90", "faculty": "business_law", "label": "الإدارة العامة — MBA (90 ECTS)", "details": "Berlin | خريف، ربيع | 1.5 سنة | 23,700 يورو/سنة\n⚡ نسخة 60 ECTS متاحة أيضاً بـ 15,800 يورو/سنة — يخضع لتقييم الجامعة", "requires": "mba_experience" },
+    { "id": "msc_healthcare_mgmt", "faculty": "business_law", "label": "إدارة الرعاية الصحية", "details": "Berlin | خريف، ربيع | 1 أو 1.5 سنة | 15,800 / 23,700 يورو/سنة\nStuttgart | خريف | 1.5 سنة | 24,300 يورو/سنة\n⚡ المدة تعتمد على عدد ECTS — يخضع لتقييم الجامعة", "requires": null },
+    { "id": "msc_intl_biz_healthcare", "faculty": "business_law", "label": "الأعمال الدولية - تركيز في إدارة الرعاية الصحية", "details": "Dresden | خريف، ربيع | 2 سنة | 23,000 يورو/سنة", "requires": null },
+    { "id": "msc_ibm_healthcare_fast", "faculty": "business_law", "label": "إدارة الأعمال الدولية - تركيز في الرعاية الصحية (المسار السريع)", "details": "Dresden | خريف، ربيع | 1.5 سنة | 17,250 يورو/سنة", "requires": null },
+    { "id": "msc_sustainability", "faculty": "business_law", "label": "الأعمال الدولية - تخصص في إدارة الاستدامة", "details": "Hamburg | خريف، ربيع | 1.5 أو 2 سنة | 17,250 / 23,000 يورو/سنة\n⚡ المدة تعتمد على عدد ECTS — يخضع لتقييم الجامعة", "requires": null },
+    { "id": "msc_intl_biz_leadership", "faculty": "business_law", "label": "الأعمال التجارية الدولية والقيادة", "details": "Dresden، Hamburg، Heidelberg، Munich | خريف، ربيع | 1 أو 1.5 أو 2 سنة | 11,500 - 27,800 يورو/سنة\n⚡ المدة والرسوم تعتمد على الكامبوس وعدد ECTS — يخضع لتقييم الجامعة", "requires": null },
+    { "id": "msc_intl_mgmt", "faculty": "business_law", "label": "الإدارة الدولية", "details": "Berlin | خريف، ربيع | 2 سنة | 27,800 يورو/سنة", "requires": null },
+    { "id": "msc_intl_mgmt_entrepreneurship", "faculty": "business_law", "label": "الإدارة الدولية - تخصص في ريادة الأعمال", "details": "Berlin | خريف، ربيع | 2 سنة | 27,800 يورو/سنة", "requires": null },
+    { "id": "msc_law_tech", "faculty": "business_law", "label": "القانون والتكنولوجيا", "details": "Berlin | خريف، ربيع | 1 أو 1.5 أو 2 سنة | 13,900 / 20,850 / 27,800 يورو/سنة\n⚡ المدة تعتمد على عدد ECTS — يخضع لتقييم الجامعة", "requires": null },
+    { "id": "msc_global_biz_leadership", "faculty": "business_law", "label": "الأعمال العالمية والقيادة", "details": "Heidelberg | خريف | 2 سنة | 23,000 يورو/سنة", "requires": null },
+
+    { "id": "msc_design_mgmt_online", "faculty": "communications", "label": "إدارة التصميم (أونلاين)", "details": "Online | جميع المواسم | 1 أو 1.5 أو 2 سنة | 8,948 / 12,122 / 14,096 يورو/سنة\n⚡ المدة تعتمد على عدد ECTS — يخضع لتقييم الجامعة", "requires": "portfolio" },
+    { "id": "msc_creative_leadership", "faculty": "communications", "label": "الإدارة الدولية - تخصص في القيادة الإبداعية", "details": "Berlin | خريف، ربيع | 2 سنة | 27,800 يورو/سنة", "requires": "portfolio" },
+
+    { "id": "msc_digital_health", "faculty": "health_education", "label": "الصحة الرقمية - تحليل البيانات", "details": "Fürth | خريف، ربيع | 2 سنة | 21,800 يورو/سنة", "requires": null },
+
+    { "id": "msc_ux_services_online", "faculty": "arts_design", "label": "تصميم تجربة المستخدم والخدمات (أونلاين)", "details": "Online | جميع المواسم | 1 أو 1.5 أو 2 سنة | 8,948 / 12,122 / 14,096 يورو/سنة\n⚡ المدة تعتمد على عدد ECTS — يخضع لتقييم الجامعة", "requires": "portfolio" },
+    { "id": "msc_film_tv", "faculty": "arts_design", "label": "الأفلام والتلفزيون والسرديات الرقمية", "details": "Berlin | خريف، ربيع | 2 سنة | 23,800 يورو/سنة", "requires": "portfolio" },
+    { "id": "msc_social_design", "faculty": "arts_design", "label": "التصميم الاجتماعي والابتكار المستدام", "details": "Berlin | خريف، ربيع | 2 سنة | 23,800 يورو/سنة", "requires": "portfolio" },
+    { "id": "msc_photography", "faculty": "arts_design", "label": "التصوير الفوتوغرافي", "details": "Berlin | خريف | 2 سنة | 23,800 يورو/سنة", "requires": "portfolio" },
+    { "id": "msc_strategic_design", "faculty": "arts_design", "label": "التصميم الاستراتيجي", "details": "Berlin | خريف | 2 سنة | 23,800 يورو/سنة", "requires": "portfolio" },
+
+    { "id": "msc_architecture_hamburg", "faculty": "engineering", "label": "الهندسة المعمارية — هامبورغ", "details": "Hamburg | خريف | 1.5 سنة | 16,500 يورو/سنة", "requires": null },
+    { "id": "msc_architecture_heidelberg", "faculty": "engineering", "label": "الهندسة المعمارية — هايدلبرغ", "details": "Heidelberg | خريف، ربيع | 1.5 سنة | 16,500 يورو/سنة", "requires": null },
+    { "id": "msc_renewable_energy", "faculty": "engineering", "label": "الهندسة والأعمال الدولية - الطاقة المتجددة والمياه", "details": "Berlin | خريف، ربيع | 2 سنة | 27,800 يورو/سنة", "requires": null },
+    { "id": "msc_industry40_berlin", "faculty": "engineering", "label": "الهندسة وإدارة التكنولوجيا - الصناعة 4.0 — برلين", "details": "Berlin | خريف، ربيع | 2 سنة | 27,800 يورو/سنة", "requires": null },
+    { "id": "msc_industry40_heidelberg", "faculty": "engineering", "label": "الهندسة وإدارة التكنولوجيا - الصناعة 4.0 — هايدلبرغ", "details": "Heidelberg | خريف، ربيع | 2 سنة | 26,000 يورو/سنة", "requires": null },
+    { "id": "msc_mobility_berlin", "faculty": "engineering", "label": "الهندسة وإدارة التكنولوجيا - صناعة التنقل والسيارات — برلين", "details": "Berlin | خريف، ربيع | 2 سنة | 27,800 يورو/سنة", "requires": null },
+    { "id": "msc_mobility_heidelberg", "faculty": "engineering", "label": "الهندسة وإدارة التكنولوجيا - صناعة التنقل والسيارات — هايدلبرغ", "details": "Heidelberg | خريف، ربيع | 2 سنة | 26,000 يورو/سنة", "requires": null },
+    { "id": "msc_smart_buildings", "faculty": "engineering", "label": "الهندسة وإدارة التكنولوجيا - تقنيات المباني الذكية", "details": "Berlin | خريف، ربيع | 2 سنة | 27,800 يورو/سنة", "requires": null },
+    { "id": "msc_it_heidelberg", "faculty": "engineering", "label": "تكنولوجيا المعلومات", "details": "Heidelberg | خريف، ربيع | 2 سنة | 27,800 يورو/سنة", "requires": null },
+    { "id": "msc_intl_biz_eng_hamburg", "faculty": "engineering", "label": "الأعمال التجارية الدولية والهندسة — هامبورغ", "details": "Hamburg | خريف | 1.5 سنة | 17,250 يورو/سنة", "requires": null },
+    { "id": "msc_intl_biz_eng_hamm", "faculty": "engineering", "label": "الأعمال التجارية الدولية والهندسة — هام", "details": "Hamm | خريف | 2 سنة | 23,000 يورو/سنة", "requires": null },
+    { "id": "msc_intl_biz_eng_heidelberg", "faculty": "engineering", "label": "الأعمال التجارية الدولية والهندسة — هايدلبرغ", "details": "Heidelberg | خريف، ربيع | 1.5 أو 2 سنة | 20,850 / 27,800 يورو/سنة\n⚡ المدة تعتمد على عدد ECTS — يخضع لتقييم الجامعة", "requires": null },
+    { "id": "msc_battery_eng", "faculty": "engineering", "label": "هندسة إنتاج البطاريات المستدامة (نظام مزدوج)", "details": "Berlin | ربيع | 2 سنة | 27,800 يورو/سنة", "requires": null },
+    { "id": "msc_water_tech", "faculty": "engineering", "label": "تكنولوجيا المياه", "details": "Heidelberg | خريف، ربيع | 1.5 سنة | 19,500 يورو/سنة", "requires": null },
+    { "id": "msc_biotech", "faculty": "engineering", "label": "التكنولوجيا الحيوية", "details": "Munich | خريف | 2 سنة | 23,000 يورو/سنة", "requires": null },
+
+    { "id": "msc_dance_therapy", "faculty": "psychology", "label": "العلاج بالحركة الراقصة", "details": "Heidelberg | خريف | 2 سنة | 21,800 يورو/سنة", "requires": "portfolio" },
+    { "id": "msc_music_therapy", "faculty": "psychology", "label": "العلاج بالموسيقى", "details": "Heidelberg | خريف | 2 سنة | 21,800 يورو/سنة", "requires": "portfolio" },
+
+    { "id": "msc_applied_cs", "faculty": "computer_science", "label": "علوم الحاسوب التطبيقية", "details": "Heidelberg | خريف، ربيع | 2 سنة | 27,800 يورو/سنة\nMunich | خريف، ربيع | 2 سنة | 23,000 يورو/سنة\nStuttgart | خريف، ربيع | 2 سنة | 23,000 يورو/سنة", "requires": null },
+    { "id": "msc_data_science_ai", "faculty": "computer_science", "label": "علوم البيانات التطبيقية والذكاء الاصطناعي", "details": "Hamburg | ربيع | 2 سنة | 23,800 يورو/سنة\nHeidelberg | ربيع | 2 سنة | 27,000 يورو/سنة\nMunich | ربيع | 2 سنة | 23,800 يورو/سنة", "requires": null },
+    { "id": "msc_cs_big_data", "faculty": "computer_science", "label": "علوم الحاسوب - البيانات الضخمة والذكاء الاصطناعي", "details": "Berlin | خريف، ربيع | 2 سنة | 27,800 يورو/سنة\nLeipzig | خريف، ربيع | 2 سنة | 23,000 يورو/سنة", "requires": null },
+    { "id": "msc_cs_big_data_fast", "faculty": "computer_science", "label": "علوم الحاسوب - البيانات الضخمة والذكاء الاصطناعي (المسار السريع)", "details": "Berlin | خريف، ربيع | 1.5 سنة | 20,850 يورو/سنة\nLeipzig | خريف، ربيع | 1.5 سنة | 16,350 يورو/سنة", "requires": null },
+    { "id": "msc_cs_cybersecurity", "faculty": "computer_science", "label": "علوم الحاسوب - الأمن السيبراني", "details": "Berlin | خريف، ربيع | 2 سنة | 27,800 يورو/سنة\nLeipzig | خريف، ربيع | 2 سنة | 23,000 يورو/سنة", "requires": null },
+    { "id": "msc_cs_cybersecurity_fast", "faculty": "computer_science", "label": "علوم الحاسوب - الأمن السيبراني (المسار السريع)", "details": "Berlin | خريف، ربيع | 1.5 سنة | 20,850 يورو/سنة\nLeipzig | خريف، ربيع | 1.5 سنة | 17,250 يورو/سنة", "requires": null },
+    { "id": "msc_data_analytics_biz", "faculty": "computer_science", "label": "علوم البيانات التطبيقية والذكاء الاصطناعي (تحليلات الأعمال)", "details": "Fürth | خريف، ربيع | 2 سنة | 21,800 يورو/سنة", "requires": null }
+  ]
+}

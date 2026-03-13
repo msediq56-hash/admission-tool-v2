@@ -1,0 +1,74 @@
+{
+  "path_label": "بكالوريوس — جميع الشهادات العربية",
+  "first_question": "SRH_BSC_HS",
+
+  "faculty_select": {
+    "data_file": "bsc_faculties",
+    "programs_file": "bsc_programs"
+  },
+
+  "questions": {
+    "SRH_BSC_HS": {
+      "text": "هل لدى الطالب شهادة ثانوية؟",
+      "type": "yes_no",
+      "options": [
+        { "value": "yes", "label": "نعم", "next": "SRH_BSC_IELTS" },
+        { "value": "no", "label": "لا", "result": "no_hs" }
+      ]
+    },
+    "SRH_BSC_IELTS": {
+      "text": "هل لدى الطالب شهادة لغة إنجليزية معتمدة (IELTS 6.5 أو أعلى، أو دولينجو 110 أو أعلى، أو ما يثبت أن دراسته السابقة كانت بالإنجليزية)؟",
+      "type": "yes_no",
+      "dynamic_result": "srh_bachelor_language",
+      "options": [
+        { "value": "yes", "label": "نعم" },
+        { "value": "no", "label": "لا" }
+      ]
+    },
+    "SRH_BSC_PORTFOLIO": {
+      "text": "هل لدى الطالب بورتفوليو جاهز أو هو مستعد لتقديمه؟ (أعمال إبداعية مثل رسوم، تصاميم، تصوير، مقاطع فيديو، إنتاج صوتي، إلخ)",
+      "type": "yes_no",
+      "dynamic_result": "srh_bachelor_portfolio",
+      "options": [
+        { "value": "yes", "label": "نعم" },
+        { "value": "no", "label": "لا" }
+      ]
+    },
+    "SRH_BSC_AUDITION": {
+      "text": "هل الطالب مستعد لتقديم أوديشن وإرسال تسجيلات لأدائه الموسيقي؟",
+      "type": "yes_no",
+      "dynamic_result": "srh_bachelor_audition",
+      "options": [
+        { "value": "yes", "label": "نعم" },
+        { "value": "no", "label": "لا" }
+      ]
+    }
+  },
+
+  "results": {
+    "no_hs": {
+      "status": "negative",
+      "title": "غير مؤهل",
+      "message": "الطالب لا يملك شهادة ثانوية — وهي شرط أساسي للقبول في بكالوريوس جامعة SRH.",
+      "notes": ["يرجى التواصل مع المستشار لمعرفة الخيارات المتاحة."]
+    },
+    "no_lang": {
+      "status": "negative",
+      "title": "غير مؤهل حالياً — اللغة الإنجليزية",
+      "message": "الطالب لا يملك شهادة IELTS 6.5 أو دولينجو 110 أو ما يثبت أن دراسته السابقة كانت بالإنجليزية.",
+      "notes": ["يمكن للطالب التقديم بعد الحصول على شهادة اللغة المطلوبة."]
+    },
+    "no_portfolio": {
+      "status": "negative",
+      "title": "غير مؤهل حالياً — البورتفوليو",
+      "message": "هذا البرنامج يتطلب بورتفوليو إبداعي. الطالب غير مستعد لتقديمه حالياً.",
+      "notes": ["يمكن للطالب التقديم بعد إعداد بورتفوليو مناسب يتضمن أعمال إبداعية."]
+    },
+    "no_audition": {
+      "status": "negative",
+      "title": "غير مؤهل حالياً — الأوديشن",
+      "message": "برنامج الموسيقى الكلاسيكية يتطلب أوديشن وتسجيلات أداء موسيقي. الطالب غير مستعد حالياً.",
+      "notes": ["يمكن للطالب التقديم بعد الاستعداد للأوديشن وتجهيز التسجيلات الموسيقية."]
+    }
+  }
+}
