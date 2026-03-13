@@ -1,0 +1,65 @@
+{
+  "flow_id": "ify_british",
+  "path_label": "سنة تأسيسية — شهادة بريطانية",
+  "first_question": "IFY001",
+
+  "questions": {
+    "IFY001": {
+      "text": "هل لدى الطالب 3 مواد A Level؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "next": "IFY002" },
+        { "label": "لا", "value": "no", "result": "not_eligible" }
+      ]
+    },
+    "IFY002": {
+      "text": "هل جميع المواد بدرجة C أو أعلى؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "result": "redirect_bachelor" },
+        { "label": "لا", "value": "no", "next": "IFY003" }
+      ]
+    },
+    "IFY003": {
+      "text": "هل لدى الطالب شهادة لغة إنجليزية (دولينجو 65+ أو IELTS 4.5+)؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "result": "eligible_with_lang" },
+        { "label": "لا", "value": "no", "result": "eligible_no_lang" }
+      ]
+    }
+  },
+
+  "results": {
+    "not_eligible": {
+      "status": "negative",
+      "title": "غير مؤهل",
+      "message": "الطالب لا يملك 3 مواد A Level."
+    },
+    "redirect_bachelor": {
+      "status": "conditional",
+      "title": "مراجعة البكالوريوس المباشر",
+      "message": "درجات الطالب C أو أعلى — يُقترح التقديم للبكالوريوس المباشر.",
+      "suggestions": [
+        { "label": "انتقل لمسار البكالوريوس", "path": "bachelor_british" }
+      ]
+    },
+    "eligible_with_lang": {
+      "status": "positive",
+      "title": "مؤهل للسنة التأسيسية",
+      "message": "الطالب مؤهل لبرنامج السنة التأسيسية (IFY).",
+      "notes": [
+        "رسوم السنة التأسيسية: 13,000 يورو."
+      ]
+    },
+    "eligible_no_lang": {
+      "status": "positive",
+      "title": "مؤهل للسنة التأسيسية + مقابلة لغة",
+      "message": "الطالب مؤهل لبرنامج السنة التأسيسية مع إجراء مقابلة تقييم لغة.",
+      "notes": [
+        "يجب إجراء مقابلة تقييم لغة.",
+        "رسوم السنة التأسيسية: 13,000 يورو."
+      ]
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "university_id": "constructor_university",
+  "university_label": "جامعة كونستركتر",
+  "country_label": "ألمانيا — جامعة خاصة",
+
+  "programs": [
+    {
+      "id": "bachelor",
+      "label": "بكالوريوس",
+      "certificates": [
+        { "id": "bachelor_british", "label": "شهادة بريطانية", "file": "bachelor_british.json" },
+        { "id": "bachelor_arabic", "label": "شهادات عربية", "file": "bachelor_arabic.json" }
+      ]
+    },
+    {
+      "id": "ify",
+      "label": "سنة تأسيسية",
+      "certificates": [
+        { "id": "ify_british", "label": "شهادة بريطانية", "file": "ify_british.json" },
+        { "id": "ify_arabic", "label": "شهادات عربية", "file": "ify_arabic.json" }
+      ]
+    },
+    {
+      "id": "master",
+      "label": "ماجستير",
+      "direct_flow": "master",
+      "file": "master.json"
+    },
+    {
+      "id": "pre_bachelor",
+      "label": "Pre-Bachelor",
+      "placeholder": true,
+      "placeholder_message": "غير متاح حالياً — سيُضاف قريباً"
+    }
+  ]
+}

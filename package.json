@@ -1,0 +1,9 @@
+{
+  "name": "admission-tool-v2",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Admission eligibility evaluation engine",
+  "scripts": {
+    "test": "node engine/run_tests.js"
+  }
+}

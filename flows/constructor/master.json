@@ -1,0 +1,58 @@
+{
+  "flow_id": "master",
+  "path_label": "ماجستير",
+  "first_question": "KO_MSC_PROGRAM",
+
+  "program_select": {
+    "_comment": "Master's path starts with program selection instead of certificate selection",
+    "question_id": "KO_MSC_PROGRAM",
+    "text": "ما هو البرنامج المطلوب؟",
+    "programs": [
+      { "id": "supply_chain_online", "label": "إدارة سلسلة التوريد (أونلاين)", "campus": "أونلاين", "semester": "—" },
+      { "id": "data_sci_online", "label": "علم البيانات للمجتمع والأعمال (أونلاين)", "campus": "أونلاين", "semester": "—" },
+      { "id": "data_eng_tech_online", "label": "تقنيات هندسة البيانات (أونلاين)", "campus": "أونلاين", "semester": "—" },
+      { "id": "supply_chain_bremen", "label": "إدارة سلسلة التوريد — بريمن", "campus": "بريمن", "semester": "الفصل الخريفي" },
+      { "id": "quant_life_sci", "label": "علوم الحياة الكمية — بريمن", "campus": "بريمن", "semester": "الفصل الخريفي" },
+      { "id": "data_sci_bremen", "label": "علم البيانات للمجتمع والأعمال — بريمن", "campus": "بريمن", "semester": "الفصل الخريفي" },
+      { "id": "data_eng_bremen", "label": "هندسة البيانات — بريمن", "campus": "بريمن", "semester": "الفصل الخريفي" },
+      { "id": "cs_software_eng", "label": "علوم الحاسوب وهندسة البرمجيات — بريمن", "campus": "بريمن", "semester": "الفصل الخريفي" },
+      { "id": "adv_software_tech", "label": "تقنيات البرمجيات المتقدمة — بريمن", "campus": "بريمن", "semester": "الفصل الخريفي" },
+      { "id": "adv_materials", "label": "علوم المواد المتقدمة — بريمن", "campus": "بريمن", "semester": "الفصل الخريفي" },
+      { "id": "mba_4sem", "label": "ماجستير إدارة الأعمال (4 فصول) — بريمن", "campus": "بريمن", "semester": "الفصل الخريفي" },
+      { "id": "mba_2sem", "label": "ماجستير إدارة الأعمال (فصلين) — بريمن", "campus": "بريمن", "semester": "الفصل الخريفي" }
+    ]
+  },
+
+  "questions": {
+    "KO_MSC_PROGRAM": {
+      "text": "ما هو البرنامج المطلوب؟",
+      "type": "program_select",
+      "next": "KO_MSC_BA"
+    },
+    "KO_MSC_BA": {
+      "text": "هل لدى الطالب شهادة بكالوريوس؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "next": "KO_MSC_IELTS" },
+        { "label": "لا", "value": "no", "result": "not_eligible" }
+      ]
+    },
+    "KO_MSC_IELTS": {
+      "text": "هل لدى الطالب شهادة لغة إنجليزية (IELTS 6.5+ أو دولينجو 110+)؟",
+      "type": "yes_no",
+      "dynamic_result": "master_language",
+      "options": [
+        { "label": "نعم", "value": "yes" },
+        { "label": "لا", "value": "no" }
+      ]
+    }
+  },
+
+  "results": {
+    "not_eligible": {
+      "status": "negative",
+      "title": "غير مؤهل",
+      "message": "الطالب لا يملك شهادة بكالوريوس."
+    }
+  }
+}

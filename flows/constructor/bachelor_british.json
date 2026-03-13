@@ -1,0 +1,186 @@
+{
+  "flow_id": "bachelor_british",
+  "path_label": "بكالوريوس — شهادة بريطانية",
+  "first_question": "KO001",
+
+  "questions": {
+    "KO001": {
+      "text": "هل لدى الطالب 3 مواد A Level؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "next": "KO001A" },
+        { "label": "لا", "value": "no", "result": "not_eligible_no_alevels" }
+      ]
+    },
+    "KO001A": {
+      "text": "هل جميع المواد الثلاثة بدرجة C أو أعلى؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "next": "KO001B" },
+        { "label": "لا", "value": "no", "result": "redirect_ify" }
+      ]
+    },
+    "KO001B": {
+      "text": "هل لدى الطالب مادتان من المواد الأساسية المعترف بها؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "next": "KO004" },
+        { "label": "لا", "value": "no", "result": "not_eligible_core_subjects" }
+      ]
+    },
+    "KO004": {
+      "text": "ما هو التخصص المطلوب في جامعة كونستركتر؟",
+      "type": "major_select",
+      "source": "shared/majors.json",
+      "branching": {
+        "G1": "KO005G1",
+        "G2": "KO005G2",
+        "G3": "KO005G3",
+        "G4": "KO005G4"
+      }
+    },
+
+    "KO005G1": {
+      "text": "هل لدى الطالب مادتان من: رياضيات / أحياء / كيمياء / فيزياء / حاسب؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "next": "KO002" },
+        { "label": "لا", "value": "no", "result": "not_eligible_major_subjects" }
+      ]
+    },
+    "KO005G2": {
+      "text": "هل لدى الطالب A Level رياضيات بدرجة C أو أعلى؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "next": "KO006G2" },
+        { "label": "لا", "value": "no", "result": "not_eligible_major_subjects" }
+      ]
+    },
+    "KO006G2": {
+      "text": "هل لدى الطالب مادة من: أحياء / كيمياء / فيزياء / حاسب؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "next": "KO002" },
+        { "label": "لا", "value": "no", "result": "not_eligible_major_subjects" }
+      ]
+    },
+    "KO005G3": {
+      "text": "هل لدى الطالب مادة من: تاريخ / جغرافيا / سياسة / اقتصاد؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "next": "KO006G3" },
+        { "label": "لا", "value": "no", "result": "not_eligible_major_subjects" }
+      ]
+    },
+    "KO006G3": {
+      "text": "هل لدى الطالب مادة من: رياضيات / أحياء / كيمياء / فيزياء / حاسب؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "next": "KO002" },
+        { "label": "لا", "value": "no", "result": "not_eligible_major_subjects" }
+      ]
+    },
+    "KO005G4": {
+      "text": "هل لدى الطالب مادة من: لغة / تاريخ / جغرافيا / سياسة / اقتصاد؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "next": "KO002" },
+        { "label": "لا", "value": "no", "result": "not_eligible_major_subjects" }
+      ]
+    },
+
+    "KO002": {
+      "text": "هل لدى الطالب SAT بدرجة 1200 أو أعلى؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "next": "KO003" },
+        { "label": "لا", "value": "no", "next": "KO003KO" }
+      ]
+    },
+    "KO003": {
+      "text": "هل لدى الطالب شهادة لغة إنجليزية (IELTS 6.5+ أو دولينجو 110+)؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "result": "eligible_sat_lang" },
+        { "label": "لا", "value": "no", "result": "eligible_sat_no_lang" }
+      ]
+    },
+    "KO003KO": {
+      "text": "هل لدى الطالب شهادة لغة إنجليزية (IELTS 6.5+ أو دولينجو 110+)؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "result": "conditional_no_sat_lang" },
+        { "label": "لا", "value": "no", "result": "conditional_no_sat_no_lang" }
+      ]
+    }
+  },
+
+  "results": {
+    "not_eligible_no_alevels": {
+      "status": "negative",
+      "title": "غير مؤهل للبكالوريوس المباشر",
+      "message": "الطالب لا يملك 3 مواد A Level.",
+      "suggestions": [
+        { "label": "جرّب مسار السنة التأسيسية (IFY)", "path": "ify_british" }
+      ]
+    },
+    "redirect_ify": {
+      "status": "conditional",
+      "title": "جرّب مسار السنة التأسيسية",
+      "message": "درجات الطالب أقل من C — يُحوّل لبرنامج السنة التأسيسية (IFY).",
+      "suggestions": [
+        { "label": "انتقل لمسار IFY", "path": "ify_british" }
+      ]
+    },
+    "not_eligible_core_subjects": {
+      "status": "negative",
+      "title": "غير مؤهل",
+      "message": "الطالب لا يستوفي شرط المواد الأساسية المعترف بها."
+    },
+    "not_eligible_major_subjects": {
+      "status": "negative",
+      "title": "غير مؤهل",
+      "message": "الطالب لا يستوفي شروط المواد المطلوبة للتخصص المختار."
+    },
+    "eligible_sat_lang": {
+      "status": "positive",
+      "title": "نمضي بالتقديم",
+      "message": "الطالب يحقق جميع الشروط الأكاديمية وشهادة اللغة و SAT.",
+      "notes": [
+        "قد يكون مؤهلاً لمنحة 3,000 أو 5,000 أو 7,000 يورو."
+      ]
+    },
+    "eligible_sat_no_lang": {
+      "status": "positive",
+      "title": "نمضي بالتقديم + مقابلة لغة",
+      "message": "الطالب يحقق الشروط الأكاديمية و SAT، لكن يحتاج مقابلة تقييم لغة.",
+      "notes": [
+        "يجب إجراء مقابلة تقييم لغة.",
+        "قد يكون مؤهلاً لمنحة 3,000 أو 5,000 أو 7,000 يورو."
+      ]
+    },
+    "conditional_no_sat_lang": {
+      "status": "conditional",
+      "title": "نمضي بالتقديم — مشروط بـ SAT",
+      "message": "الطالب يحقق شرط اللغة لكن يجب تقديم SAT بدرجة 1200+ قبل 31 ديسمبر.",
+      "conditions": [
+        { "category": "sat", "description": "تقديم شهادة SAT بدرجة 1200 أو أعلى قبل 31 ديسمبر" }
+      ],
+      "notes": [
+        "قد يكون مؤهلاً لمنحة 3,000 أو 5,000 أو 7,000 يورو."
+      ]
+    },
+    "conditional_no_sat_no_lang": {
+      "status": "conditional",
+      "title": "نمضي بالتقديم — مشروط",
+      "message": "يجب تقديم SAT بدرجة 1200+ قبل 31 ديسمبر + مقابلة تقييم لغة.",
+      "conditions": [
+        { "category": "sat", "description": "تقديم شهادة SAT بدرجة 1200 أو أعلى قبل 31 ديسمبر" }
+      ],
+      "notes": [
+        "يجب إجراء مقابلة تقييم لغة.",
+        "قد يكون مؤهلاً لمنحة 3,000 أو 5,000 أو 7,000 يورو."
+      ]
+    }
+  }
+}

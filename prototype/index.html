@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admission Eligibility Prototype</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; color: #333; }
+    h1 { margin-bottom: 4px; font-size: 1.4em; }
+    .subtitle { color: #666; margin-bottom: 20px; font-size: 0.9em; }
+    fieldset { border: 1px solid #ccc; padding: 16px; margin-bottom: 16px; border-radius: 4px; }
+    legend { font-weight: bold; padding: 0 6px; }
+    .field { margin-bottom: 10px; }
+    label { display: block; font-size: 0.85em; color: #555; margin-bottom: 3px; }
+    select, input { width: 100%; padding: 6px 8px; border: 1px solid #ccc; border-radius: 3px; font-size: 0.9em; }
+    .row { display: flex; gap: 12px; }
+    .row .field { flex: 1; }
+    button { background: #2563eb; color: white; border: none; padding: 10px 24px; border-radius: 4px; font-size: 1em; cursor: pointer; margin-top: 8px; }
+    button:hover { background: #1d4ed8; }
+    button:disabled { background: #93c5fd; cursor: not-allowed; }
+    #result { margin-top: 20px; }
+    .verdict-box { padding: 16px; border-radius: 6px; margin-bottom: 16px; }
+    .verdict-eligible { background: #dcfce7; border: 1px solid #86efac; }
+    .verdict-not_eligible { background: #fee2e2; border: 1px solid #fca5a5; }
+    .verdict-conditional { background: #fef9c3; border: 1px solid #fde047; }
+    .verdict-needs_review { background: #fed7aa; border: 1px solid #fdba74; }
+    .verdict-insufficient_data { background: #e0e7ff; border: 1px solid #a5b4fc; }
+    .verdict-label { font-size: 1.3em; font-weight: bold; text-transform: uppercase; }
+    .confidence { font-size: 0.85em; color: #555; margin-top: 4px; }
+    .section { margin-bottom: 14px; }
+    .section h3 { font-size: 0.95em; margin-bottom: 6px; border-bottom: 1px solid #e5e7eb; padding-bottom: 4px; }
+    .section ul { padding-left: 20px; font-size: 0.85em; }
+    .section li { margin-bottom: 4px; }
+    .rule-passed { color: #16a34a; }
+    .rule-failed { color: #dc2626; }
+    .rule-skipped { color: #9ca3af; }
+    .rule-exception { color: #d97706; }
+    .error-box { background: #fee2e2; border: 1px solid #fca5a5; padding: 12px; border-radius: 4px; }
+    .optional-note { font-size: 0.8em; color: #888; font-style: italic; }
+  </style>
+</head>
+<body>
+  <h1>Admission Eligibility Evaluator</h1>
+  <p class="subtitle">Constructor University &mdash; Computer Science (Bachelor) &mdash; Prototype</p>
+
+  <form id="evalForm">
+    <!-- Personal Info -->
+    <fieldset>
+      <legend>Personal Info</legend>
+      <div class="row">
+        <div class="field">
+          <label for="nationality">Nationality</label>
+          <select id="nationality">
+            <option value="JO">Jordan</option>
+            <option value="EG">Egypt</option>
+            <option value="TR">Turkey</option>
+            <option value="IN">India</option>
+            <option value="NG">Nigeria</option>
+            <option value="CN">China</option>
+            <option value="US">United States</option>
+            <option value="GB">United Kingdom</option>
+            <option value="DE">Germany</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="dob">Date of Birth</label>
+          <input type="date" id="dob" value="2004-05-15">
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Education -->
+    <fieldset>
+      <legend>Secondary Education</legend>
+      <div class="row">
+        <div class="field">
+          <label for="certCountry">Certificate Country</label>
+          <select id="certCountry">
+            <option value="JO">Jordan</option>
+            <option value="EG">Egypt</option>
+            <option value="TR">Turkey</option>
+            <option value="IN">India</option>
+            <option value="NG">Nigeria</option>
+            <option value="CN">China</option>
+            <option value="US">United States</option>
+            <option value="GB">United Kingdom</option>
+            <option value="DE">Germany</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="certType">Certificate Type</label>
+          <input type="text" id="certType" placeholder="e.g. Tawjihi, High School Diploma" value="Tawjihi">
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="gradStatus">Graduation Status</label>
+          <select id="gradStatus">
+            <option value="completed">Completed</option>
+            <option value="expected">Expected</option>
+            <option value="in_progress">In Progress</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="gradYear">Graduation Year</label>
+          <input type="number" id="gradYear" value="2023" min="2000" max="2030">
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="gradingSystem">Grading System</label>
+          <select id="gradingSystem">
+            <option value="percentage">Percentage (0-100)</option>
+            <option value="gpa_4">GPA (0-4.0)</option>
+            <option value="gpa_5">GPA (0-5.0)</option>
+            <option value="german_1_to_6">German (1-6)</option>
+            <option value="ib_points">IB Points</option>
+            <option value="">No grade available</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="gradeValue">Grade Value</label>
+          <input type="number" id="gradeValue" step="0.1" placeholder="e.g. 85 or 3.2" value="85">
+        </div>
+      </div>
+      <div class="field">
+        <label for="subjects">Subjects studied <span class="optional-note">(comma-separated)</span></label>
+        <input type="text" id="subjects" placeholder="e.g. mathematics, physics, english" value="mathematics, arabic, physics, chemistry">
+      </div>
+    </fieldset>
+
+    <!-- Studienkolleg (optional) -->
+    <fieldset>
+      <legend>Studienkolleg / Foundation Year <span class="optional-note">(if completed)</span></legend>
+      <div class="row">
+        <div class="field">
+          <label for="hasStudienkolleg">Completed Studienkolleg?</label>
+          <select id="hasStudienkolleg">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="skTrack">Track</label>
+          <select id="skTrack" disabled>
+            <option value="T">T-Kurs (Technical)</option>
+            <option value="W">W-Kurs (Economics)</option>
+            <option value="M">M-Kurs (Medical)</option>
+            <option value="G">G-Kurs (Humanities)</option>
+            <option value="S">S-Kurs (Language)</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Language -->
+    <fieldset>
+      <legend>English Proficiency</legend>
+      <div class="row">
+        <div class="field">
+          <label for="langTestType">Test Type</label>
+          <select id="langTestType">
+            <option value="IELTS">IELTS</option>
+            <option value="TOEFL">TOEFL</option>
+            <option value="Duolingo">Duolingo</option>
+            <option value="Cambridge">Cambridge</option>
+            <option value="">No test provided</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="langScore">Overall Score</label>
+          <input type="number" id="langScore" step="0.5" placeholder="e.g. 6.5" value="7.0">
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="langTestDate">Test Date</label>
+          <input type="date" id="langTestDate" value="2025-06-01">
+        </div>
+        <div class="field">
+          <label for="langCertStatus">Certificate Status</label>
+          <select id="langCertStatus">
+            <option value="provided">Provided</option>
+            <option value="pending">Pending</option>
+            <option value="self_reported">Self-reported</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <button type="submit" id="evalBtn">Evaluate Eligibility</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

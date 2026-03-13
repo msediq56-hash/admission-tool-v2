@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تقييم أهلية القبول</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+      background: #f5f6fa;
+      color: #333;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    #app {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 1.5em;
+      color: #1a365d;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      color: #718096;
+      font-size: 0.9em;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 16px;
+    }
+
+    .card h2 {
+      font-size: 1.15em;
+      margin-bottom: 16px;
+      color: #2d3748;
+      line-height: 1.6;
+    }
+
+    /* Path selector */
+    .path-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .path-btn {
+      background: #ebf5ff;
+      border: 2px solid #bee3f8;
+      color: #2b6cb0;
+      padding: 14px 20px;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      text-align: right;
+      transition: all 0.15s;
+    }
+
+    .path-btn:hover {
+      background: #bee3f8;
+      border-color: #90cdf4;
+    }
+
+    .path-btn.placeholder {
+      background: #f7fafc;
+      border-color: #e2e8f0;
+      color: #a0aec0;
+    }
+
+    .path-btn.placeholder:hover {
+      background: #edf2f7;
+    }
+
+    /* Option buttons */
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .option-btn {
+      background: white;
+      border: 2px solid #e2e8f0;
+      color: #2d3748;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 0.95em;
+      cursor: pointer;
+      text-align: right;
+      transition: all 0.15s;
+    }
+
+    .option-btn:hover {
+      background: #ebf5ff;
+      border-color: #90cdf4;
+    }
+
+    .major-btn, .program-btn {
+      font-size: 0.9em;
+      padding: 10px 16px;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      background: white;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .progress-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+      font-size: 0.82em;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .progress-item:last-child {
+      border-bottom: none;
+    }
+
+    .progress-q {
+      color: #718096;
+      flex: 1;
+    }
+
+    .progress-a {
+      color: #2b6cb0;
+      font-weight: bold;
+      margin-right: 12px;
+      white-space: nowrap;
+    }
+
+    /* Back button */
+    .back-btn {
+      background: none;
+      border: 1px solid #cbd5e0;
+      color: #718096;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.85em;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .back-btn:hover {
+      background: #f7fafc;
+      color: #4a5568;
+    }
+
+    /* Result box */
+    .result-box {
+      border-right: 5px solid #ccc;
+    }
+
+    .status-positive { border-right-color: #48bb78; background: #f0fff4; }
+    .status-conditional { border-right-color: #ecc94b; background: #fffff0; }
+    .status-negative { border-right-color: #fc8181; background: #fff5f5; }
+
+    .result-status {
+      font-size: 1.3em;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .result-section {
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .result-section h3 {
+      font-size: 0.9em;
+      color: #4a5568;
+      margin-bottom: 6px;
+    }
+
+    .result-section ul {
+      padding-right: 20px;
+      font-size: 0.88em;
+      line-height: 1.7;
+    }
+
+    .result-section li {
+      margin-bottom: 4px;
+    }
+
+    .suggestion-btn {
+      background: #ebf5ff;
+      border: 2px solid #bee3f8;
+      color: #2b6cb0;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.9em;
+      cursor: pointer;
+      margin-top: 6px;
+      display: block;
+      width: 100%;
+      text-align: right;
+    }
+
+    .suggestion-btn:hover {
+      background: #bee3f8;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="header">
+      <h1>جارٍ التحميل...</h1>
+    </div>
+  </div>
+  <script src="advisor.js"></script>
+</body>
+</html>

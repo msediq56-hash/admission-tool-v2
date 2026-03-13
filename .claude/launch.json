@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "advisor",
+      "runtimeExecutable": "C:\\Program Files\\nodejs\\node.exe",
+      "runtimeArgs": ["advisor/server.js"],
+      "port": 3001,
+      "autoPort": true
+    }
+  ]
+}

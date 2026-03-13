@@ -1,0 +1,90 @@
+{
+  "flow_id": "ify_arabic",
+  "path_label": "سنة تأسيسية — شهادات عربية",
+  "first_question": "KO_IFY_AR_HS",
+
+  "questions": {
+    "KO_IFY_AR_HS": {
+      "text": "هل لدى الطالب شهادة ثانوية؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "next": "KO_IFY_AR_GPA" },
+        { "label": "لا", "value": "no", "result": "not_eligible" }
+      ]
+    },
+    "KO_IFY_AR_GPA": {
+      "text": "ما هو معدل الطالب؟ (مقياس سعودي)",
+      "type": "select",
+      "options": [
+        { "label": "70% أو أعلى", "value": "70_plus" },
+        { "label": "أقل من 70%", "value": "below_70" }
+      ],
+      "next": "KO_IFY_AR_IELTS"
+    },
+    "KO_IFY_AR_IELTS": {
+      "text": "ما هو مستوى اللغة الإنجليزية؟",
+      "type": "select",
+      "dynamic_result": "ify_arabic_language",
+      "options": [
+        { "label": "IELTS 6.5 أو أعلى", "value": "ielts_65_plus" },
+        { "label": "IELTS 5.0 — 6.4", "value": "ielts_50_64" },
+        { "label": "أقل من IELTS 5.0", "value": "below_50" }
+      ]
+    }
+  },
+
+  "results": {
+    "not_eligible": {
+      "status": "negative",
+      "title": "غير مؤهل",
+      "message": "الطالب لا يملك شهادة ثانوية."
+    }
+  },
+
+  "dynamic_result_table": {
+    "_comment": "6-scenario matrix: [gpa_answer][language_answer] → result. Used by advisor.js",
+    "70_plus": {
+      "ielts_65_plus": {
+        "status": "conditional",
+        "title": "اقتراح: جرّب البكالوريوس المباشر",
+        "message": "معدل الطالب ومستوى اللغة يؤهلانه للتقديم للبكالوريوس المباشر.",
+        "suggestions": [
+          { "label": "انتقل لمسار البكالوريوس", "path": "bachelor_arabic" }
+        ],
+        "notes": ["رسوم السنة التأسيسية: 13,000 يورو."]
+      },
+      "ielts_50_64": {
+        "status": "positive",
+        "title": "مؤهل للسنة التأسيسية",
+        "message": "الطالب مؤهل لبرنامج السنة التأسيسية.",
+        "notes": ["رسوم السنة التأسيسية: 13,000 يورو."]
+      },
+      "below_50": {
+        "status": "positive",
+        "title": "مؤهل للسنة التأسيسية + مقابلة لغة",
+        "message": "الطالب مؤهل لبرنامج السنة التأسيسية مع إجراء مقابلة تقييم لغة.",
+        "notes": ["يجب إجراء مقابلة تقييم لغة.", "رسوم السنة التأسيسية: 13,000 يورو."]
+      }
+    },
+    "below_70": {
+      "ielts_65_plus": {
+        "status": "positive",
+        "title": "مؤهل للسنة التأسيسية",
+        "message": "الطالب مؤهل للسنة التأسيسية. يُنصح أيضاً بمناقشة إمكانية البكالوريوس المباشر.",
+        "notes": ["يُنصح بمناقشة إمكانية البكالوريوس المباشر.", "رسوم السنة التأسيسية: 13,000 يورو."]
+      },
+      "ielts_50_64": {
+        "status": "positive",
+        "title": "مؤهل للسنة التأسيسية",
+        "message": "الطالب مؤهل لبرنامج السنة التأسيسية.",
+        "notes": ["رسوم السنة التأسيسية: 13,000 يورو."]
+      },
+      "below_50": {
+        "status": "positive",
+        "title": "مؤهل للسنة التأسيسية + مقابلة لغة",
+        "message": "الطالب مؤهل لبرنامج السنة التأسيسية مع إجراء مقابلة تقييم لغة.",
+        "notes": ["يجب إجراء مقابلة تقييم لغة.", "رسوم السنة التأسيسية: 13,000 يورو."]
+      }
+    }
+  }
+}

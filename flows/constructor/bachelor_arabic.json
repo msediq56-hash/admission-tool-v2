@@ -1,0 +1,71 @@
+{
+  "flow_id": "bachelor_arabic",
+  "path_label": "بكالوريوس — شهادات عربية",
+  "first_question": "KO_AR_HS",
+
+  "questions": {
+    "KO_AR_HS": {
+      "text": "هل لدى الطالب شهادة ثانوية؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "next": "KO_AR_SAT" },
+        { "label": "لا", "value": "no", "result": "not_eligible_no_hs" }
+      ]
+    },
+    "KO_AR_SAT": {
+      "text": "هل لدى الطالب SAT بدرجة 1200 أو أعلى؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "next": "KO_AR_IELTS" },
+        { "label": "لا", "value": "no", "next": "KO_AR_IELTS" }
+      ]
+    },
+    "KO_AR_IELTS": {
+      "text": "هل لدى الطالب شهادة لغة إنجليزية (IELTS 6.5+ أو دولينجو 110+)؟",
+      "type": "yes_no",
+      "options": [
+        { "label": "نعم", "value": "yes", "next": "KO_AR_SPEC" },
+        { "label": "لا", "value": "no", "next": "KO_AR_SPEC" }
+      ]
+    },
+    "KO_AR_SPEC": {
+      "text": "ما هو التخصص المطلوب؟",
+      "type": "major_select",
+      "source": "shared/majors.json",
+      "branching": null,
+      "next": "KO_AR_GPA"
+    },
+    "KO_AR_GPA": {
+      "text": "ما هو معدل الطالب في الثانوية؟",
+      "type": "select",
+      "dynamic_result": "bachelor_arabic_gpa",
+      "options": [
+        { "label": "95% أو أعلى", "value": "95_plus" },
+        { "label": "90% أو أعلى", "value": "90_plus" },
+        { "label": "85% أو أعلى", "value": "85_plus" },
+        { "label": "80% أو أعلى", "value": "80_plus" },
+        { "label": "معدل آخر", "value": "other" }
+      ]
+    }
+  },
+
+  "results": {
+    "not_eligible_no_hs": {
+      "status": "negative",
+      "title": "غير مؤهل",
+      "message": "الطالب لا يملك شهادة ثانوية."
+    }
+  },
+
+  "scholarship_table": {
+    "_comment": "Used by dynamic logic in advisor.js to build the final result for KO_AR_GPA",
+    "95_plus": { "scholarship": "أعلى منحة 7,000 يورو + تأجيل دفع 7,000 يورو" },
+    "90_plus": { "scholarship": "منحة 5,000 يورو + تأجيل دفع 5,000 يورو" },
+    "85_plus": { "scholarship": "منحة 5,000 أو 3,000 يورو (خاضع لتقدير الجامعة)" },
+    "80_plus": { "scholarship": "منحة 3,000 يورو + تأجيل دفع 3,000 يورو" },
+    "other":   { "scholarship": "قد يكون مؤهلاً لمنحة 3,000 يورو" }
+  },
+
+  "tuition_note": "الرسوم الأساسية: 20,000 يورو/سنة",
+  "gpa_warning": "تقييم المعدل مبني على مقياس الشهادة السعودية"
+}

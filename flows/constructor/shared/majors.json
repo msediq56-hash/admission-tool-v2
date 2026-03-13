@@ -1,0 +1,54 @@
+{
+  "_comment": "Constructor University 18 bachelor majors, grouped into 4 subject-requirement groups (G1-G4). Groups are used by the British certificate path for subject prerequisite branching. Arabic path uses the same list without group branching.",
+
+  "groups": {
+    "G1": {
+      "label": "المجموعة الأولى — تتطلب مادتين علمية",
+      "required_subjects_text": "هل لدى الطالب مادتان من: رياضيات / أحياء / كيمياء / فيزياء / حاسب؟",
+      "question_id": "KO005G1"
+    },
+    "G2": {
+      "label": "المجموعة الثانية — تتطلب رياضيات + مادة علمية",
+      "required_subjects_text_step1": "هل لدى الطالب A Level رياضيات بدرجة C أو أعلى؟",
+      "required_subjects_text_step2": "هل لدى الطالب مادة من: أحياء / كيمياء / فيزياء / حاسب؟",
+      "question_id_step1": "KO005G2",
+      "question_id_step2": "KO006G2"
+    },
+    "G3": {
+      "label": "المجموعة الثالثة — تتطلب مادة إنسانية + علمية",
+      "required_subjects_text_step1": "هل لدى الطالب مادة من: تاريخ / جغرافيا / سياسة / اقتصاد؟",
+      "required_subjects_text_step2": "هل لدى الطالب مادة من: رياضيات / أحياء / كيمياء / فيزياء / حاسب؟",
+      "question_id_step1": "KO005G3",
+      "question_id_step2": "KO006G3"
+    },
+    "G4": {
+      "label": "المجموعة الرابعة — تتطلب مادة إنسانية أو لغوية",
+      "required_subjects_text": "هل لدى الطالب مادة من: لغة / تاريخ / جغرافيا / سياسة / اقتصاد؟",
+      "question_id": "KO005G4"
+    }
+  },
+
+  "majors": [
+    { "id": "biochem_cell_bio", "label": "الكيمياء الحيوية وبيولوجيا الخلية", "group": "G1" },
+    { "id": "chem_biotech", "label": "الكيمياء والتكنولوجيا الحيوية", "group": "G1" },
+    { "id": "pharma_chem_bio", "label": "الكيمياء الدوائية والبيولوجيا الكيميائية", "group": "G1" },
+    { "id": "earth_sci_sustainability", "label": "علوم الأرض والإدارة المستدامة", "group": "G1", "warning": "يُرجى الرجوع لمحمود للتأكيد" },
+
+    { "id": "math_modeling", "label": "الرياضيات والنمذجة", "group": "G2" },
+    { "id": "physics_data_sci", "label": "الفيزياء وعلوم البيانات", "group": "G2" },
+    { "id": "cs_1", "label": "علوم الحاسوب (المسار الأول)", "group": "G2" },
+    { "id": "cs_2", "label": "علوم الحاسوب (المسار الثاني)", "group": "G2" },
+    { "id": "cs_3", "label": "علوم الحاسوب (المسار الثالث)", "group": "G2" },
+    { "id": "software_data", "label": "البرمجيات والبيانات", "group": "G2" },
+    { "id": "electrical_eng", "label": "الهندسة الكهربائية", "group": "G2" },
+    { "id": "robotics", "label": "الروبوتات", "group": "G2" },
+    { "id": "industrial_eng", "label": "الهندسة الصناعية", "group": "G2", "warning": "يُرجى الرجوع لمحمود للتأكيد" },
+    { "id": "mgmt_decision", "label": "الإدارة واتخاذ القرار", "group": "G2", "warning": "يُرجى الرجوع لمحمود للتأكيد" },
+
+    { "id": "global_econ_mgmt", "label": "الاقتصاد العالمي والإدارة", "group": "G3" },
+    { "id": "social_cog_psych", "label": "علم النفس الاجتماعي والمعرفي المتكامل", "group": "G3" },
+    { "id": "intl_business", "label": "إدارة الأعمال الدولية", "group": "G3" },
+
+    { "id": "intl_relations", "label": "العلاقات الدولية: السياسة والتاريخ", "group": "G4" }
+  ]
+}
