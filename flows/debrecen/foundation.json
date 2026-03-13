@@ -1,0 +1,99 @@
+{
+  "path_label": "فاونديشن",
+  "first_question": "DB_FND_PROGRAM",
+  "fee_note": "💰 رسوم تقديم الملف 150 دولار تُدفع قبل تقديم الملف للجامعة، ورسوم الامتحان 350 دولار تُدفع بعد القبول.",
+
+  "program_select": {
+    "programs": [
+      {
+        "id": "full_english",
+        "label": "دورة اللغة الإنجليزية الكاملة",
+        "start": "سبتمبر",
+        "duration": "سبتمبر – مايو (900 ساعة)",
+        "fee": "6,000 دولار",
+        "note": "غير مخصص للمتقدمين للطب أو طب الأسنان. إمكانية الانتقال للفصل التحضيري المكثف (3,300 USD) بعد الفصل الأول.",
+        "link": "https://edu.unideb.hu/p/english-language-courses"
+      },
+      {
+        "id": "short_english",
+        "label": "دورة اللغة الإنجليزية القصيرة",
+        "start": "سبتمبر",
+        "duration": "سبتمبر – ديسمبر (300 ساعة)",
+        "fee": "3,000 دولار",
+        "note": "غير مخصص للمتقدمين للطب أو طب الأسنان. إمكانية الانتقال للفصل التحضيري المكثف.",
+        "link": "https://edu.unideb.hu/p/english-language-courses"
+      },
+      {
+        "id": "intensive_english",
+        "label": "دورة اللغة الإنجليزية المكثفة",
+        "start": "فبراير",
+        "duration": "فبراير – يونيو (400 ساعة)",
+        "fee": "4,800 دولار",
+        "note": "غير مخصص للمتقدمين للطب أو طب الأسنان.",
+        "link": "https://edu.unideb.hu/p/english-language-courses"
+      },
+      {
+        "id": "basic_med",
+        "label": "الدورة الأساسية للطب (سنة)",
+        "start": "سبتمبر",
+        "duration": "فصلان دراسيان",
+        "fee": "7,500 دولار",
+        "note": "المواد: الأحياء، الفيزياء، الكيمياء. تُوصى للطلاب الذين لا يمتلكون خلفية كافية. يُمنح الطالب قبولاً مباشراً في البرنامج المختار عند اجتيازها بنجاح.",
+        "link": "https://edu.unideb.hu/p/basic-medicine-course-premedical-studies"
+      },
+      {
+        "id": "intensive_med",
+        "label": "الدورة الأساسية المكثفة للطب",
+        "start": "يناير",
+        "duration": "فصل دراسي واحد (يناير – يوليو)",
+        "fee": "7,500 دولار",
+        "note": "المواد: الأحياء، الفيزياء، الكيمياء. تُوصى للطلاب الذين لا يمتلكون أساساً كافياً. يُمنح قبول مباشر عند اجتيازها بنجاح.",
+        "link": "https://edu.unideb.hu/p/basic-medicine-course-ii-premedical-studies"
+      },
+      {
+        "id": "intl_foundation",
+        "label": "السنة التحضيرية الدولية",
+        "start": "سبتمبر",
+        "duration": "10 أشهر",
+        "fee": "6,000 دولار",
+        "note": "يُمنح قبول مضمون في برامج الهندسة أو IT أو الزراعة أو الأعمال للطلاب الذين يحققون معدل 4.0 في أحد الفصلين و3.5 في الآخر. المسارات: IT، هندسة/فيزياء، هندسة/كيمياء، أعمال.",
+        "link": "https://edu.unideb.hu/p/international-foundation-year"
+      },
+      {
+        "id": "intensive_semester",
+        "label": "الفصل التحضيري المكثف",
+        "start": "فبراير",
+        "duration": "5 أشهر",
+        "fee": "4,800 دولار",
+        "note": "يُمنح قبول مضمون للطلاب الذين يحققون معدل 4.0. المسارات: علوم/هندسة، أعمال، IT، علوم إنسانية.",
+        "link": "https://edu.unideb.hu/p/intensive-foundation-semester"
+      }
+    ]
+  },
+
+  "questions": {
+    "DB_FND_PROGRAM": {
+      "text": "اختر نوع البرنامج التحضيري",
+      "type": "program_select",
+      "next": "DB_FND_HS"
+    },
+    "DB_FND_HS": {
+      "text": "هل لدى الطالب شهادة ثانوية ودراسة لمدة 12 سنة متواصلة؟",
+      "type": "yes_no",
+      "dynamic_result": "debrecen_fnd_eligible",
+      "options": [
+        { "value": "yes", "label": "نعم" },
+        { "value": "no", "label": "لا" }
+      ]
+    }
+  },
+
+  "results": {
+    "no_hs": {
+      "status": "negative",
+      "title": "غير مؤهل",
+      "message": "الطالب لا يملك شهادة ثانوية أو لم يكمل 12 سنة دراسة — وهي شرط أساسي للقبول.",
+      "notes": ["💰 رسوم تقديم الملف 150 دولار تُدفع قبل تقديم الملف للجامعة، ورسوم الامتحان 350 دولار تُدفع بعد القبول."]
+    }
+  }
+}

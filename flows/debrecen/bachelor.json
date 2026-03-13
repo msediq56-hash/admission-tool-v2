@@ -1,0 +1,109 @@
+{
+  "path_label": "بكالوريوس",
+  "first_question": "DB_BSC_PROGRAM",
+  "fee_note": "💰 رسوم تقديم الملف 150 دولار تُدفع قبل تقديم الملف للجامعة، ورسوم الامتحان 350 دولار تُدفع بعد القبول.",
+  "lang_note": "لا توجد شهادة لغة مطلوبة — يتم تقييم اللغة خلال امتحان القبول.",
+
+  "program_select": {
+    "programs": [
+      { "id": "agri_eng", "label": "الهندسة الزراعية", "exam_type": "math_chem_bio", "fee": "7,000 دولار/سنة", "duration": "7 فصول", "link": "https://edu.unideb.hu/p/agricultural-engineering-bsc-archived" },
+      { "id": "food_eng", "label": "هندسة الأغذية", "exam_type": "math_chem_bio", "fee": "7,000 دولار/سنة", "duration": "7 فصول", "link": "https://edu.unideb.hu/p/food-engineering-bsc" },
+      { "id": "precision_agri", "label": "هندسة الزراعة الدقيقة", "exam_type": "math_chem_bio", "fee": "7,000 دولار/سنة", "duration": "7 فصول", "link": "https://edu.unideb.hu/p/precision-agricultural-engineering-bsc" },
+      { "id": "biochem_eng", "label": "الهندسة الكيميائية الحيوية", "exam_type": "math_chem_bio", "fee": "7,000 دولار/سنة", "duration": "7 فصول", "link": "https://edu.unideb.hu/p/biochemical-engineering-bsc" },
+      { "id": "chem_eng", "label": "الهندسة الكيميائية", "exam_type": "math_chem", "fee": "7,000 دولار/سنة", "duration": "7 فصول", "link": "https://edu.unideb.hu/p/chemical-engineering-bsc" },
+      { "id": "eng_mgmt", "label": "إدارة الهندسة", "exam_type": "math_chem", "fee": "7,500 دولار/سنة", "duration": "7 فصول", "link": "https://edu.unideb.hu/p/engineering-management-bsc" },
+      { "id": "civil_eng", "label": "الهندسة المدنية", "exam_type": "math_phys", "fee": "7,500 دولار/سنة", "duration": "8 فصول", "link": "https://edu.unideb.hu/p/civil-engineering-bsc" },
+      { "id": "elec_eng", "label": "الهندسة الكهربائية", "exam_type": "math_phys", "fee": "7,000 دولار/سنة", "duration": "7 فصول", "link": "https://edu.unideb.hu/p/electrical-engineering-bsc" },
+      { "id": "env_eng", "label": "الهندسة البيئية", "exam_type": "math_phys", "fee": "7,500 دولار/سنة", "duration": "7 فصول", "link": "https://edu.unideb.hu/p/environmental-engineering-bsc" },
+      { "id": "mech_eng", "label": "الهندسة الميكانيكية", "exam_type": "math_phys", "fee": "7,500 دولار/سنة", "duration": "7 فصول", "link": "https://edu.unideb.hu/p/mechanical-engineering-bsc" },
+      { "id": "mechatronics", "label": "هندسة الميكاترونكس", "exam_type": "math_phys", "fee": "7,500 دولار/سنة", "duration": "7 فصول", "link": "https://edu.unideb.hu/p/mechatronics-engineering-bsc" },
+      { "id": "vehicle_eng", "label": "هندسة المركبات", "exam_type": "math_phys", "fee": "7,000 دولار/سنة", "duration": "7 فصول", "link": "https://edu.unideb.hu/p/vehicle-engineering-bsc" },
+      { "id": "cs_eng", "label": "هندسة علوم الحاسوب", "exam_type": "math_phys", "fee": "7,000 دولار/سنة", "duration": "7 فصول", "link": "https://edu.unideb.hu/p/computer-science-engineering-bsc" },
+      { "id": "physics", "label": "الفيزياء", "exam_type": "math_phys", "fee": "6,500 دولار/سنة", "duration": "6 فصول", "link": "https://edu.unideb.hu/p/physics-bsc" },
+      { "id": "business_admin", "label": "إدارة الأعمال", "exam_type": "math_eng", "fee": "7,000 دولار/سنة", "duration": "7 فصول", "link": "https://edu.unideb.hu/p/business-administration-and-management-bsc" },
+      { "id": "commerce", "label": "التجارة والتسويق", "exam_type": "math_eng", "fee": "7,000 دولار/سنة", "duration": "7 فصول", "link": "https://edu.unideb.hu/p/commerce-and-marketing-bsc" },
+      { "id": "business_info", "label": "نظم معلومات الأعمال", "exam_type": "math_only", "fee": "7,000 دولار/سنة", "duration": "7 فصول", "link": "https://edu.unideb.hu/p/business-informatics-bsc" },
+      { "id": "cs", "label": "علوم الحاسوب", "exam_type": "math_only", "fee": "7,000 دولار/سنة", "duration": "6 فصول", "link": "https://edu.unideb.hu/p/computer-science-bsc" },
+      { "id": "math", "label": "الرياضيات", "exam_type": "math_only", "fee": "6,500 دولار/سنة", "duration": "6 فصول", "link": "https://edu.unideb.hu/p/mathematics-bsc" },
+      { "id": "biology", "label": "علم الأحياء", "exam_type": "bio_math", "fee": "6,500 دولار/سنة", "duration": "6 فصول", "link": "https://edu.unideb.hu/p/biology-bsc" },
+      { "id": "biotech", "label": "التكنولوجيا الحيوية", "exam_type": "bio_chem", "fee": "6,500 دولار/سنة", "duration": "6 فصول", "link": "https://edu.unideb.hu/p/biotechnology-bsc" },
+      { "id": "chemistry", "label": "الكيمياء", "exam_type": "chem_math", "fee": "6,500 دولار/سنة", "duration": "6 فصول", "link": "https://edu.unideb.hu/p/chemistry-bsc" },
+      { "id": "earth_sci", "label": "علوم الأرض", "exam_type": "math_geo", "fee": "6,500 دولار/سنة", "duration": "6 فصول", "link": "https://edu.unideb.hu/p/earth-sciences-bsc" },
+      { "id": "nursing", "label": "التمريض ورعاية المرضى (ممرض/ة)", "exam_type": "bio_interview", "fee": "7,500 دولار/سنة", "duration": "8 فصول", "link": "https://edu.unideb.hu/p/nursing-and-patient-care-nurse-bsc" },
+      { "id": "physio", "label": "التمريض ورعاية المرضى (العلاج الطبيعي)", "exam_type": "interview_comm", "fee": "7,000 دولار/سنة", "duration": "8 فصول", "link": "https://edu.unideb.hu/p/nursing-and-patient-care-physiotherapy-bsc" },
+      { "id": "public_health", "label": "الصحة العامة", "exam_type": "interview_comm", "fee": "6,000 دولار/سنة", "duration": "8 فصول", "link": "https://edu.unideb.hu/p/public-health-bsc" },
+      { "id": "comm_media", "label": "دراسات الاتصال والإعلام", "exam_type": "eng_oral", "fee": "6,000 دولار/سنة", "duration": "6 فصول", "link": "https://edu.unideb.hu/p/communication-and-media-studies-ba" },
+      { "id": "eng_studies", "label": "الدراسات الإنجليزية والأمريكية", "exam_type": "interview_eng", "fee": "6,000 دولار/سنة", "duration": "6 فصول", "link": "https://edu.unideb.hu/p/english-and-american-studies-ba" },
+      { "id": "french", "label": "الدراسات الفرنسية", "exam_type": "french_oral", "fee": "6,000 دولار/سنة", "duration": "6 فصول", "link": "https://edu.unideb.hu/p/romance-philology-and-cultures-french-studies" },
+      { "id": "kindergarten", "label": "تعليم رياض الأطفال", "exam_type": "interview_only", "fee": "6,000 دولار/سنة", "duration": "6 فصول", "link": "https://edu.unideb.hu/p/kindergarten-education-ba" },
+      { "id": "psychology", "label": "علم النفس", "exam_type": "eng_oral_mcq", "fee": "6,000 دولار/سنة", "duration": "6 فصول", "link": "https://edu.unideb.hu/p/psychology-ba" },
+      { "id": "music_creative", "label": "الفنون الإبداعية الموسيقية وعلم الموسيقى", "exam_type": "music_perf", "fee": "10,000 دولار/سنة", "duration": "6 فصول", "link": "https://edu.unideb.hu/p/musical-creative-art-and-musicology-ba" },
+      { "id": "classical_music", "label": "الفنون الأدائية الكلاسيكية (موسيقى)", "exam_type": "music_perf", "fee": "10,000 دولار/سنة", "duration": "6 فصول", "link": "https://edu.unideb.hu/p/classical-performing-arts-music-ba" },
+      { "id": "contemporary_music", "label": "الموسيقى المعاصرة", "exam_type": "music_perf", "fee": "10,000 دولار/سنة", "duration": "6 فصول", "link": "https://edu.unideb.hu/p/contemporary-music-ba" }
+    ]
+  },
+
+  "exam_questions": {
+    "math_chem_bio": "هل يمكن للطالب دخول امتحان القبول في الرياضيات والكيمياء أو الأحياء (كتابي وشفهي)؟",
+    "math_chem": "هل يمكن للطالب دخول امتحان القبول في الرياضيات والكيمياء (كتابي وشفهي)؟",
+    "math_phys": "هل يمكن للطالب دخول امتحان القبول في الرياضيات والفيزياء (كتابي وشفهي)؟",
+    "math_eng": "هل يمكن للطالب دخول امتحان القبول في الرياضيات واللغة الإنجليزية (كتابي وشفهي)؟",
+    "math_only": "هل يمكن للطالب دخول امتحان القبول في الرياضيات (كتابي وشفهي)؟",
+    "bio_math": "هل يمكن للطالب دخول امتحان القبول في الأحياء والرياضيات (كتابي وشفهي)؟",
+    "bio_chem": "هل يمكن للطالب دخول امتحان القبول في الأحياء والكيمياء (كتابي وشفهي)؟",
+    "chem_math": "هل يمكن للطالب دخول امتحان القبول في الكيمياء والرياضيات (كتابي وشفهي)؟",
+    "math_geo": "هل يمكن للطالب دخول امتحان القبول في الرياضيات والجغرافيا (كتابي وشفهي)؟",
+    "bio_interview": "هل يمكن للطالب دخول امتحان في الأحياء + مقابلة قبول؟",
+    "interview_comm": "هل يمكن للطالب حضور مقابلة القبول (تقييم اللغة ومهارات التواصل)؟",
+    "eng_oral": "هل يمكن للطالب دخول اختبار لغة إنجليزية + امتحان شفهي؟",
+    "interview_eng": "هل يمكن للطالب حضور مقابلة قبول + اختبار لغة إنجليزية (كتابي وشفهي)؟",
+    "french_oral": "هل يمكن للطالب دخول اختبار لغة فرنسية (شفهي)؟",
+    "interview_only": "هل يمكن للطالب حضور مقابلة القبول؟",
+    "eng_oral_mcq": "هل يمكن للطالب دخول امتحان إنجليزي + امتحان شفهي + امتحان خيارات متعددة؟",
+    "music_perf": "هل يمكن للطالب حضور اختبار الأداء الموسيقي (شفهي)؟"
+  },
+
+  "questions": {
+    "DB_BSC_PROGRAM": {
+      "text": "اختر التخصص",
+      "type": "program_select",
+      "next": "DB_BSC_HS"
+    },
+    "DB_BSC_HS": {
+      "text": "هل لدى الطالب شهادة ثانوية ودراسة لمدة 12 سنة متواصلة؟",
+      "type": "yes_no",
+      "dynamic_result": "debrecen_bsc_hs",
+      "options": [
+        { "value": "yes", "label": "نعم" },
+        { "value": "no", "label": "لا" }
+      ]
+    },
+    "DB_BSC_EXAM": {
+      "text": "(يتم تحديد نص السؤال ديناميكياً حسب التخصص)",
+      "type": "yes_no",
+      "dynamic_result": "debrecen_bsc_exam",
+      "options": [
+        { "value": "yes", "label": "نعم" },
+        { "value": "no", "label": "لا" }
+      ]
+    }
+  },
+
+  "results": {
+    "no_hs": {
+      "status": "negative",
+      "title": "غير مؤهل",
+      "message": "الطالب لا يملك شهادة ثانوية أو لم يكمل 12 سنة دراسة — وهي شرط أساسي للقبول.",
+      "notes": ["💰 رسوم تقديم الملف 150 دولار تُدفع قبل تقديم الملف للجامعة، ورسوم الامتحان 350 دولار تُدفع بعد القبول."]
+    },
+    "no_exam": {
+      "status": "negative",
+      "title": "غير مؤهل حالياً",
+      "message": "الطالب غير قادر على دخول امتحان القبول المطلوب لهذا التخصص.",
+      "notes": [
+        "يمكن للطالب التقديم لاحقاً عند الاستعداد لامتحان القبول.",
+        "💰 رسوم تقديم الملف 150 دولار تُدفع قبل تقديم الملف للجامعة، ورسوم الامتحان 350 دولار تُدفع بعد القبول."
+      ]
+    }
+  }
+}

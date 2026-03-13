@@ -72,7 +72,7 @@ function handleAPI(req, res) {
         if (!fs.existsSync(metaPath)) continue;
         const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
         universities.push({
-          id: meta.university_id || entry.name,
+          id: entry.name,
           label: meta.university_label,
           country_label: meta.country_label
         });

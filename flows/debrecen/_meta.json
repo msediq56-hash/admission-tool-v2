@@ -1,0 +1,38 @@
+{
+  "university_id": "debrecen",
+  "university_label": "جامعة ديبريسن",
+  "country_label": "هنغاريا — جامعة حكومية",
+
+  "programs": [
+    {
+      "id": "foundation",
+      "label": "فاونديشن",
+      "direct_flow": "foundation",
+      "file": "foundation.json"
+    },
+    {
+      "id": "bachelor",
+      "label": "بكالوريوس",
+      "direct_flow": "bachelor",
+      "file": "bachelor.json"
+    },
+    {
+      "id": "master",
+      "label": "ماجستير",
+      "direct_flow": "master",
+      "file": "master.json"
+    },
+    {
+      "id": "phd",
+      "label": "دكتوراة",
+      "direct_flow": "phd",
+      "file": "phd.json"
+    },
+    {
+      "id": "medical",
+      "label": "طبيات / صيدلة",
+      "direct_flow": "medical",
+      "file": "medical.json"
+    }
+  ]
+}

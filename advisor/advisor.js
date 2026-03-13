@@ -41,6 +41,7 @@ async function init() {
 
 async function fetchJSON(url) {
   const res = await fetch(url);
+  if (!res.ok) return null;
   return res.json();
 }
 
@@ -82,6 +83,7 @@ function showUniversitySelector() {
 async function selectUniversity(uniId) {
   currentUni = uniId;
   meta = await fetchJSON(`/api/${uniId}/meta`);
+  // majors.json is optional — only Constructor uses major_select questions
   majorsData = await fetchJSON(`/api/${uniId}/majors`);
   showProgramSelector();
 }
@@ -264,6 +266,18 @@ function showQuestion(questionId) {
     return;
   }
 
+  // Dynamic question text override: for Debrecen bachelor, the exam question text
+  // depends on the selected program's exam_type. The flow JSON stores exam_questions
+  // mapping exam_type→Arabic text, and the resolver routes to DB_BSC_EXAM.
+  let questionText = q.text;
+  if (currentFlow.exam_questions && questionId === 'DB_BSC_EXAM') {
+    const programId = getHistoryAnswer(history, 'DB_BSC_PROGRAM');
+    const program = currentFlow.program_select.programs.find(p => p.id === programId);
+    if (program && currentFlow.exam_questions[program.exam_type]) {
+      questionText = currentFlow.exam_questions[program.exam_type];
+    }
+  }
+
   let optionsHTML = '';
 
   if (q.type === 'yes_no') {
@@ -292,7 +306,7 @@ function showQuestion(questionId) {
     </div>
     ${progressHTML}
     <div class="card">
-      <h2>${esc(q.text)}</h2>
+      <h2>${esc(questionText)}</h2>
       <div class="options" id="optionsArea">${optionsHTML}</div>
     </div>
     <button class="back-btn" onclick="goBack()">${history.length > 0 ? 'السؤال السابق' : 'العودة'}</button>
@@ -324,7 +338,16 @@ function buildProgressHTML() {
   if (history.length === 0) return '';
   const items = history.map(h => {
     const q = currentFlow.questions[h.questionId];
-    return `<div class="progress-item"><span class="progress-q">${esc(q ? q.text : h.questionId)}</span><span class="progress-a">${esc(h.answerLabel)}</span></div>`;
+    let text = q ? q.text : h.questionId;
+    // Dynamic text override for Debrecen bachelor exam question
+    if (currentFlow.exam_questions && h.questionId === 'DB_BSC_EXAM') {
+      const programId = getHistoryAnswer(history, 'DB_BSC_PROGRAM');
+      const program = currentFlow.program_select.programs.find(p => p.id === programId);
+      if (program && currentFlow.exam_questions[program.exam_type]) {
+        text = currentFlow.exam_questions[program.exam_type];
+      }
+    }
+    return `<div class="progress-item"><span class="progress-q">${esc(text)}</span><span class="progress-a">${esc(h.answerLabel)}</span></div>`;
   }).join('');
   return `<div class="progress-bar">${items}</div>`;
 }
@@ -351,8 +374,21 @@ function handleAnswer(questionId, value, label) {
     return;
   }
 
-  // --- Program select (master's): store selection, go to next ---
+  // --- Program select: store selection, check for dynamic routing, go to next ---
   if (q.type === 'program_select') {
+    // Support dynamic routing after program selection (e.g. Debrecen master interview exception)
+    if (q.dynamic_result) {
+      const resolver = DYNAMIC_RESOLVERS[q.dynamic_result];
+      if (resolver) {
+        const result = resolver(value, history, currentFlow);
+        if (typeof result === 'string' && result.startsWith('__next:')) {
+          showQuestion(result.slice(7));
+          return;
+        }
+        showResult(result);
+        return;
+      }
+    }
     showQuestion(q.next);
     return;
   }
@@ -506,8 +542,7 @@ const DYNAMIC_RESOLVERS = {
         notes
       };
     }
-  }
-};
+  },
 
   // ─── SRH Foundation (Business/Creative/Engineering): Language question ──
   // Reference: SRH section 3.2 — all 3 foundation types share the same language logic.
@@ -659,6 +694,205 @@ const DYNAMIC_RESOLVERS = {
   srh_master_portfolio(value, hist, flow) {
     if (value === 'no') return flow.results.no_portfolio;
     return buildMscResult(hist, flow);
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // DEBRECEN RESOLVERS
+  // Reference: docs/reference/debrecen_all_program_paths_approved_logic.md
+  // ═══════════════════════════════════════════════════════════════════════
+
+  // ─── Debrecen Foundation: HS question ───────────────────────────────
+  // WHY dynamic: result includes selected program's details (fees, duration, start, notes).
+  debrecen_fnd_eligible(value, hist, flow) {
+    if (value === 'no') return flow.results.no_hs;
+    const programId = getHistoryAnswer(hist, 'DB_FND_PROGRAM');
+    const program = flow.program_select.programs.find(p => p.id === programId);
+    const notes = [
+      'الطالب مؤهل — نجمع أوراقه ويعبّي فورم التقديم ونقدمها للجامعة.',
+      program ? `البرنامج: ${program.label}` : '',
+      program ? `البدء: ${program.start}` : '',
+      program ? `المدة: ${program.duration}` : '',
+      program ? `الرسوم: ${program.fee}` : '',
+      program && program.note ? `ℹ️ ${program.note}` : '',
+      program && program.link ? `🔗 ${program.link}` : '',
+      flow.fee_note
+    ].filter(Boolean);
+    return {
+      status: 'positive',
+      title: `مؤهل للتقديم — ${program ? program.label : 'فاونديشن'}`,
+      message: 'الطالب يستوفي شروط القبول في البرنامج التحضيري بجامعة ديبريسن.',
+      notes
+    };
+  },
+
+  // ─── Debrecen Bachelor: HS question → route to exam ─────────────────
+  // WHY dynamic: after HS=yes, must route to the specific exam question
+  // matching the selected program's exam_type (17 different exams).
+  debrecen_bsc_hs(value, hist, flow) {
+    if (value === 'no') return flow.results.no_hs;
+    // Route to the single exam question (text is overridden dynamically in showQuestion)
+    return '__next:DB_BSC_EXAM';
+  },
+
+  // ─── Debrecen Bachelor: Exam question result ────────────────────────
+  // WHY dynamic: result includes selected program's details (fees, duration, link).
+  debrecen_bsc_exam(value, hist, flow) {
+    if (value === 'no') return flow.results.no_exam;
+    const programId = getHistoryAnswer(hist, 'DB_BSC_PROGRAM');
+    const program = flow.program_select.programs.find(p => p.id === programId);
+    const notes = [
+      'الطالب مؤهل — ابحث عن سعر البرنامج في السيلز فورس.',
+      program ? `التخصص: ${program.label}` : '',
+      program ? `الرسوم: ${program.fee}` : '',
+      program ? `المدة: ${program.duration}` : '',
+      program && program.link ? `🔗 ${program.link}` : '',
+      flow.lang_note,
+      flow.fee_note
+    ].filter(Boolean);
+    return {
+      status: 'positive',
+      title: `مؤهل للتقديم — ${program ? program.label : 'بكالوريوس'}`,
+      message: 'الطالب يستوفي شروط القبول في جامعة ديبريسن.',
+      notes
+    };
+  },
+
+  // ─── Debrecen Master: IELTS question ────────────────────────────────
+  // WHY dynamic: IELTS requirement varies per program (5.5, 6, 7, or interview).
+  // One program (العمل الاجتماعي والاقتصاد الاجتماعي) uses interview assessment
+  // instead of IELTS — both answers lead to eligible for that program.
+  debrecen_msc_ielts(value, hist, flow) {
+    const programId = getHistoryAnswer(hist, 'DB_MSC_PROGRAM');
+    const program = flow.program_select.programs.find(p => p.id === programId);
+
+    // Special case: interview-based language assessment
+    if (program && program.ielts === 'interview') {
+      const notes = [
+        'الطالب مؤهل — ابحث عن سعر البرنامج في السيلز فورس.',
+        `التخصص: ${program.label}`,
+        `الرسوم: ${program.fee}`,
+        `المدة: ${program.duration}`,
+        'ℹ️ هذا البرنامج لا يتطلب شهادة IELTS — يتم تقييم اللغة خلال مقابلة القبول.',
+        program.link ? `🔗 ${program.link}` : '',
+        flow.fee_note
+      ].filter(Boolean);
+      return {
+        status: 'positive',
+        title: `مؤهل للتقديم — ${program.label}`,
+        message: 'الطالب مؤهل للتقديم — يتم تقييم اللغة خلال مقابلة القبول.',
+        notes
+      };
+    }
+
+    if (value === 'no') {
+      const ieltsScore = program ? program.ielts : '6';
+      return {
+        status: 'negative',
+        title: 'غير مؤهل حالياً — يحتاج شهادة IELTS',
+        message: `الطالب يحتاج شهادة IELTS بدرجة ${ieltsScore} على الأقل للتقديم على هذا التخصص.`,
+        notes: [
+          program ? `التخصص: ${program.label}` : '',
+          `الدرجة المطلوبة: IELTS ${ieltsScore}`,
+          flow.fee_note
+        ].filter(Boolean)
+      };
+    }
+
+    // Yes → eligible
+    const notes = [
+      'الطالب مؤهل — ابحث عن سعر البرنامج في السيلز فورس.',
+      program ? `التخصص: ${program.label}` : '',
+      program ? `الرسوم: ${program.fee}` : '',
+      program ? `المدة: ${program.duration}` : '',
+      program && program.link ? `🔗 ${program.link}` : '',
+      flow.fee_note
+    ].filter(Boolean);
+    return {
+      status: 'positive',
+      title: `مؤهل للتقديم — ${program ? program.label : 'ماجستير'}`,
+      message: 'الطالب يستوفي شروط القبول في ماجستير جامعة ديبريسن.',
+      notes
+    };
+  },
+
+  // ─── Debrecen PhD: IELTS question ──────────────────────────────────
+  // WHY dynamic: IELTS requirement varies per program (6, 6.5, 7.5, 8).
+  // If IELTS=yes → route to research plan question.
+  debrecen_phd_ielts(value, hist, flow) {
+    const programId = getHistoryAnswer(hist, 'DB_PHD_PROGRAM');
+    const program = flow.program_select.programs.find(p => p.id === programId);
+
+    if (value === 'no') {
+      const ieltsScore = program ? program.ielts : '6';
+      return {
+        status: 'negative',
+        title: 'غير مؤهل حالياً — يحتاج شهادة IELTS',
+        message: `الطالب يحتاج شهادة IELTS بدرجة ${ieltsScore} على الأقل للتقديم على هذا التخصص.`,
+        notes: [
+          program ? `التخصص: ${program.label}` : '',
+          `الدرجة المطلوبة: IELTS ${ieltsScore}`,
+          flow.fee_note
+        ].filter(Boolean)
+      };
+    }
+
+    // Yes → ask about research plan
+    return '__next:DB_PHD_RESEARCH';
+  },
+
+  // ─── Debrecen PhD: Research plan question ──────────────────────────
+  // WHY dynamic: result includes program details. No plan = conditional.
+  debrecen_phd_research(value, hist, flow) {
+    const programId = getHistoryAnswer(hist, 'DB_PHD_PROGRAM');
+    const program = flow.program_select.programs.find(p => p.id === programId);
+    const baseNotes = [
+      program ? `التخصص: ${program.label}` : '',
+      program ? `الرسوم: ${program.fee}` : '',
+      program && program.link ? `🔗 ${program.link}` : '',
+      flow.fee_note
+    ].filter(Boolean);
+
+    if (value === 'no') {
+      return {
+        status: 'conditional',
+        title: 'مشروط — يحتاج تجهيز خطة بحث',
+        message: 'الطالب يستوفي شرط اللغة لكنه يحتاج تجهيز خطة بحث قبل التقديم.',
+        notes: ['يجب إعداد خطة بحث واضحة وتقديمها مع ملف التقديم.', ...baseNotes]
+      };
+    }
+
+    // Yes → fully eligible
+    return {
+      status: 'positive',
+      title: `مؤهل للتقديم — ${program ? program.label : 'دكتوراة'}`,
+      message: 'الطالب يستوفي جميع شروط القبول في برنامج الدكتوراة بجامعة ديبريسن.',
+      notes: ['الطالب مؤهل — ابحث عن سعر البرنامج في السيلز فورس.', ...baseNotes]
+    };
+  },
+
+  // ─── Debrecen Medical: Exam subject choice ─────────────────────────
+  // WHY dynamic: result includes selected medical program's details.
+  // Both exam options lead to eligible (it's just which subjects the student prefers).
+  debrecen_med_result(value, hist, flow) {
+    const programId = getHistoryAnswer(hist, 'DB_MED_PROGRAM');
+    const program = flow.program_select.programs.find(p => p.id === programId);
+    const examLabel = value === 'bio_phys'
+      ? 'أحياء + فيزياء (وأساسيات كيمياء)'
+      : 'أحياء + كيمياء (وأساسيات فيزياء)';
+    const notes = [
+      'الطالب مؤهل للتقديم — نجمع أوراقه ويعبّي فورم التقديم ونقدمها للجامعة.',
+      program ? `البرنامج: ${program.label}` : '',
+      program ? `الرسوم: ${program.fee}` : '',
+      `مواد الامتحان: ${examLabel}`,
+      program && program.link ? `🔗 ${program.link}` : '',
+      flow.fee_note
+    ].filter(Boolean);
+    return {
+      status: 'positive',
+      title: `مؤهل للتقديم — ${program ? program.label : 'طبيات'}`,
+      message: 'الطالب مؤهل للتقديم على البرنامج الطبي في جامعة ديبريسن.',
+      notes
+    };
   }
 };
 

@@ -1,0 +1,32 @@
+{
+  "path_label": "طبيات / صيدلة",
+  "first_question": "DB_MED_PROGRAM",
+  "fee_note": "💰 رسوم تقديم الملف 150 دولار تُدفع قبل تقديم الملف للجامعة، ورسوم الامتحان 350 دولار تُدفع بعد القبول.",
+
+  "program_select": {
+    "programs": [
+      { "id": "dentistry", "label": "طب الأسنان (DMD)", "fee": "17,500 دولار/سنة", "link": "https://www.edu.unideb.hu/p/dentistry-full-time-graduate-program" },
+      { "id": "medicine", "label": "الطب (MD)", "fee": "16,900 دولار/سنة", "link": "https://www.edu.unideb.hu/p/medicine-full-time-graduate-program" },
+      { "id": "pharmacy", "label": "الصيدلة (PharmD)", "fee": "8,000 دولار/سنة", "link": "https://www.edu.unideb.hu/p/pharmacy-full-time-graduate-program" }
+    ]
+  },
+
+  "questions": {
+    "DB_MED_PROGRAM": {
+      "text": "اختر البرنامج الطبي",
+      "type": "program_select",
+      "next": "DB_MED_EXAM"
+    },
+    "DB_MED_EXAM": {
+      "text": "ما هو اختيار الطالب لمواد امتحان القبول؟",
+      "type": "select",
+      "dynamic_result": "debrecen_med_result",
+      "options": [
+        { "value": "bio_phys", "label": "أحياء + فيزياء (وأساسيات كيمياء)" },
+        { "value": "bio_chem", "label": "أحياء + كيمياء (وأساسيات فيزياء)" }
+      ]
+    }
+  },
+
+  "results": {}
+}

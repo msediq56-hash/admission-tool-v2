@@ -1,0 +1,79 @@
+{
+  "path_label": "ماجستير",
+  "first_question": "DB_MSC_PROGRAM",
+  "fee_note": "💰 رسوم تقديم الملف 150 دولار تُدفع قبل تقديم الملف للجامعة، ورسوم الامتحان 350 دولار تُدفع بعد القبول.",
+
+  "program_select": {
+    "programs": [
+      { "id": "animal_husbandry", "label": "هندسة تربية الحيوان", "fee": "8,000 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/animal-husbandry-engineering-msc" },
+      { "id": "agri_env_mgmt", "label": "هندسة الإدارة البيئية الزراعية", "fee": "8,000 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/agricultural-environmental-management-engineering-msc" },
+      { "id": "agri_water", "label": "هندسة إدارة المياه الزراعية", "fee": "8,000 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/agricultural-water-management-engineering-msc" },
+      { "id": "crop_production", "label": "هندسة إنتاج المحاصيل", "fee": "8,000 دولار/سنة", "duration": "4 فصول", "ielts": "5.5", "link": "https://edu.unideb.hu/p/crop-production-engineering-msc" },
+      { "id": "food_safety", "label": "هندسة سلامة وجودة الأغذية", "fee": "8,000 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/food-safety-and-quality-engineering-msc" },
+      { "id": "plant_protection", "label": "وقاية النبات", "fee": "8,000 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/plant-protection-msc" },
+      { "id": "rural_dev", "label": "هندسة التنمية الريفية", "fee": "7,500 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/rural-development-engineering-msc" },
+      { "id": "intl_economy", "label": "الاقتصاد الدولي والأعمال", "fee": "7,500 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/international-economy-and-business-msc" },
+      { "id": "chem_eng_msc", "label": "الهندسة الكيميائية", "fee": "8,000 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/chemical-engineering-msc" },
+      { "id": "elec_eng_msc", "label": "الهندسة الكهربائية", "fee": "8,000 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/electrical-engineering-msc" },
+      { "id": "eng_mgmt_msc", "label": "إدارة الهندسة", "fee": "8,000 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/engineering-management-msc" },
+      { "id": "env_eng_msc", "label": "الهندسة البيئية", "fee": "8,000 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/environmental-engineering-msc" },
+      { "id": "mechatronics_msc", "label": "هندسة الميكاترونكس", "fee": "8,000 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/mechatronical-engineering-msc" },
+      { "id": "mech_eng_msc", "label": "الهندسة الميكانيكية", "fee": "8,000 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/mechanical-engineering-msc" },
+      { "id": "sports_eng", "label": "هندسة الرياضة", "fee": "8,000 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/sports-engineering-msc" },
+      { "id": "urban_sys", "label": "هندسة الأنظمة الحضرية", "fee": "8,000 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/urban-systems-engineering-msc" },
+      { "id": "vehicle_eng_msc", "label": "هندسة المركبات", "fee": "8,000 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/vehicle-engineering-msc" },
+      { "id": "lean_eng", "label": "دبلوم الهندسة الرشيقة", "fee": "7,500 دولار/سنة", "duration": "2 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/postgraduate-diploma-in-lean-engineer" },
+      { "id": "lean_mgr", "label": "دبلوم إدارة الهندسة الرشيقة", "fee": "7,500 دولار/سنة", "duration": "2 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/postgraduate-diploma-in-lean-manager" },
+      { "id": "strategic_eng", "label": "دبلوم الهندسة الاستراتيجية والاستدامة", "fee": "7,500 دولار/سنة", "duration": "2 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/postgraduate-diploma-in-strategic-engineering-and-sustainability-leadership" },
+      { "id": "pharma_rd", "label": "البحث والتطوير الصيدلاني", "fee": "6,000 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/pharmaceutical-research-and-development-manager-msc" },
+      { "id": "public_health_msc", "label": "الصحة العامة", "fee": "8,000 دولار/سنة", "duration": "3 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/public-health-msc" },
+      { "id": "social_work_health", "label": "العمل الاجتماعي في الرعاية الصحية", "fee": "5,500 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/social-work-in-health-care-msc" },
+      { "id": "social_work_econ", "label": "العمل الاجتماعي والاقتصاد الاجتماعي", "fee": "5,500 دولار/سنة", "duration": "4 فصول", "ielts": "interview", "link": "https://edu.unideb.hu/p/social-work-and-social-economics-ma" },
+      { "id": "american_studies", "label": "الدراسات الأمريكية", "fee": "7,000 دولار/سنة", "duration": "4 فصول", "ielts": "7", "link": "https://edu.unideb.hu/p/american-studies-ma" },
+      { "id": "english_studies_msc", "label": "الدراسات الإنجليزية", "fee": "7,000 دولار/سنة", "duration": "4 فصول", "ielts": "7", "link": "https://edu.unideb.hu/p/english-studies-ma" },
+      { "id": "tefl", "label": "تدريس الإنجليزية كلغة أجنبية", "fee": "5,500 دولار/سنة", "duration": "2 فصول", "ielts": "7", "link": "https://edu.unideb.hu/p/instruction-of-english-as-a-foreign-language-ma" },
+      { "id": "business_info_msc", "label": "نظم معلومات الأعمال", "fee": "7,500 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/business-informatics-msc" },
+      { "id": "cs_msc", "label": "علوم الحاسوب", "fee": "7,500 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/computer-science-msc" },
+      { "id": "cs_eng_msc", "label": "هندسة علوم الحاسوب", "fee": "7,500 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/computer-science-engineering-msc" },
+      { "id": "data_science", "label": "علم البيانات", "fee": "7,500 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/data-science-msc" },
+      { "id": "ai_diploma", "label": "دبلوم الذكاء الاصطناعي", "fee": "8,000 دولار/سنة", "duration": "2 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/postgraduate-diploma-in-artificial-intelligence" },
+      { "id": "eu_law", "label": "القانون الأوروبي والدولي للأعمال", "fee": "7,500 دولار/سنة", "duration": "2 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/european-and-international-business-law-llm" },
+      { "id": "classical_music_msc", "label": "الأداء الموسيقي الكلاسيكي", "fee": "10,000 دولار/سنة", "duration": "2 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/classical-musical-performance-ma" },
+      { "id": "applied_math", "label": "الرياضيات التطبيقية", "fee": "7,500 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/applied-mathematics-msc" },
+      { "id": "biology_msc", "label": "علم الأحياء", "fee": "7,500 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/biology-msc" },
+      { "id": "chemistry_msc", "label": "الكيمياء", "fee": "7,500 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/chemistry-msc" },
+      { "id": "env_sci", "label": "العلوم البيئية", "fee": "7,500 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/environmental-sciences-msc" },
+      { "id": "geography", "label": "الجغرافيا", "fee": "7,500 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/geography-msc" },
+      { "id": "geoinformatics", "label": "نظم المعلومات الجغرافية", "fee": "7,500 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/geoinformatics-msc" },
+      { "id": "hydrobiology", "label": "إدارة جودة المياه – الهيدرولوجيا", "fee": "7,500 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/hydrobiology-water-quality-management-msc" },
+      { "id": "physics_msc", "label": "الفيزياء", "fee": "7,500 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/physics-msc" },
+      { "id": "molecular_bio", "label": "الأحياء الجزيئية", "fee": "7,500 دولار/سنة", "duration": "4 فصول", "ielts": "6", "link": "https://edu.unideb.hu/p/molecular-biology-msc" }
+    ]
+  },
+
+  "questions": {
+    "DB_MSC_PROGRAM": {
+      "text": "اختر التخصص",
+      "type": "program_select",
+      "next": "DB_MSC_IELTS"
+    },
+    "DB_MSC_IELTS": {
+      "text": "هل لدى الطالب شهادة IELTS بالدرجة المطلوبة للتخصص؟",
+      "type": "yes_no",
+      "dynamic_result": "debrecen_msc_ielts",
+      "options": [
+        { "value": "yes", "label": "نعم" },
+        { "value": "no", "label": "لا" }
+      ]
+    }
+  },
+
+  "results": {
+    "no_ielts": {
+      "status": "negative",
+      "title": "غير مؤهل حالياً",
+      "message": "الطالب لا يملك شهادة IELTS بالدرجة المطلوبة.",
+      "notes": ["💰 رسوم تقديم الملف 150 دولار تُدفع قبل تقديم الملف للجامعة، ورسوم الامتحان 350 دولار تُدفع بعد القبول."]
+    }
+  }
+}

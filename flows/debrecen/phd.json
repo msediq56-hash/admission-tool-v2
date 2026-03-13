@@ -1,0 +1,71 @@
+{
+  "path_label": "دكتوراة",
+  "first_question": "DB_PHD_PROGRAM",
+  "fee_note": "💰 رسوم تقديم الملف 150 دولار تُدفع قبل تقديم الملف للجامعة، ورسوم الامتحان 350 دولار تُدفع بعد القبول.",
+
+  "program_select": {
+    "programs": [
+      { "id": "nutrition_food", "label": "علوم التغذية وعلوم الأغذية", "fee": "9,800 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/doctoral-school-of-nutrition-and-food-sciences" },
+      { "id": "animal_sci", "label": "علوم الحيوان", "fee": "6,500 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/animal-science-phd" },
+      { "id": "crop_sci", "label": "علوم المحاصيل والبستنة والعلوم الإقليمية", "fee": "6,500 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/crop-sciences-and-horticulture-phd" },
+      { "id": "eng_am_lit", "label": "اللغة والأدب الإنجليزي والأمريكي", "fee": "6,500 دولار/سنة", "ielts": "8", "link": "https://edu.unideb.hu/p/english-linguistics-phd" },
+      { "id": "eng_linguistics", "label": "اللسانيات الإنجليزية", "fee": "6,500 دولار/سنة", "ielts": "8", "link": "https://edu.unideb.hu/p/english-linguistics-phd" },
+      { "id": "history_ethno", "label": "التاريخ والإثنولوجيا", "fee": "6,500 دولار/سنة", "ielts": "6.5", "link": "https://edu.unideb.hu/p/history-and-ethnology-phd" },
+      { "id": "human_sci", "label": "العلوم الإنسانية", "fee": "6,500 دولار/سنة", "ielts": "7.5", "link": "https://edu.unideb.hu/p/human-sciences-phd" },
+      { "id": "mech_eng_phd", "label": "الهندسة الميكانيكية", "fee": "10,000 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/doctoral-school-of-mechanical-engineering" },
+      { "id": "informatics", "label": "المعلوماتية", "fee": "6,500 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/informatics-phd" },
+      { "id": "env_bio", "label": "العلوم البيئية والبيولوجيا", "fee": "6,500 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/biology-and-environmental-sciences-phd" },
+      { "id": "chemistry_phd", "label": "الكيمياء", "fee": "6,500 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/chemistry-phd" },
+      { "id": "earth_sci_phd", "label": "علوم الأرض", "fee": "6,500 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/earth-sciences-phd" },
+      { "id": "math_comp", "label": "العلوم الرياضية والحوسبة", "fee": "6,500 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/mathematical-and-computational-sciences-phd" },
+      { "id": "physics_phd", "label": "الفيزياء", "fee": "6,500 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/physics-phd" },
+      { "id": "legal_studies", "label": "الدراسات القانونية", "fee": "6,500 دولار/سنة", "ielts": "7.5", "link": "https://edu.unideb.hu/p/legal-studies-phd" },
+      { "id": "mgmt_business", "label": "الإدارة والأعمال", "fee": "12,500 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/management-and-business-phd" },
+      { "id": "health_sci", "label": "العلوم الصحية", "fee": "16,900 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/doctoral-school-of-medical-sciences" },
+      { "id": "pharma_sci", "label": "العلوم الصيدلانية", "fee": "16,900 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/doctoral-school-of-medical-sciences" },
+      { "id": "molecular_med", "label": "الطب الجزيئي", "fee": "16,900 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/doctoral-school-of-medical-sciences" },
+      { "id": "cell_immune", "label": "بيولوجيا الخلية والجهاز المناعي", "fee": "16,900 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/doctoral-school-of-medical-sciences" },
+      { "id": "neuroscience", "label": "علوم الأعصاب", "fee": "16,900 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/doctoral-school-of-medical-sciences" },
+      { "id": "clinical_med", "label": "الطب السريري", "fee": "16,900 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/doctoral-school-of-medical-sciences" },
+      { "id": "clinical_immune", "label": "المناعة السريرية والحساسية", "fee": "16,900 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/doctoral-school-of-medical-sciences" },
+      { "id": "kalman_laki", "label": "مدرسة كالمان لاكي للدكتوراه", "fee": "16,900 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/doctoral-school-of-medical-sciences" },
+      { "id": "dental_sci", "label": "علوم طب الأسنان", "fee": "16,900 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/doctoral-school-of-medical-sciences" },
+      { "id": "nutrition_phd", "label": "علوم التغذية", "fee": "9,800 دولار/سنة", "ielts": "6", "link": "https://edu.unideb.hu/p/doctoral-school-of-nutrition-and-food-sciences" }
+    ]
+  },
+
+  "questions": {
+    "DB_PHD_PROGRAM": {
+      "text": "اختر التخصص",
+      "type": "program_select",
+      "next": "DB_PHD_IELTS"
+    },
+    "DB_PHD_IELTS": {
+      "text": "هل لدى الطالب شهادة IELTS بالدرجة المطلوبة للتخصص؟",
+      "type": "yes_no",
+      "dynamic_result": "debrecen_phd_ielts",
+      "options": [
+        { "value": "yes", "label": "نعم" },
+        { "value": "no", "label": "لا" }
+      ]
+    },
+    "DB_PHD_RESEARCH": {
+      "text": "هل لدى الطالب خطة بحث جاهزة؟",
+      "type": "yes_no",
+      "dynamic_result": "debrecen_phd_research",
+      "options": [
+        { "value": "yes", "label": "نعم" },
+        { "value": "no", "label": "لا" }
+      ]
+    }
+  },
+
+  "results": {
+    "no_ielts": {
+      "status": "negative",
+      "title": "غير مؤهل حالياً",
+      "message": "الطالب لا يملك شهادة IELTS بالدرجة المطلوبة.",
+      "notes": ["💰 رسوم تقديم الملف 150 دولار تُدفع قبل تقديم الملف للجامعة، ورسوم الامتحان 350 دولار تُدفع بعد القبول."]
+    }
+  }
+}
