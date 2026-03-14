@@ -40,6 +40,15 @@ let selectedUniType = null;
 async function init() {
   const data = await fetchJSON('/api/universities');
   universities = data.universities;
+
+  // Support deep-linking: /?uni=constructor goes straight to that university's programs
+  const urlParams = new URLSearchParams(window.location.search);
+  const uniParam = urlParams.get('uni');
+  if (uniParam && universities.some(u => u.id === uniParam)) {
+    selectUniversity(uniParam);
+    return;
+  }
+
   showCountrySelector();
 }
 
@@ -178,6 +187,17 @@ function goBackFromUniSelector() {
 // Back from program selector — navigate to university list, type list, or country list
 // depending on whether steps were skipped (single type or single university).
 function goBackToEntryFlow() {
+  // Clear deep-link URL param so back navigation works normally
+  if (window.location.search) {
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+
+  // If we deep-linked (selectedCountry is null), go to country selector
+  if (!selectedCountry) {
+    showCountrySelector();
+    return;
+  }
+
   const filtered = universities.filter(u => u.country === selectedCountry && u.university_type === selectedUniType);
   if (filtered.length > 1) {
     // Multiple universities — go back to university selector
