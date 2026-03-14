@@ -32,7 +32,8 @@ function sendError(res, code, message) {
 }
 
 function serveStatic(req, res) {
-  const filePath = req.url === '/' ? '/index.html' : req.url.split('?')[0];
+  const rawPath = req.url.split('?')[0];
+  const filePath = rawPath === '/' ? '/index.html' : rawPath;
   const fullPath = path.join(__dirname, filePath);
 
   if (!fullPath.startsWith(__dirname)) {
