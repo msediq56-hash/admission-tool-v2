@@ -447,9 +447,9 @@ function buildProgramSelectHTML() {
   ).join('');
 }
 
-function buildProgressHTML() {
+function buildProgressHTML(editable) {
   if (history.length === 0) return '';
-  const items = history.map(h => {
+  const items = history.map((h, idx) => {
     const q = currentFlow.questions[h.questionId];
     let text = q ? q.text : h.questionId;
     // Dynamic text override for Debrecen bachelor exam question
@@ -464,7 +464,8 @@ function buildProgressHTML() {
     if (q && q.dynamic_text_from_program) {
       text = resolveDynamicText(q, h.questionId);
     }
-    return `<div class="progress-item"><span class="progress-q">${esc(text)}</span><span class="progress-a">${esc(h.answerLabel)}</span></div>`;
+    const editBtn = editable ? `<button class="progress-edit-btn" onclick="editFromQuestion(${idx})">تعديل</button>` : '';
+    return `<div class="progress-item"><span class="progress-q">${esc(text)}</span><span class="progress-a">${esc(h.answerLabel)}</span>${editBtn}</div>`;
   }).join('');
   return `<div class="progress-bar">${items}</div>`;
 }
@@ -1091,7 +1092,7 @@ function showResult(result) {
       <h1>${esc(meta.university_label)}</h1>
       <p class="subtitle">${esc(currentFlow.path_label)}</p>
     </div>
-    ${buildProgressHTML()}
+    ${buildProgressHTML(true)}
     <div class="card result-box ${statusClass}">
       <div class="result-status">${statusLabels[result.status] || result.status}</div>
       <h2>${esc(result.title)}</h2>
@@ -1126,10 +1127,7 @@ function showResult(result) {
   }
 
   html += `</div>`;
-  html += `<div class="result-actions">`;
-  html += `<button class="back-btn edit-answers-btn" onclick="goBackFromResult()">تعديل الإجابات</button>`;
   html += `<button class="back-btn" onclick="showProgramSelector()">العودة لاختيار البرنامج</button>`;
-  html += `</div>`;
 
   $('app').innerHTML = html;
 }
@@ -1138,10 +1136,28 @@ function showResult(result) {
 // NAVIGATION
 // ──────────────────────────────────────────────────────────────────────────────
 
-// goBackFromResult: go back to the last question from the result screen
-// so the advisor can change their last answer and get a recalculated result.
-function goBackFromResult() {
-  goBack();
+// editFromQuestion: jump back to a specific question by index.
+// Discards all answers after that index and replays history up to that point,
+// then shows that question again so the advisor can change their answer.
+function editFromQuestion(idx) {
+  // Trim history to before the question at idx
+  history = history.slice(0, idx);
+  if (history.length === 0) {
+    showQuestion(currentFlow.first_question);
+    return;
+  }
+  // Replay to find the question that should be shown
+  const saved = [...history];
+  history = [];
+  let qId = currentFlow.first_question;
+  for (const entry of saved) {
+    history.push(entry);
+    const q = currentFlow.questions[entry.questionId];
+    qId = resolveNextQuestion(q, entry.answer);
+  }
+  if (qId) {
+    showQuestion(qId);
+  }
 }
 
 // goBack: replay from start
