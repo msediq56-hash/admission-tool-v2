@@ -34,5 +34,90 @@
       "direct_flow": "master",
       "file": "master.json"
     }
-  ]
+  ],
+
+  "comparison_rules": {
+    "ief": {
+      "category": "foundation",
+      "cert_type": "arabic",
+      "label": "برنامج اللغة الإنجليزية المكثف (IEF)",
+      "requires_hs": true,
+      "requires_bachelor": false,
+      "ielts_min": 4.0,
+      "ielts_max": 4.9,
+      "conditions_text": {
+        "ielts_too_high_5": "مستوى اللغة أعلى من هذا البرنامج — جرّب الفاونديشن العادي",
+        "ielts_too_high_65": "مستوى اللغة يؤهل للبكالوريوس المباشر",
+        "has_all": "مؤهل — الرسوم: 15,150 يورو (شاملة فصل اللغة + فصلين فاونديشن)"
+      }
+    },
+    "foundation_business": {
+      "category": "foundation",
+      "cert_type": "arabic",
+      "label": "فاونديشن في البزنس",
+      "requires_hs": true,
+      "requires_bachelor": false,
+      "ielts_min": 5.0,
+      "conditions_text": {
+        "has_all": "مؤهل للتقديم — الموقع: Berlin | القبول: أكتوبر ويناير"
+      }
+    },
+    "foundation_creative": {
+      "category": "foundation",
+      "cert_type": "arabic",
+      "label": "فاونديشن في الدراسات الإبداعية",
+      "requires_hs": true,
+      "requires_bachelor": false,
+      "ielts_min": 5.0,
+      "conditions_text": {
+        "has_all": "مؤهل للتقديم — الموقع: Berlin | القبول: أكتوبر ويناير"
+      }
+    },
+    "foundation_engineering": {
+      "category": "foundation",
+      "cert_type": "arabic",
+      "label": "فاونديشن الهندسة وتكنولوجيا المعلومات",
+      "requires_hs": true,
+      "requires_bachelor": false,
+      "ielts_min": 5.0,
+      "conditions_text": {
+        "has_all": "مؤهل للتقديم — الموقع: Berlin | القبول: أكتوبر ويناير"
+      }
+    },
+    "pre_master": {
+      "category": "foundation",
+      "cert_type": "arabic",
+      "label": "بري ماستر (ما قبل الماجستير)",
+      "requires_hs": false,
+      "requires_bachelor": true,
+      "ielts_min": 5.5,
+      "conditions_text": {
+        "has_all": "مؤهل — الموقع: برلين | الرسوم: 5,950 يورو | المدة: فصل واحد"
+      }
+    },
+    "bachelor": {
+      "category": "bachelor",
+      "cert_type": "arabic",
+      "label": "بكالوريوس",
+      "requires_hs": true,
+      "requires_bachelor": false,
+      "ielts_min": 6.5,
+      "conditions_text": {
+        "has_all": "مؤهل — بعض البرامج تتطلب بورتفوليو أو أوديشن (يُحدد في التقييم التفصيلي)"
+      }
+    },
+    "master": {
+      "category": "master",
+      "cert_type": "arabic",
+      "label": "ماجستير",
+      "requires_hs": false,
+      "requires_bachelor": true,
+      "ielts_min": 6.5,
+      "ielts_conditional_min": 5.5,
+      "conditions_text": {
+        "ielts_mid": "مستوى اللغة يكفي للبري ماستر (5.5-6.4) — فصل تحضيري ثم ماجستير",
+        "has_all": "مؤهل — بعض البرامج تتطلب خبرة عملية أو بورتفوليو (يُحدد في التقييم التفصيلي)"
+      }
+    }
+  }
 }

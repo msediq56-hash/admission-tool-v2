@@ -36,5 +36,72 @@
       "direct_flow": "medical",
       "file": "medical.json"
     }
-  ]
+  ],
+
+  "comparison_rules": {
+    "foundation": {
+      "category": "foundation",
+      "cert_type": "arabic",
+      "label": "فاونديشن",
+      "requires_hs": true,
+      "requires_bachelor": false,
+      "ielts_min": null,
+      "conditions_text": {
+        "has_all": "مؤهل للتقديم — 7 برامج تحضيرية متاحة (لغة، طب، تحضيري دولي)"
+      },
+      "eligible_note": "💰 رسوم تقديم: 150$ + رسوم امتحان: 350$"
+    },
+    "bachelor": {
+      "category": "bachelor",
+      "cert_type": "arabic",
+      "label": "بكالوريوس",
+      "requires_hs": true,
+      "requires_bachelor": false,
+      "ielts_min": null,
+      "conditions_text": {
+        "has_all": "مشروط بدخول امتحان القبول — 34 تخصصاً متاحاً. التخصص يُحدد في التقييم التفصيلي. اللغة تُقيّم خلال الامتحان."
+      },
+      "always_conditional": true,
+      "eligible_note": "💰 رسوم تقديم: 150$ + رسوم امتحان: 350$ | الرسوم: 6,000-10,000$/سنة"
+    },
+    "master": {
+      "category": "master",
+      "cert_type": "arabic",
+      "label": "ماجستير",
+      "requires_hs": false,
+      "requires_bachelor": true,
+      "ielts_min": 6,
+      "conditions_text": {
+        "has_all": "مؤهل — 43 تخصصاً. بعض التخصصات تتطلب IELTS أعلى (حتى 7). التخصص يُحدد في التقييم التفصيلي."
+      },
+      "eligible_note": "💰 رسوم تقديم: 150$ + رسوم امتحان: 350$ | الرسوم: 5,500-10,000$/سنة"
+    },
+    "phd": {
+      "category": "phd",
+      "cert_type": "arabic",
+      "label": "دكتوراة",
+      "requires_hs": false,
+      "requires_bachelor": true,
+      "ielts_min": 6,
+      "requires_research_plan": true,
+      "conditions_text": {
+        "no_research_plan": "يحتاج تجهيز خطة بحث",
+        "has_all": "مؤهل — 26 تخصصاً. بعض التخصصات تتطلب IELTS أعلى (حتى 8). التخصص يُحدد في التقييم التفصيلي."
+      },
+      "eligible_note": "💰 رسوم تقديم: 150$ + رسوم امتحان: 350$"
+    },
+    "medical": {
+      "category": "medical",
+      "cert_type": "arabic",
+      "label": "طبيات / صيدلة",
+      "requires_hs": true,
+      "requires_bachelor": false,
+      "ielts_min": null,
+      "always_conditional": true,
+      "conditions_text": {
+        "has_all": "مشروط بدخول امتحان القبول (أحياء + فيزياء أو أحياء + كيمياء). 3 برامج: طب، أسنان، صيدلة."
+      },
+      "eligible_note": "💰 رسوم تقديم: 150$ + رسوم امتحان: 350$ | الرسوم: 8,000-17,500$/سنة"
+    }
+  }
 }

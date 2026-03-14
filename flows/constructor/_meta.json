@@ -34,5 +34,76 @@
       "placeholder": true,
       "placeholder_message": "غير متاح حالياً — سيُضاف قريباً"
     }
-  ]
+  ],
+
+  "comparison_rules": {
+    "bachelor_arabic": {
+      "category": "bachelor",
+      "cert_type": "arabic",
+      "label": "بكالوريوس — شهادات عربية",
+      "requires_hs": true,
+      "requires_bachelor": false,
+      "ielts_min": null,
+      "sat_required": true,
+      "sat_conditional": true,
+      "conditions_text": {
+        "no_sat": "يحتاج تقديم SAT بدرجة 1200+ قبل 31 ديسمبر",
+        "no_ielts": "سيتم ترتيب مقابلة لتقييم اللغة",
+        "has_all": "مؤهل للتقديم — المعدل يؤثر على المنحة (3,000 إلى 7,000 يورو)"
+      },
+      "eligible_note": "الرسوم: 20,000 يورو/سنة"
+    },
+    "bachelor_british": {
+      "category": "bachelor",
+      "cert_type": "british",
+      "label": "بكالوريوس — شهادة بريطانية",
+      "requires_hs": true,
+      "requires_bachelor": false,
+      "ielts_min": null,
+      "sat_required": true,
+      "sat_conditional": true,
+      "needs_extra_info": true,
+      "extra_info_text": "يحتاج تقييم تفصيلي — شروط إضافية حسب مواد A Level والتخصص",
+      "conditions_text": {
+        "no_sat": "يحتاج تقديم SAT بدرجة 1200+ قبل 31 ديسمبر",
+        "no_ielts": "سيتم ترتيب مقابلة لتقييم اللغة"
+      }
+    },
+    "ify_arabic": {
+      "category": "foundation",
+      "cert_type": "arabic",
+      "label": "سنة تأسيسية — شهادات عربية",
+      "requires_hs": true,
+      "requires_bachelor": false,
+      "ielts_min": null,
+      "conditions_text": {
+        "has_all": "مؤهل للسنة التأسيسية — الرسوم: 13,000 يورو"
+      }
+    },
+    "ify_british": {
+      "category": "foundation",
+      "cert_type": "british",
+      "label": "سنة تأسيسية — شهادة بريطانية",
+      "requires_hs": true,
+      "requires_bachelor": false,
+      "ielts_min": null,
+      "needs_extra_info": true,
+      "extra_info_text": "يحتاج تقييم تفصيلي — يعتمد على عدد مواد A Level ودرجاتها",
+      "conditions_text": {
+        "has_all": "الرسوم: 13,000 يورو"
+      }
+    },
+    "master": {
+      "category": "master",
+      "cert_type": "any",
+      "label": "ماجستير",
+      "requires_hs": false,
+      "requires_bachelor": true,
+      "ielts_min": null,
+      "conditions_text": {
+        "no_ielts": "سيتم ترتيب مقابلة لتقييم اللغة",
+        "has_all": "مؤهل للتقديم — يحتاج اختيار البرنامج في التقييم التفصيلي"
+      }
+    }
+  }
 }

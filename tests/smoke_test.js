@@ -16,6 +16,7 @@ let totalPaths = 0;
 let totalQuestions = 0;
 let totalResults = 0;
 let totalSharedFiles = 0;
+let totalComparisonRules = 0;
 const errors = [];
 
 function err(context, msg) {
@@ -236,6 +237,80 @@ function validateShared(uniId) {
   }
 }
 
+// ── Validate comparison_rules ──
+const VALID_CATEGORIES = ['foundation', 'bachelor', 'master', 'phd', 'medical'];
+const VALID_CERT_TYPES = ['arabic', 'british', 'any'];
+
+function validateComparisonRules(uniId, meta) {
+  const ctx = `${uniId}/_meta.json:comparison_rules`;
+
+  if (!meta.comparison_rules) {
+    err(ctx, 'Missing comparison_rules object');
+    return;
+  }
+
+  if (typeof meta.comparison_rules !== 'object' || Object.keys(meta.comparison_rules).length === 0) {
+    err(ctx, 'comparison_rules is empty or not an object');
+    return;
+  }
+
+  for (const [ruleKey, rule] of Object.entries(meta.comparison_rules)) {
+    totalComparisonRules++;
+    const rCtx = `${ctx}:${ruleKey}`;
+
+    // Required fields
+    if (!isNonEmptyString(rule.label)) {
+      err(rCtx, 'Missing or empty label');
+    } else if (!hasArabic(rule.label)) {
+      err(rCtx, `Label has no Arabic text: "${rule.label}"`);
+    }
+
+    if (!rule.category || !VALID_CATEGORIES.includes(rule.category)) {
+      err(rCtx, `Invalid or missing category "${rule.category}" — must be one of: ${VALID_CATEGORIES.join(', ')}`);
+    }
+
+    if (!rule.cert_type || !VALID_CERT_TYPES.includes(rule.cert_type)) {
+      err(rCtx, `Invalid or missing cert_type "${rule.cert_type}" — must be one of: ${VALID_CERT_TYPES.join(', ')}`);
+    }
+
+    if (typeof rule.requires_hs !== 'boolean') {
+      err(rCtx, 'Missing or non-boolean requires_hs');
+    }
+
+    if (typeof rule.requires_bachelor !== 'boolean') {
+      err(rCtx, 'Missing or non-boolean requires_bachelor');
+    }
+
+    // conditions_text must exist and have has_all
+    if (!rule.conditions_text || typeof rule.conditions_text !== 'object') {
+      err(rCtx, 'Missing conditions_text object');
+    } else {
+      if (!rule.conditions_text.has_all && !rule.needs_extra_info) {
+        err(rCtx, 'Missing conditions_text.has_all (required unless needs_extra_info is true)');
+      }
+      // All condition text values should contain Arabic
+      for (const [key, val] of Object.entries(rule.conditions_text)) {
+        if (isNonEmptyString(val) && !hasArabic(val)) {
+          err(rCtx, `conditions_text.${key} has no Arabic text: "${val}"`);
+        }
+      }
+    }
+
+    // IELTS validations
+    if (rule.ielts_min !== null && rule.ielts_min !== undefined && typeof rule.ielts_min !== 'number') {
+      err(rCtx, `ielts_min must be a number or null, got: ${typeof rule.ielts_min}`);
+    }
+    if (rule.ielts_max !== undefined && typeof rule.ielts_max !== 'number') {
+      err(rCtx, `ielts_max must be a number, got: ${typeof rule.ielts_max}`);
+    }
+    if (rule.ielts_conditional_min !== undefined && typeof rule.ielts_conditional_min !== 'number') {
+      err(rCtx, `ielts_conditional_min must be a number, got: ${typeof rule.ielts_conditional_min}`);
+    }
+  }
+
+  console.log(`   ├─ comparison_rules: ${Object.keys(meta.comparison_rules).length} rules`);
+}
+
 // ── Main ──
 function main() {
   console.log('╔══════════════════════════════════════════╗');
@@ -315,6 +390,9 @@ function main() {
 
     // Validate shared data
     validateShared(uniId);
+
+    // Validate comparison_rules
+    validateComparisonRules(uniId, meta);
   }
 
   // ── Summary ──
@@ -327,6 +405,7 @@ function main() {
   console.log(`  Questions:       ${totalQuestions}`);
   console.log(`  Results:         ${totalResults}`);
   console.log(`  Shared files:    ${totalSharedFiles}`);
+  console.log(`  Comparison rules: ${totalComparisonRules}`);
   console.log();
 
   if (errors.length === 0) {
