@@ -266,9 +266,9 @@ function showQuestion(questionId) {
     return;
   }
 
-  // Dynamic question text override: for Debrecen bachelor, the exam question text
-  // depends on the selected program's exam_type. The flow JSON stores exam_questions
-  // mapping exam_type→Arabic text, and the resolver routes to DB_BSC_EXAM.
+  // Dynamic question text override:
+  // 1. Debrecen bachelor: exam question text depends on selected program's exam_type.
+  // 2. Debrecen master/PhD: IELTS question text depends on selected program's ielts score.
   let questionText = q.text;
   if (currentFlow.exam_questions && questionId === 'DB_BSC_EXAM') {
     const programId = getHistoryAnswer(history, 'DB_BSC_PROGRAM');
@@ -276,6 +276,12 @@ function showQuestion(questionId) {
     if (program && currentFlow.exam_questions[program.exam_type]) {
       questionText = currentFlow.exam_questions[program.exam_type];
     }
+  }
+  // dynamic_text_from_program: replaces question text with program-specific IELTS score
+  // WHY: Debrecen master/PhD IELTS requirements vary per program (5.5, 6, 6.5, 7, 7.5, 8, or interview).
+  // The advisor needs to show the exact required score so the advisor knows what to check.
+  if (q.dynamic_text_from_program) {
+    questionText = resolveDynamicText(q, questionId);
   }
 
   let optionsHTML = '';
@@ -346,6 +352,10 @@ function buildProgressHTML() {
       if (program && currentFlow.exam_questions[program.exam_type]) {
         text = currentFlow.exam_questions[program.exam_type];
       }
+    }
+    // Dynamic text override for Debrecen master/PhD IELTS question
+    if (q && q.dynamic_text_from_program) {
+      text = resolveDynamicText(q, h.questionId);
     }
     return `<div class="progress-item"><span class="progress-q">${esc(text)}</span><span class="progress-a">${esc(h.answerLabel)}</span></div>`;
   }).join('');
@@ -931,6 +941,24 @@ function buildMscResult(hist, flow) {
     message: 'الطالب يستوفي جميع شروط القبول في ماجستير جامعة SRH.',
     notes
   };
+}
+
+// Helper: resolve dynamic question text from selected program's IELTS score.
+// WHY: Debrecen master/PhD have per-program IELTS requirements (5.5–8 or interview).
+// The flow JSON question has dynamic_text_from_program with a template like
+// "هل لدى الطالب شهادة IELTS بدرجة {ielts} أو أعلى؟"
+// and optionally an interview_text for programs that use interview instead of IELTS.
+function resolveDynamicText(q, questionId) {
+  const cfg = q.dynamic_text_from_program;
+  const programId = getHistoryAnswer(history, cfg.program_question);
+  const program = currentFlow.program_select.programs.find(p => p.id === programId);
+  if (program && program.ielts === 'interview' && cfg.interview_text) {
+    return cfg.interview_text;
+  }
+  if (program && program.ielts) {
+    return cfg.template.replace('{ielts}', program.ielts);
+  }
+  return q.text; // fallback to static text
 }
 
 // Helper: find a previous answer in history by question ID

@@ -41,8 +41,9 @@
       "next": "DB_PHD_IELTS"
     },
     "DB_PHD_IELTS": {
-      "text": "هل لدى الطالب شهادة IELTS بالدرجة المطلوبة للتخصص؟",
+      "text": "هل لدى الطالب شهادة IELTS بالدرجة المطلوبة؟",
       "type": "yes_no",
+      "dynamic_text_from_program": { "program_question": "DB_PHD_PROGRAM", "template": "هل لدى الطالب شهادة IELTS بدرجة {ielts} أو أعلى؟" },
       "dynamic_result": "debrecen_phd_ielts",
       "options": [
         { "value": "yes", "label": "نعم" },

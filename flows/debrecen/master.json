@@ -58,8 +58,9 @@
       "next": "DB_MSC_IELTS"
     },
     "DB_MSC_IELTS": {
-      "text": "هل لدى الطالب شهادة IELTS بالدرجة المطلوبة للتخصص؟",
+      "text": "هل لدى الطالب شهادة IELTS بالدرجة المطلوبة؟",
       "type": "yes_no",
+      "dynamic_text_from_program": { "program_question": "DB_MSC_PROGRAM", "template": "هل لدى الطالب شهادة IELTS بدرجة {ielts} أو أعلى؟", "interview_text": "هذا البرنامج يعتمد على مقابلة لتقييم اللغة — لا يحتاج IELTS. هل الطالب مستعد للمقابلة؟" },
       "dynamic_result": "debrecen_msc_ielts",
       "options": [
         { "value": "yes", "label": "نعم" },
