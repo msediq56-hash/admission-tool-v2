@@ -109,7 +109,24 @@ function renderPage() {
 
       <div class="form-group">
         <label>نوع الشهادة</label>
-        <select id="certType">${certOptions}</select>
+        <select id="certType" onchange="onCertTypeChange()">${certOptions}</select>
+      </div>
+
+      <div id="britishQuestionsGroup" class="hidden">
+        <div class="form-group">
+          <label>كم مادة A Level لدى الطالب؟</label>
+          <div class="toggle-group" id="aLevelCountGroup">
+            <button class="toggle-btn" data-value="1" onclick="toggleBtn('aLevelCountGroup', this); updateCGradeOptions()">1 مادة</button>
+            <button class="toggle-btn" data-value="2" onclick="toggleBtn('aLevelCountGroup', this); updateCGradeOptions()">2 مادتان</button>
+            <button class="toggle-btn" data-value="3" onclick="toggleBtn('aLevelCountGroup', this); updateCGradeOptions()">3 مواد أو أكثر</button>
+          </div>
+        </div>
+
+        <div class="form-group hidden" id="cGradeGroup">
+          <label>كم مادة منها بدرجة C أو أعلى؟</label>
+          <div class="toggle-group" id="cGradeCountGroup">
+          </div>
+        </div>
       </div>
 
       <div class="form-row">
@@ -205,20 +222,60 @@ function toggleGpaInput() {
   $('gpaInputGroup').classList.toggle('hidden', !has);
 }
 
+function onCertTypeChange() {
+  const isBritish = $('certType').value === 'british';
+  $('britishQuestionsGroup').classList.toggle('hidden', !isBritish);
+  // Reset A Level selections when switching away from british
+  if (!isBritish) {
+    const btns = $('aLevelCountGroup').querySelectorAll('.toggle-btn');
+    for (const b of btns) b.classList.remove('active');
+    $('cGradeGroup').classList.add('hidden');
+    $('cGradeCountGroup').innerHTML = '';
+  }
+}
+
+function updateCGradeOptions() {
+  const aLevelVal = getToggleValue('aLevelCountGroup');
+  if (!aLevelVal) {
+    $('cGradeGroup').classList.add('hidden');
+    return;
+  }
+  $('cGradeGroup').classList.remove('hidden');
+  const max = parseInt(aLevelVal, 10);
+  const labels = ['0', '1 مادة', '2 مادتان', '3 مواد أو أكثر'];
+  let html = '';
+  for (let i = 0; i <= max; i++) {
+    html += `<button class="toggle-btn" data-value="${i}" onclick="toggleBtn('cGradeCountGroup', this)">${labels[i]}</button>`;
+  }
+  $('cGradeCountGroup').innerHTML = html;
+}
+
 function collectProfile() {
   const hasIelts = getToggleValue('ieltsToggle') === 'has';
   const hasSAT = getToggleValue('satGroup') === 'yes';
   const hasGpa = getToggleValue('gpaToggle') === 'has';
+  const certType = $('certType').value;
 
-  return {
+  const profile = {
     hasHighSchool: getToggleValue('hsGroup') === 'yes',
-    certificateType: $('certType').value,
+    certificateType: certType,
     ielts: hasIelts ? parseFloat($('ieltsScore').value) : null,
     hasSAT,
     satScore: hasSAT ? parseInt($('satScore').value, 10) : null,
     gpa: hasGpa ? parseInt($('gpaScore').value, 10) : null,
-    hasBachelor: getToggleValue('bachelorGroup') === 'yes'
+    hasBachelor: getToggleValue('bachelorGroup') === 'yes',
+    aLevelCount: null,
+    aLevelCCount: null
   };
+
+  if (certType === 'british') {
+    const alVal = getToggleValue('aLevelCountGroup');
+    if (alVal) profile.aLevelCount = parseInt(alVal, 10);
+    const cVal = getToggleValue('cGradeCountGroup');
+    if (cVal !== null && cVal !== undefined) profile.aLevelCCount = parseInt(cVal, 10);
+  }
+
+  return profile;
 }
 
 function getSelectedCategories() {
@@ -298,7 +355,32 @@ function evaluateRule(rule, profile) {
     };
   }
 
-  // 4. Collect conditions and notes
+  // 4. Check A Level requirements (British certificate paths)
+  if (rule.a_level_min !== undefined && rule.a_level_min !== null) {
+    if (profile.aLevelCount === null) {
+      return { status: 'needs_info', reason: 'يحتاج تحديد عدد مواد A Level' };
+    }
+    if (profile.aLevelCount < rule.a_level_min) {
+      return {
+        status: 'negative',
+        reason: rule.conditions_text.a_level_low || `يحتاج ${rule.a_level_min} مواد A Level على الأقل`
+      };
+    }
+  }
+
+  if (rule.a_level_c_min !== undefined && rule.a_level_c_min !== null) {
+    if (profile.aLevelCCount === null) {
+      return { status: 'needs_info', reason: 'يحتاج تحديد عدد مواد A Level بدرجة C أو أعلى' };
+    }
+    if (profile.aLevelCCount < rule.a_level_c_min) {
+      return {
+        status: 'conditional',
+        reason: rule.conditions_text.a_level_c_low || 'درجات أقل من C — جرّب مسار السنة التأسيسية'
+      };
+    }
+  }
+
+  // 5. Collect conditions and notes
   const conditions = [];
   const notes = [];
 
@@ -322,7 +404,7 @@ function evaluateRule(rule, profile) {
     conditions.push(rule.conditions_text.no_research_plan);
   }
 
-  // 5. Always conditional (Debrecen bachelor, medical — exam required)
+  // 6. Always conditional (Debrecen bachelor, medical — exam required)
   if (rule.always_conditional) {
     return {
       status: 'conditional',
@@ -331,7 +413,7 @@ function evaluateRule(rule, profile) {
     };
   }
 
-  // 6. Needs extra info (Constructor British paths — need A Level details)
+  // 7. Needs extra info
   if (rule.needs_extra_info) {
     return {
       status: 'needs_info',
@@ -340,7 +422,7 @@ function evaluateRule(rule, profile) {
     };
   }
 
-  // 7. Determine final status
+  // 8. Determine final status
   if (conditions.length > 0) {
     return {
       status: 'conditional',

@@ -62,12 +62,16 @@
       "ielts_min": null,
       "sat_required": true,
       "sat_conditional": true,
-      "needs_extra_info": true,
-      "extra_info_text": "يحتاج تقييم تفصيلي — شروط إضافية حسب مواد A Level والتخصص",
+      "a_level_min": 3,
+      "a_level_c_min": 3,
       "conditions_text": {
         "no_sat": "يحتاج تقديم SAT بدرجة 1200+ قبل 31 ديسمبر",
-        "no_ielts": "سيتم ترتيب مقابلة لتقييم اللغة"
-      }
+        "no_ielts": "سيتم ترتيب مقابلة لتقييم اللغة",
+        "a_level_low": "يحتاج 3 مواد A Level على الأقل",
+        "a_level_c_low": "درجات أقل من C — جرّب مسار السنة التأسيسية IFY",
+        "has_all": "مؤهل للتقديم — يعتمد على التخصص والمواد"
+      },
+      "eligible_note": "الرسوم: 20,000 يورو/سنة"
     },
     "ify_arabic": {
       "category": "foundation",
@@ -87,10 +91,10 @@
       "requires_hs": true,
       "requires_bachelor": false,
       "ielts_min": null,
-      "needs_extra_info": true,
-      "extra_info_text": "يحتاج تقييم تفصيلي — يعتمد على عدد مواد A Level ودرجاتها",
+      "a_level_min": 3,
       "conditions_text": {
-        "has_all": "الرسوم: 13,000 يورو"
+        "a_level_low": "يحتاج 3 مواد A Level على الأقل — قد يحتاج مسار بديل",
+        "has_all": "مؤهل للسنة التأسيسية — الرسوم: 13,000 يورو"
       }
     },
     "master": {
