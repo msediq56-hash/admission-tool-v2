@@ -267,15 +267,16 @@ function runEvaluation() {
   renderResults(results);
 }
 
-// Map certId from _meta.json to profile certificateType
+// Map certId from _meta.json to profile certificateType.
+// Only filter when the certId explicitly indicates a certificate type (contains 'arabic' or 'british').
+// SRH foundation cert IDs (ief, foundation_business, etc.) are program-type names,
+// not certificate-type names — they apply to all students regardless of cert type.
 function matchCertificate(certId, profileCertType) {
-  if (profileCertType === 'british') {
-    return certId.includes('british');
-  }
-  if (profileCertType === 'arabic') {
-    return certId.includes('arabic');
-  }
-  return true; // unknown cert type → include
+  const isCertSpecific = certId.includes('arabic') || certId.includes('british');
+  if (!isCertSpecific) return true; // not cert-type-specific → include for all
+  if (profileCertType === 'british') return certId.includes('british');
+  if (profileCertType === 'arabic') return certId.includes('arabic');
+  return true;
 }
 
 function evaluateFlow(flow, profile) {
@@ -479,7 +480,7 @@ function tryAnswerSelect(q, questionId, text, profile, history, flow) {
 // ──────────────────────────────────────────────────────────────────────────────
 
 function hasIeltsBandOptions(values) {
-  return values.some(v => v.includes('ielts_') || v === 'below_4' || v === 'below_55');
+  return values.some(v => v.includes('ielts_') || v === 'below_4' || v === 'below_50' || v === 'below_55');
 }
 
 function hasGpaTierOptions(values) {
@@ -492,9 +493,11 @@ function matchIeltsBand(score, options) {
   const bands = [
     { value: 'ielts_65_plus', min: 6.5, max: 99 },
     { value: 'ielts_5_6', min: 5.0, max: 6.4 },
+    { value: 'ielts_50_64', min: 5.0, max: 6.4 },   // Constructor IFY Arabic variant
     { value: 'ielts_55_64', min: 5.5, max: 6.4 },
     { value: 'ielts_4_5', min: 4.0, max: 4.9 },
     { value: 'below_4', min: -1, max: 3.9 },
+    { value: 'below_50', min: -1, max: 4.9 },        // Constructor IFY Arabic variant
     { value: 'below_55', min: -1, max: 5.4 }
   ];
 
