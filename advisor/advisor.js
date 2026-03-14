@@ -33,10 +33,14 @@ const $ = id => document.getElementById(id);
 // INIT
 // ──────────────────────────────────────────────────────────────────────────────
 
+// Entry selection state
+let selectedCountry = null;
+let selectedUniType = null;
+
 async function init() {
   const data = await fetchJSON('/api/universities');
   universities = data.universities;
-  showUniversitySelector();
+  showCountrySelector();
 }
 
 async function fetchJSON(url) {
@@ -46,11 +50,10 @@ async function fetchJSON(url) {
 }
 
 // ──────────────────────────────────────────────────────────────────────────────
-// UNIVERSITY SELECTION — Step 0
+// ENTRY SELECTION — Country → University Type → University
 // ──────────────────────────────────────────────────────────────────────────────
 
-function showUniversitySelector() {
-  // Reset all state
+function resetAllState() {
   currentUni = null;
   meta = null;
   majorsData = null;
@@ -58,25 +61,129 @@ function showUniversitySelector() {
   history = [];
   currentQuestion = null;
   selectedProgram = null;
+  selectedCountry = null;
+  selectedUniType = null;
+}
+
+// Step 0a: Select country
+function showCountrySelector() {
+  resetAllState();
+
+  // Extract unique countries from universities
+  const countries = [...new Set(universities.map(u => u.country))];
 
   $('app').innerHTML = `
     <div class="header">
       <h1>تقييم أهلية القبول</h1>
-      <p class="subtitle">اختر الجامعة للبدء</p>
+      <p class="subtitle">اختر الدولة للبدء</p>
+    </div>
+    <div class="card">
+      <h2>اختر الدولة</h2>
+      <div class="path-list" id="countryList"></div>
+    </div>
+  `;
+
+  const list = $('countryList');
+  for (const country of countries) {
+    const btn = document.createElement('button');
+    btn.className = 'path-btn';
+    btn.textContent = country;
+    btn.addEventListener('click', () => selectCountry(country));
+    list.appendChild(btn);
+  }
+}
+
+// Step 0b: Select university type (حكومية / خاصة)
+// Skips if only one type exists for the selected country.
+function selectCountry(country) {
+  selectedCountry = country;
+  const filtered = universities.filter(u => u.country === country);
+  const types = [...new Set(filtered.map(u => u.university_type))];
+
+  if (types.length === 1) {
+    // Only one type — skip type selection
+    selectUniType(types[0]);
+    return;
+  }
+
+  $('app').innerHTML = `
+    <div class="header">
+      <h1>تقييم أهلية القبول</h1>
+      <p class="subtitle">${esc(country)}</p>
+    </div>
+    <div class="card">
+      <h2>اختر نوع الجامعة</h2>
+      <div class="path-list" id="typeList"></div>
+    </div>
+    <button class="back-btn" onclick="showCountrySelector()">العودة لاختيار الدولة</button>
+  `;
+
+  const list = $('typeList');
+  for (const t of types) {
+    const btn = document.createElement('button');
+    btn.className = 'path-btn';
+    btn.textContent = t;
+    btn.addEventListener('click', () => selectUniType(t));
+    list.appendChild(btn);
+  }
+}
+
+// Step 0c: Select university (filtered by country + type)
+// Skips if only one university matches.
+function selectUniType(uniType) {
+  selectedUniType = uniType;
+  const filtered = universities.filter(u => u.country === selectedCountry && u.university_type === uniType);
+
+  if (filtered.length === 1) {
+    // Only one university — skip university selection
+    selectUniversity(filtered[0].id);
+    return;
+  }
+
+  $('app').innerHTML = `
+    <div class="header">
+      <h1>تقييم أهلية القبول</h1>
+      <p class="subtitle">${esc(selectedCountry)} — ${esc(uniType)}</p>
     </div>
     <div class="card">
       <h2>اختر الجامعة</h2>
       <div class="path-list" id="uniList"></div>
     </div>
+    <button class="back-btn" onclick="goBackFromUniSelector()">العودة لاختيار نوع الجامعة</button>
   `;
 
   const list = $('uniList');
-  for (const uni of universities) {
+  for (const uni of filtered) {
     const btn = document.createElement('button');
     btn.className = 'path-btn';
-    btn.innerHTML = `${esc(uni.label)}<span class="uni-country">${esc(uni.country_label)}</span>`;
+    btn.textContent = uni.label;
     btn.addEventListener('click', () => selectUniversity(uni.id));
     list.appendChild(btn);
+  }
+}
+
+// Back from university selector — go to type selector or country selector
+function goBackFromUniSelector() {
+  const filtered = universities.filter(u => u.country === selectedCountry);
+  const types = [...new Set(filtered.map(u => u.university_type))];
+  if (types.length === 1) {
+    // Type was skipped — go back to country
+    showCountrySelector();
+  } else {
+    selectCountry(selectedCountry);
+  }
+}
+
+// Back from program selector — navigate to university list, type list, or country list
+// depending on whether steps were skipped (single type or single university).
+function goBackToEntryFlow() {
+  const filtered = universities.filter(u => u.country === selectedCountry && u.university_type === selectedUniType);
+  if (filtered.length > 1) {
+    // Multiple universities — go back to university selector
+    selectUniType(selectedUniType);
+  } else {
+    // University was auto-selected — go back further
+    goBackFromUniSelector();
   }
 }
 
@@ -116,7 +223,7 @@ function showProgramSelector() {
       <h2>ما نوع البرنامج المطلوب؟</h2>
       <div class="path-list" id="programList"></div>
     </div>
-    <button class="back-btn" onclick="showUniversitySelector()">العودة لاختيار الجامعة</button>
+    <button class="back-btn" onclick="goBackToEntryFlow()">العودة لاختيار الجامعة</button>
   `;
 
   const list = $('programList');

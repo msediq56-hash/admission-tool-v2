@@ -1,6 +1,8 @@
 {
   "university_id": "constructor_university",
   "university_label": "جامعة كونستركتر",
+  "country": "ألمانيا",
+  "university_type": "خاصة",
   "country_label": "ألمانيا — جامعة خاصة",
 
   "programs": [

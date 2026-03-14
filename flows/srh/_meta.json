@@ -1,6 +1,8 @@
 {
   "university_id": "srh",
   "university_label": "جامعة SRH",
+  "country": "ألمانيا",
+  "university_type": "خاصة",
   "country_label": "ألمانيا — جامعة خاصة",
 
   "programs": [

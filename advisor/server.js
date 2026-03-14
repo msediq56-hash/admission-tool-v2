@@ -74,6 +74,8 @@ function handleAPI(req, res) {
         universities.push({
           id: entry.name,
           label: meta.university_label,
+          country: meta.country,
+          university_type: meta.university_type,
           country_label: meta.country_label
         });
       }

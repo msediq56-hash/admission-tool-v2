@@ -1,6 +1,8 @@
 {
   "university_id": "debrecen",
   "university_label": "جامعة ديبريسن",
+  "country": "هنغاريا",
+  "university_type": "حكومية",
   "country_label": "هنغاريا — جامعة حكومية",
 
   "programs": [
