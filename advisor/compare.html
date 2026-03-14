@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>وضع المقارنة — تقييم أهلية القبول</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+      background: #f5f6fa;
+      color: #333;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    #app {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 1.5em;
+      color: #1a365d;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      color: #718096;
+      font-size: 0.9em;
+    }
+
+    .nav-link {
+      display: inline-block;
+      margin-top: 8px;
+      color: #2b6cb0;
+      text-decoration: none;
+      font-size: 0.85em;
+      border: 1px solid #bee3f8;
+      padding: 4px 12px;
+      border-radius: 4px;
+    }
+
+    .nav-link:hover {
+      background: #ebf5ff;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 16px;
+    }
+
+    .card h2 {
+      font-size: 1.15em;
+      margin-bottom: 16px;
+      color: #2d3748;
+      line-height: 1.6;
+    }
+
+    /* Form */
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.92em;
+      color: #4a5568;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .form-group select,
+    .form-group input[type="number"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.95em;
+      color: #2d3748;
+      background: white;
+      direction: rtl;
+    }
+
+    .form-group select:focus,
+    .form-group input:focus {
+      border-color: #90cdf4;
+      outline: none;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    .toggle-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .toggle-btn {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      background: white;
+      font-size: 0.95em;
+      cursor: pointer;
+      color: #4a5568;
+      transition: all 0.15s;
+    }
+
+    .toggle-btn.active {
+      background: #ebf5ff;
+      border-color: #2b6cb0;
+      color: #2b6cb0;
+      font-weight: 600;
+    }
+
+    .toggle-btn:hover:not(.active) {
+      border-color: #90cdf4;
+    }
+
+    .hidden { display: none !important; }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: #2b6cb0;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.05em;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.15s;
+    }
+
+    .submit-btn:hover {
+      background: #2c5282;
+    }
+
+    .submit-btn:disabled {
+      background: #a0aec0;
+      cursor: not-allowed;
+    }
+
+    /* Results */
+    .results-section {
+      margin-top: 20px;
+    }
+
+    .section-header {
+      font-size: 1.1em;
+      font-weight: 700;
+      padding: 10px 0;
+      border-bottom: 2px solid #e2e8f0;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-count {
+      background: #e2e8f0;
+      color: #4a5568;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.8em;
+    }
+
+    .result-card {
+      background: white;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      border-right: 4px solid #ccc;
+    }
+
+    .result-card.status-positive { border-right-color: #48bb78; }
+    .result-card.status-conditional { border-right-color: #ecc94b; }
+    .result-card.status-needs_info { border-right-color: #90cdf4; }
+    .result-card.status-negative { border-right-color: #fc8181; }
+
+    .result-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+
+    .result-card-uni {
+      font-weight: 700;
+      color: #2d3748;
+      font-size: 0.95em;
+    }
+
+    .result-card-badge {
+      font-size: 0.8em;
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .badge-positive { background: #c6f6d5; color: #276749; }
+    .badge-conditional { background: #fefcbf; color: #975a16; }
+    .badge-needs_info { background: #bee3f8; color: #2a4365; }
+    .badge-negative { background: #fed7d7; color: #9b2c2c; }
+
+    .result-card-path {
+      font-size: 0.85em;
+      color: #718096;
+      margin-bottom: 4px;
+    }
+
+    .result-card-reason {
+      font-size: 0.88em;
+      color: #4a5568;
+      line-height: 1.5;
+    }
+
+    .loading {
+      text-align: center;
+      color: #718096;
+      padding: 40px;
+      font-size: 1.1em;
+    }
+
+    .no-results {
+      text-align: center;
+      color: #a0aec0;
+      padding: 30px;
+      font-size: 0.95em;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="header">
+      <h1>جارٍ التحميل...</h1>
+    </div>
+  </div>
+  <script src="compare.js"></script>
+</body>
+</html>

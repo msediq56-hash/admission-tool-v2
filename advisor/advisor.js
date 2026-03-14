@@ -76,6 +76,7 @@ function showCountrySelector() {
     <div class="header">
       <h1>تقييم أهلية القبول</h1>
       <p class="subtitle">اختر الدولة للبدء</p>
+      <a href="/compare.html" class="nav-link">وضع المقارنة</a>
     </div>
     <div class="card">
       <h2>اختر الدولة</h2>
