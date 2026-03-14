@@ -1126,7 +1126,10 @@ function showResult(result) {
   }
 
   html += `</div>`;
+  html += `<div class="result-actions">`;
+  html += `<button class="back-btn edit-answers-btn" onclick="goBackFromResult()">تعديل الإجابات</button>`;
   html += `<button class="back-btn" onclick="showProgramSelector()">العودة لاختيار البرنامج</button>`;
+  html += `</div>`;
 
   $('app').innerHTML = html;
 }
@@ -1134,6 +1137,12 @@ function showResult(result) {
 // ──────────────────────────────────────────────────────────────────────────────
 // NAVIGATION
 // ──────────────────────────────────────────────────────────────────────────────
+
+// goBackFromResult: go back to the last question from the result screen
+// so the advisor can change their last answer and get a recalculated result.
+function goBackFromResult() {
+  goBack();
+}
 
 // goBack: replay from start
 function goBack() {
